@@ -15,24 +15,6 @@ CREATE TABLE apotheke(
 	FOREIGN KEY (anschrift) REFERENCES adresse_t(id)
 );
 
-CREATE TABLE benutzer (
-	id INTEGER NOT NULL AUTO_INCREMENT,
-	nutzername VARCHAR (30) NOT NULL,
-	vorname VARCHAR (30) NOT NULL,
-	nachname VARCHAR (30) NOT NULL,
-	passwort VARCHAR (40) NOT NULL,
-	PRIMARY KEY (id)
-);
-
-CREATE TABLE rolle (
-	apotheke  INTEGER NOT NULL,
-	benutzer  INTEGER NOT NULL,
-	rolle ENUM('ADMIN', 'PRUEFER', 'STANDARDNUTZER') NOT NULL,
-	PRIMARY KEY (apoID, benutzerID),
-	FOREIGN KEY (apoID) REFERENCES apotheke (id),
-	FOREIGN KEY (benutzerID) REFERENCES apotheke (id)
-);
-
 CREATE TABLE btm(
 	id INTEGER NOT NULL AUTO_INCREMENT,
 	name VARCHAR (50) NOT NULL,
@@ -46,84 +28,75 @@ CREATE TABLE btm(
 	FOREIGN KEY (apotheke) REFERENCES apotheke (id)	
 );
 
-CREATE TABLE btm_buchung (
+CREATE TABLE benutzer (
 	id INTEGER NOT NULL AUTO_INCREMENT,
-	pruefdatum DATE NOT NULL,
-	menge INTEGER NOT NULL,
-	datum DATE  NOT NULL,
-	benutzer INTEGER NOT NULL,
-	btm INTEGER NOT NULL,
+	name VARCHAR (30) NOT NULL,
+	passwort VARCHAR (40) NOT NULL,
+	rolle ENUM ('ADMIN', 'Pruefer', 'Benutzer') NOT NULL, 
+	apotheke INTEGER,
 	PRIMARY KEY (id),
-	FOREIGN KEY (benutzer) REFERENCES benutzer (id),
-	FOREIGN KEY (btm) REFERENCES btm (id)
-);
-
-CREATE TABLE zugang (
-	id INTEGER NOT NULL AUTO_INCREMENT,
-	btm_buchung INTEGER NOT NULL,
-	anfordergungsschein VARCHAR (30) NOT NULL,
-	lieferant INTEGER NOT NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY (btm_buchung) REFERENCES btm_buchung (id),
-	FOREIGN KEY (lieferant) REFERENCES lieferant (id)
-
-);
-
-CREATE TABLE abgang (
-	id INTEGER NOT NULL AUTO_INCREMENT,
-	btm_buchung INTEGER NOT NULL,
-	empfaenger INTEGER NOT NULL,
-	arzt INTEGER NOT NULL,
-	rezept VARCHAR (30) NOT NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY (btm_buchung) REFERENCES btm_buchung (id),
-	FOREIGN KEY (empfaenger) REFERENCES empfaenger (id),
-	FOREIGN KEY (arzt) REFERENCES arzt (id)
-);
-
-CREATE TABLE medikation (
-	apotheke INTEGER NOT NULL,
-	lieferant INTEGER NOT NULL,
-	PRIMARY KEY (apotheke, lieferant),
-	FOREIGN KEY (apotheke) REFERENCES apotheke (id),
-	FOREIGN KEY (lieferant) REFERENCES lieferant (id)
-);
-
-CREATE TABLE bestellung (
-	apotheke INTEGER NOT NULL,
-	arzt INTEGER NOT NULL,
-	PRIMARY KEY (apotheke, lieferant),
-	FOREIGN KEY (apotheke) REFERENCES apotheke (id),
-	FOREIGN KEY (arzt) REFERENCES arzt (id)
+	FOREIGN KEY (apotheke) REFERENCES apotheke (id)
 );
 
 CREATE TABLE lieferant (
 	id INTEGER NOT NULL AUTO_INCREMENT,
 	name VARCHAR (30) NOT NULL,
 	anschrift INTEGER NOT NULL,
+	apotheke INTEGER NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (anschrift) REFERENCES adresse_t(id)
+	FOREIGN KEY (anschrift) REFERENCES adresse_t(id),
+	FOREIGN KEY (apotheke) REFERENCES apotheke(id)	
 );
 
 CREATE TABLE arzt (
 	id INTEGER NOT NULL AUTO_INCREMENT,
 	name VARCHAR (30) NOT NULL,
 	anschrift INTEGER NOT NULL,
+	apotheke INTEGER NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (anschrift) REFERENCES adresse_t(id)
+	FOREIGN KEY (anschrift) REFERENCES adresse_t(id),
+	FOREIGN KEY (apotheke) REFERENCES apotheke(id)	
 );
 
 CREATE TABLE empfaenger (
 	id INTEGER NOT NULL AUTO_INCREMENT,
-	vorname VARCHAR (30) NOT NULL,
-	nachname VARCHAR (30) NOT NULL,
+	name VARCHAR (30) NOT NULL,
 	anschrift INTEGER NOT NULL,
 	apotheke INTEGER NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (anschrift) REFERENCES adresse_t(id),
 	FOREIGN KEY (apotheke) REFERENCES apotheke(id)	
 );
-/*
-Dokumentation:
-Für die ID Generierung wird im Backend UUID verwendet um sichere und eindeutige IDs für alle Tabellen zu generieren.
-*/
+
+CREATE TABLE btm_buchung (
+	id INTEGER NOT NULL AUTO_INCREMENT,
+	pruefdatum DATE NOT NULL,
+	menge INTEGER NOT NULL,
+	datum DATE  NOT NULL,
+	btm INTEGER NOT NULL,
+	benutzer INTEGER NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (btm) REFERENCES btm (id),
+	FOREIGN KEY (benutzer) REFERENCES benutzer (id)		
+);
+
+CREATE TABLE zugang (
+	btm_buchung INTEGER NOT NULL,
+	anfordergungsschein VARCHAR (30) NOT NULL,
+	lieferant INTEGER NOT NULL,
+	PRIMARY KEY (btm_buchung),
+	FOREIGN KEY (btm_buchung) REFERENCES btm_buchung (id),
+	FOREIGN KEY (lieferant) REFERENCES lieferant (id)
+);
+
+CREATE TABLE abgang (
+	btm_buchung INTEGER NOT NULL,
+	empfaenger INTEGER NOT NULL,
+	arzt INTEGER NOT NULL,
+	rezept VARCHAR (30) NOT NULL,
+	PRIMARY KEY (btm_buchung),
+	FOREIGN KEY (btm_buchung) REFERENCES btm_buchung (id),
+	FOREIGN KEY (empfaenger) REFERENCES empfaenger (id),
+	FOREIGN KEY (arzt) REFERENCES arzt (id)
+);
+
