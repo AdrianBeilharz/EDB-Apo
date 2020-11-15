@@ -18,11 +18,8 @@ CREATE TABLE apotheke(
 CREATE TABLE btm(
 	id INTEGER NOT NULL AUTO_INCREMENT,
 	name VARCHAR (50) NOT NULL,
-	pzn VARCHAR (15) NOT NULL,
-	darreichungsform ENUM('Tabletten', 'Tropfen', 'Zaepfchen') NOT NULL,
-	staerke VARCHAR (10) NOT NULL,
-	packungsgroesse INTEGER NOT NULL,
-	einheit ENUM('g','mg','ml', 'Stueck') NOT NULL,
+	darreichungsform ENUM ('Tbl', 'Trp', 'Sup', 'RTA', 'RKA', 'Ampullen', 'Rezeptursubstanz', 'HKP', 'Pfl.') NOT NULL,
+	einheit ENUM('g','mg','ml', 'Stk.') NOT NULL,
 	apotheke INTEGER NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (apotheke) REFERENCES apotheke (id)	
@@ -31,6 +28,7 @@ CREATE TABLE btm(
 CREATE TABLE benutzer (
 	id INTEGER NOT NULL AUTO_INCREMENT,
 	name VARCHAR (30) NOT NULL,
+	vorname VARCHAR (30) NOT NULL,
 	passwort VARCHAR (40) NOT NULL,
 	rolle ENUM ('ADMIN', 'Pruefer', 'Benutzer') NOT NULL, 
 	apotheke INTEGER,
@@ -61,6 +59,7 @@ CREATE TABLE arzt (
 CREATE TABLE empfaenger (
 	id INTEGER NOT NULL AUTO_INCREMENT,
 	name VARCHAR (30) NOT NULL,
+	vorname VARCHAR (30) NOT NULL,
 	anschrift INTEGER NOT NULL,
 	apotheke INTEGER NOT NULL,
 	PRIMARY KEY (id),
