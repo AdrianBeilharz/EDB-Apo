@@ -1,0 +1,15 @@
+version: '3'
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+     - "3306:3306"
+     - "33060:33060"
+    environment:
+       MYSQL_DATABASE: edb-apo-db
+       MYSQL_USER: edbapo
+       MYSQL_PASSWORD: edbapoadmin
+       MYSQL_ROOT_PASSWORD: edbapoadmin
+
+ 

@@ -1,0 +1,1041 @@
+openapi: 3.0.0
+info:
+  description: |
+    Vollständige Dokumentation der API für die Plattform EDB-Apo.
+  version: "1.0.0"
+  title: Swagger dokumentation EDB-Apo
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/edb-ap/edb-ap/1.0.0
+  - description: Local development
+    url: https://localhost:8080
+tags:
+  - name: apotheke
+    description: Everything about your apothekes
+    externalDocs:
+      description: Find out more
+      url: 'http://swagger.io'
+  - name: benutzer
+    description: Operations about benutzer
+  - name: btm
+    description: Access to btm
+  - name: btm-buchung
+    description: Access to btm-buchung
+  - name: arzt
+    description: Access to apothekearzt
+  - name: lieferant
+    description: Access to lieferabt
+  - name: empfaenger
+    description: Access to empfaenger
+paths:
+  /apotheke:
+    get:
+      tags:
+        - apotheke
+      summary: Add a new apotheke
+      operationId: getapotheke
+      responses:
+        '405':
+          description: Invalid input
+    post:
+      tags:
+        - apotheke
+      summary: Add a new apotheke
+      operationId: addapotheke
+      responses:
+        '405':
+          description: Invalid input
+      security:
+        - apothekearzt_auth:
+            - 'write:apothekes'
+            - 'read:apothekes'
+      requestBody:
+        $ref: '#/components/requestBodies/apotheke'
+  '/apotheke/{apothekeId}':
+    get:
+      tags:
+        - apotheke
+      summary: Find apotheke by ID
+      description: Returns a single apotheke
+      operationId: getapothekeById
+      parameters:
+        - name: apothekeId
+          in: path
+          description: ID of apotheke to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apotheke'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/apotheke'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: apotheke not found
+      security:
+        - api_key: []
+    put:
+      tags:
+        - apotheke
+      summary: Updates a apotheke in the arzt with form data
+      operationId: updateapothekeWithForm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: ID of apotheke that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '405':
+          description: Invalid input
+      security:
+        - apothekearzt_auth:
+            - 'write:apothekes'
+            - 'read:apothekes'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: Updated name of the apotheke
+                  type: string
+                status:
+                  description: Updated status of the apotheke
+                  type: string
+    delete:
+      tags:
+        - apotheke
+      summary: Deletes a apotheke
+      operationId: deleteapotheke
+      parameters:
+        - name: api_key
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: apotheke not found
+      security:
+        - apothekearzt_auth:
+            - 'write:apothekes'
+            - 'read:apothekes'
+  
+  /apotheke/{apothekeId}/btm:
+    get:
+      tags:
+        - btm
+      description: Get all btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    post:
+      tags:
+        - btm
+      description: Add new btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/btm'
+          
+  '/apotheke/{apothekeId}/btm/{btmId}':
+    get:
+      tags:
+        - btm
+      description: Get a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: btmId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    put:
+      tags:
+        - btm
+      description: Update a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: btmId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/btm'
+    delete:
+      tags:
+        - btm
+      description: delete a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: btmId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+  /apotheke/{apothekeId}/btmbuchung:
+    get:
+      tags:
+        - btm-buchung
+      description: Get all btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    post:
+      tags:
+        - btm-buchung
+      description: Add new btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/btmbuchung'
+  /apotheke/{apothekeId}/btmbuchung/{btmbuchungId}:
+    get:
+      tags:
+        - btm-buchung
+      description: Get a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: btmbuchungId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    put:
+      tags:
+        - btm-buchung
+      description: Update a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: btmbuchungId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/btmbuchung'
+    delete:
+      tags:
+        - btm-buchung
+      description: delete a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: btmbuchungId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+  
+  /apotheke/{apothekeId}/benutzer:
+    get:
+      tags:
+        - benutzer
+      description: Get all btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    post:
+      tags:
+        - benutzer
+      description: Add new btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/benutzer'
+  /apotheke/{apothekeId}/benutzer/{benutzerId}:
+    get:
+      tags:
+        - benutzer
+      description: Get a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: benutzerId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    put:
+      tags:
+        - benutzer
+      description: Update a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: benutzerId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/benutzer'
+    delete:
+      tags:
+        - benutzer
+      description: delete a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: benutzerId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+  
+  /apotheke/{apothekeId}/arzt:
+    get:
+      tags:
+        - arzt
+      description: Get all btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    post:
+      tags:
+        - arzt
+      description: Add new btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/arzt'
+  /apotheke/{apothekeId}/arzt/{arztId}:
+    get:
+      tags:
+        - arzt
+      description: Get a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: arztId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    put:
+      tags:
+        - arzt
+      description: Update a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: arztId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/arzt'
+    delete:
+      tags:
+        - arzt
+      description: delete a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: arztId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+  
+  /apotheke/{apothekeId}/lieferant:
+    get:
+      tags:
+        - lieferant
+      description: Get all lieferant
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    post:
+      tags:
+        - lieferant
+      description: Add new btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/lieferant'
+  /apotheke/{apothekeId}/lieferant/{lieferantId}:
+    get:
+      tags:
+        - lieferant
+      description: Get a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: lieferantId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    put:
+      tags:
+        - lieferant
+      description: Update a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: lieferantId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/lieferant'
+    delete:
+      tags:
+        - lieferant
+      description: delete a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: lieferantId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+          
+  /apotheke/{apothekeId}/empfaenger:
+    get:
+      tags:
+        - empfaenger
+      description: Get all lieferant
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    post:
+      tags:
+        - empfaenger
+      description: Add new btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+      requestBody:
+        $ref: '#/components/requestBodies/empfaenger'
+  /apotheke/{apothekeId}/empfaenger/{empfaengerId}:
+    get:
+      tags:
+        - empfaenger
+      description: Get a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: empfaengerId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+    put:
+      tags:
+        - empfaenger
+      description: Update a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: empfaengerId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found
+      requestBody:
+        $ref: '#/components/requestBodies/empfaenger'
+    delete:
+      tags:
+        - empfaenger
+      description: delete a btm
+      parameters:
+        - name: apothekeId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: empfaengerId
+          in: path
+          description: apotheke id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: not found 
+  /login:
+    post:
+      tags:
+        - benutzer
+      description: Try to login as user
+      responses:
+        '401':
+          description: invalid login credentials
+      requestBody:
+        $ref: '#/components/requestBodies/benutzer'
+      
+  /logout:
+    post:
+      tags:
+        - benutzer
+      description: Logout a user
+      responses:
+        '400':
+          description: on some magic way logout failed
+      
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+components:
+  schemas:
+    anschrift:
+      type: object
+      required:
+        - strasse
+        - nummer
+        - plz
+        - ort
+      properties:
+        strasse:
+          type: string
+          example: Eine Strasse
+        nummer:
+          type: integer
+          format: int64
+          example: 5
+        plz:
+          type: integer
+          format: int64
+          example: 54321
+        ort:
+          type: string
+          example: hier
+    apotheke:
+      type: object
+      required:
+        - name
+        - anschrift
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Apotheke xy
+        anschrift:
+          $ref: '#/components/schemas/anschrift'
+    benutzer:
+      type: object
+      required:
+        - name
+        - passwort
+        - apotheke
+      properties:
+        id:
+          type: string
+          format: uuid
+        vorname:
+          type: string
+          example: Karl-Heinz
+        name:
+          type: string
+          example: Müller
+        passwort:
+          type: string
+          example: acd_123
+        apotheke:
+          type: string
+          format: uuid
+    btm:
+      type: object
+      required:
+        - name
+        - pzn
+        - darreichungsform
+        - staerke
+        - groesse
+        - einheit
+        - apotheke
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: urogesic
+        pzn:
+          type: string
+          example: 00123456
+        darreichungsform:
+          type: string
+          enum: [Tabletten, Tropfen, Zäpfchen]
+          example: Tabletten
+        staerke:
+          type: integer
+          format: int64
+          example: 100
+        groesse:
+          type: integer
+          format: int64
+          example: 3
+        einheit:
+          type: string
+          enum: [g, mg, ml, Stueck]
+          example: g
+        apotheke:
+          type: string
+          format: uuid
+    btmbuchung:
+      type: object
+      required:
+        - menge
+        - datum
+        - btm
+        - benutzer
+        - typ
+      properties:
+        id:
+          type: string
+          format: uuid
+        benutzer:
+          type: string
+          format: uuid
+        btm:
+          type: string
+          format: uuid
+        menge:
+          type: integer
+          format: int64
+          example: 3
+        datum: 
+          type: string
+          format: date
+        typ:
+          type: string
+          enum: [ZUGANG, ABGANG]
+          example: ZUGANG
+        anforderungsschein:
+          type: string
+          example: 08786234
+        lieferant:
+          $ref: '#/components/schemas/lieferant'
+        rezeptnr:
+          type: string
+          example: 0038483
+        arzt:
+          $ref: '#/components/schemas/arzt'
+        empfaenger:
+          $ref: '#/components/schemas/empfaenger'
+    arzt:
+      type: object
+      required:
+        - vorname
+        - name
+        - anschrift
+        - apotheke
+      properties:
+        id:
+          type: string
+          format: uuid
+        vorname:
+          type: string
+          example: Holger
+        name:
+          type: string
+          example: Streicher
+        anschrift:
+          $ref: '#/components/schemas/anschrift'
+        apotheke:
+          type: string
+          format: uuid
+    lieferant:
+      type: object
+      required:
+        - name
+        - anschrift
+        - apotheke
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Liefer GmbH
+        anschrift:
+          $ref: '#/components/schemas/anschrift'
+        apotheke:
+          type: string
+          format: uuid
+    empfaenger:
+      type: object
+      required:
+        - vorname
+        - name
+        - anschrift
+        - apotheke
+      properties:
+        id:
+          type: string
+          format: uuid
+        vorname:
+          type: string
+          example: Heiz
+        name:
+          type: string
+          example: Wagner
+        anschrift:
+          $ref: '#/components/schemas/anschrift'
+        apotheke:
+          type: string
+          format: uuid
+  requestBodies:
+    apotheke:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/apotheke'
+      description: apotheke
+      required: true
+    benutzer:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/benutzer'
+      description: benutzer einer apotheke
+      required: true
+    btm:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/btm'
+    btmbuchung:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/btmbuchung'
+    arzt:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/arzt'
+    lieferant:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/lieferant'
+    empfaenger:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/lieferant'
+  securitySchemes:
+    apothekearzt_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://apothekearzt.swagger.io/oauth/dialog'
+          scopes:
+            'write:apothekes': modify apothekes in your account
+            'read:apothekes': read your apothekes
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
