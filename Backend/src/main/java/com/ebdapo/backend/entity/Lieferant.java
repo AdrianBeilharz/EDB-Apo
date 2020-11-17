@@ -1,13 +1,16 @@
 package com.ebdapo.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({"zugaenge"})
 @Table(name = "lieferant")
 public class Lieferant {
 
@@ -16,16 +19,17 @@ public class Lieferant {
     private int id;
 
     @Column(name="name", nullable = false)
-    String name;
+    private String name;
 
-//    @Column(name="anschrift", nullable = false)
     @ManyToOne(targetEntity = Adresse.class, cascade = CascadeType.ALL)
     @JoinColumn(name="anschrift", referencedColumnName = "id")
-    Adresse anschrift;
+    private Adresse anschrift;
 
-//    @Column(name="apotheke", nullable = false)
     @ManyToOne(targetEntity = Apotheke.class, cascade = CascadeType.ALL)
     @JoinColumn(name="apotheke", referencedColumnName = "id")
-    Apotheke apotheke;
+    private Apotheke apotheke;
+
+    @OneToMany(targetEntity = Zugang.class, cascade = CascadeType.ALL, mappedBy="lieferant")
+    private List<Zugang> zugaenge;
 
 }

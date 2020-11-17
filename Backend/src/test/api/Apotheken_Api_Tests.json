@@ -1,0 +1,383 @@
+{
+	"info": {
+		"_postman_id": "f7997380-aba7-496c-9d25-04dfc7669a98",
+		"name": "EDB-APO-API-TESTS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Apotheken",
+			"item": [
+				{
+					"name": "Alle Apotheken kriegen",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "62ea36fd-343b-4cfd-bdae-0924a1c9ab48",
+								"exec": [
+									"\r",
+									"pm.test(\"Get correct apotheken\", function () {\r",
+									"    let jsonData = pm.response.json();\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(jsonData.length).to.be.greaterThan(0);\r",
+									"    pm.environment.set(\"anzahlApotheken\", jsonData.length);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Apotheke Fail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d2bf4def-5daf-45d9-904f-dd15aa036ea7",
+								"exec": [
+									"pm.test(\"Bereits bestehende Apotheke wird nicht angelegt\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Löwen Apotheke\",\r\n    \"anschrift\": {\r\n        \"strasse\": \"Milchstrasse\",\r\n        \"nummer\": \"14a\",\r\n        \"ort\": \"Dresden\",\r\n        \"plz\": 1139\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Apotheke Pass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "30b2ab45-aa5c-4920-b19f-87c50aa84e24",
+								"exec": [
+									"pm.test(\"Erfolgreich neue Apotheke angelegt\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.environment.set('apoId', pm.response.json().id);\r",
+									"    pm.sendRequest(pm.environment.get(\"host\")+\":\"+pm.environment.get(\"port\")+\"/apotheke/\", function (err, response) {\r",
+									"        let v = response.json().length;\r",
+									"        console.log(v);\r",
+									"        pm.expect(v).to.be.greaterThan(parseInt(pm.environment.get(\"anzahlApotheken\")));\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Löwen Apotheke Doppelgaengersssss\",\r\n    \"anschrift\": {\r\n        \"strasse\": \"Milchstrasse\",\r\n        \"nummer\": \"14a\",\r\n        \"ort\": \"Dresden\",\r\n        \"plz\": 1139\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apotheke löschen",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "be3456c1-c503-4680-8345-2edfaccff447",
+								"exec": [
+									"pm.test(\"Apotheke erfolgreich löschen\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.sendRequest(pm.environment.get(\"host\")+\":\"+pm.environment.get(\"port\")+\"/apotheke/\", function (err, response) {\r",
+									"        let v = response.json().length;\r",
+									"        console.log(v);\r",
+									"        pm.expect(v).to.be.eql(parseInt(pm.environment.get(\"anzahlApotheken\")));\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "cf20932f-4221-4e5a-9815-367c7f0ba93d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{apoId}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{apoId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Apotheke Pass 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3718054c-95dd-4657-8662-96057c4c2f24",
+								"exec": [
+									"pm.test(\"Erfolgreich neue Apotheke angelegt\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.environment.set('apoId', pm.response.json().id);\r",
+									"    console.log(\"                \"+pm.environment.get(\"apoId\"))\r",
+									"    pm.sendRequest(pm.environment.get(\"host\")+\":\"+pm.environment.get(\"port\")+\"/apotheke/\", function (err, response) {\r",
+									"        let v = response.json().length;\r",
+									"        console.log(v);\r",
+									"        pm.expect(v).to.be.greaterThan(parseInt(pm.environment.get(\"anzahlApotheken\")));\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Löwen Apotheke Doppelgaengersssss\",\r\n    \"anschrift\": {\r\n        \"strasse\": \"Milchstrasse\",\r\n        \"nummer\": \"14a\",\r\n        \"ort\": \"Dresden\",\r\n        \"plz\": 1139\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apotheke aktualisieren Fail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "afe38bae-0939-4abd-a90c-a0b6ce41794f",
+								"exec": [
+									"pm.test(\"Erfolgreich Apotheke aktualisiert\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{apoId}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{apoId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apotheke aktualisieren Pass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1cfcef1a-8f86-468d-b696-c5c8bbeeacac",
+								"exec": [
+									"pm.test(\"Erfolgreich Apotheke aktualisiert\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Daten stimmen\", function () {\r",
+									"    let updated = pm.response.json();\r",
+									"    pm.expect(updated.name).to.eql(\"Löwen Apotheke23113\");\r",
+									"    pm.expect(updated.anschrift.strasse).to.eql(\"Honigstrasse\");\r",
+									"    pm.expect(updated.anschrift.nummer).to.eql('15');\r",
+									"    pm.expect(updated.anschrift.ort).to.eql(\"Hannover\");\r",
+									"    pm.expect(updated.anschrift.plz).to.eql(11333);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Löwen Apotheke23113\",\r\n    \"anschrift\": {\r\n        \"strasse\": \"Honigstrasse\",\r\n        \"nummer\": \"15\",\r\n        \"ort\": \"Hannover\",\r\n        \"plz\": 11333\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{apoId}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{apoId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Aktualisierte Apotheke wieder löschen",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8f168b65-9d9e-4719-b827-389a79982b13",
+								"exec": [
+									"pm.test(\"Aktualisierte Apotheke erfolgreich löschen\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.sendRequest(pm.environment.get(\"host\")+\":\"+pm.environment.get(\"port\")+\"/apotheke/\", function (err, response) {\r",
+									"        let v = response.json().length;\r",
+									"        console.log(v);\r",
+									"        pm.expect(v).to.be.eql(parseInt(pm.environment.get(\"anzahlApotheken\")));\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{apoId}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{apoId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

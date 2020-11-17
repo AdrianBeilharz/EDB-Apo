@@ -1,20 +1,23 @@
 package com.ebdapo.backend.entity;
 
 import com.ebdapo.backend.entity.enums.Rolle;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({"btmBuchungen"})
 @Table(name = "benutzer")
 public class Benutzer {
 
     @Id
     @Column(name="id", nullable = false)
-    private int id;
+    private String id;
 
     @Column(name="name", nullable = false)
     private String name;
@@ -29,9 +32,11 @@ public class Benutzer {
     @Column(name="rolle", nullable = false)
     private Rolle rolle;
 
-//    @Column(name="apotheke", nullable = false)
     @ManyToOne(targetEntity = Apotheke.class, cascade = CascadeType.ALL)
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     private Apotheke apotheke;
+
+    @OneToMany(targetEntity = BetaeubungsmittelBuchung.class, cascade = CascadeType.ALL, mappedBy="benutzer")
+    private List<BetaeubungsmittelBuchung> btmBuchungen;
 
 }
