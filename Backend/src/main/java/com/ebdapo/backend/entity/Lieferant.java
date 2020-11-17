@@ -13,7 +13,7 @@ public class Lieferant {
 
     @Id
     @Column(name="id", nullable = false)
-    private int id;
+    private String id;
 
     @Column(name="name", nullable = false)
     String name;
@@ -28,4 +28,31 @@ public class Lieferant {
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     Apotheke apotheke;
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAnschrift(Adresse anschrift) {
+        this.anschrift = anschrift;
+    }
+
+    public void setApotheke(Apotheke apotheke) {
+        this.apotheke = apotheke;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Adresse getAnschrift() {
+        return anschrift;
+    }
+
+    public Apotheke getApotheke() {
+        return apotheke;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

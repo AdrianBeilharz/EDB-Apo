@@ -23,6 +23,7 @@ CREATE TABLE adresse_t(
 CREATE TABLE apotheke(
 	id VARCHAR (40) NOT NULL,
 	name VARCHAR (50) NOT NULL,
+	email VARCHAR (50) NOT NUll,
 	anschrift VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (anschrift) REFERENCES adresse_t(id)
@@ -42,6 +43,7 @@ CREATE TABLE benutzer (
 	id VARCHAR (40) NOT NULL,
 	name VARCHAR (30) NOT NULL,
 	vorname VARCHAR (30) NOT NULL,
+	nutzername VARCHAR (30) NOT NULL,
 	passwort VARCHAR (40) NOT NULL,
 	rolle ENUM ('ADMIN', 'PRUEFER', 'BENUTZER') NOT NULL,
 	apotheke VARCHAR (40) NOT NULL,
