@@ -18,6 +18,9 @@ public class Apotheke {
     @Column(name="id", nullable = false)
     private String id;
 
+    @Column(name="email", nullable = false)
+    private String email;
+
     @Column(name="name", nullable = false)
     private String name;
 

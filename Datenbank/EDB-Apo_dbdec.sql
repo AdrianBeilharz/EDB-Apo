@@ -23,9 +23,10 @@ CREATE TABLE adresse_t(
 CREATE TABLE apotheke(
 	id VARCHAR (40) NOT NULL,
 	name VARCHAR (50) NOT NULL,
+	email VARCHAR (50) NOT NUll,
 	anschrift VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (anschrift) REFERENCES adresse_t(id)
+	FOREIGN KEY (anschrift) REFERENCES adresse_t(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE btm(
@@ -35,18 +36,19 @@ CREATE TABLE btm(
 	einheit ENUM('g','mg','ml', 'Stk.') NOT NULL,
 	apotheke VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (apotheke) REFERENCES apotheke (id)
+	FOREIGN KEY (apotheke) REFERENCES apotheke (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE benutzer (
 	id VARCHAR (40) NOT NULL,
 	name VARCHAR (30) NOT NULL,
 	vorname VARCHAR (30) NOT NULL,
+	nutzername VARCHAR (30) NOT NULL,
 	passwort VARCHAR (40) NOT NULL,
 	rolle ENUM ('ADMIN', 'PRUEFER', 'BENUTZER') NOT NULL,
 	apotheke VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (apotheke) REFERENCES apotheke (id)
+	FOREIGN KEY (apotheke) REFERENCES apotheke (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE lieferant (
@@ -55,8 +57,8 @@ CREATE TABLE lieferant (
 	anschrift VARCHAR (40) NOT NULL,
 	apotheke VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (anschrift) REFERENCES adresse_t(id),
-	FOREIGN KEY (apotheke) REFERENCES apotheke(id)
+	FOREIGN KEY (anschrift) REFERENCES adresse_t(id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (apotheke) REFERENCES apotheke(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE arzt (
@@ -65,8 +67,8 @@ CREATE TABLE arzt (
 	anschrift VARCHAR (40) NOT NULL,
 	apotheke VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (anschrift) REFERENCES adresse_t(id),
-	FOREIGN KEY (apotheke) REFERENCES apotheke(id)
+	FOREIGN KEY (anschrift) REFERENCES adresse_t(id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (apotheke) REFERENCES apotheke(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE empfaenger (
@@ -76,8 +78,8 @@ CREATE TABLE empfaenger (
 	anschrift VARCHAR (40) NOT NULL,
 	apotheke VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (anschrift) REFERENCES adresse_t(id),
-	FOREIGN KEY (apotheke) REFERENCES apotheke(id)
+	FOREIGN KEY (anschrift) REFERENCES adresse_t(id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (apotheke) REFERENCES apotheke(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE btm_buchung (
@@ -88,8 +90,8 @@ CREATE TABLE btm_buchung (
 	btm VARCHAR (40) NOT NULL,
 	benutzer VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (btm) REFERENCES btm (id),
-	FOREIGN KEY (benutzer) REFERENCES benutzer (id)
+	FOREIGN KEY (btm) REFERENCES btm (id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (benutzer) REFERENCES benutzer (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE zugang (
@@ -97,8 +99,8 @@ CREATE TABLE zugang (
 	anfordergungsschein VARCHAR (30) NOT NULL,
 	lieferant VARCHAR (40) NOT NULL,
 	PRIMARY KEY (btm_buchung),
-	FOREIGN KEY (btm_buchung) REFERENCES btm_buchung (id),
-	FOREIGN KEY (lieferant) REFERENCES lieferant (id)
+	FOREIGN KEY (btm_buchung) REFERENCES btm_buchung (id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (lieferant) REFERENCES lieferant (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE abgang (
@@ -107,8 +109,8 @@ CREATE TABLE abgang (
 	arzt VARCHAR (40) NOT NULL,
 	rezept VARCHAR (30) NOT NULL,
 	PRIMARY KEY (btm_buchung),
-	FOREIGN KEY (btm_buchung) REFERENCES btm_buchung (id),
-	FOREIGN KEY (empfaenger) REFERENCES empfaenger (id),
-	FOREIGN KEY (arzt) REFERENCES arzt (id)
+	FOREIGN KEY (btm_buchung) REFERENCES btm_buchung (id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (empfaenger) REFERENCES empfaenger (id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (arzt) REFERENCES arzt (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
