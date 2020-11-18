@@ -6,9 +6,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>EDB-Apo</h1>
-      </header>  
-      <Startseite></Startseite>
-      
+      </header>
+      <div class="container" >
+        <Startseite />
+      </div>
     </div>
   );
 }
