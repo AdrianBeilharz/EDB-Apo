@@ -1,6 +1,8 @@
 package com.ebdapo.backend.restcontroller;
 
+import com.ebdapo.backend.entity.Apotheke;
 import com.ebdapo.backend.entity.Benutzer;
+import com.ebdapo.backend.entity.BenutzerUpdateDetails;
 import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.repository.BenutzerRepository;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
@@ -25,20 +27,27 @@ public class BenutzerController {
     @GetMapping("/apotheke/{apothekeId}/benutzer")
     public List<Benutzer> getAll(@PathVariable String apothekeId) {
         if(!apothekeRepo.existsById(apothekeId)){
-            throw new BadRequestException("Benutzer existiert nicht");
+            throw new BadRequestException("Apotheke existiert nicht");
         }
         return benutzerRepo.findBenutzerWithApothekeId(apothekeId);
     }
 
     @PostMapping("/apotheke/{apothekeId}/benutzer")
-    public ResponseEntity createNewBenutzer(Benutzer benutzer) {
-        if((benutzer.getId() != null && benutzerRepo.existsById(benutzer.getId())) ||
-            checkIfUserExists(benutzer)) {
+    public ResponseEntity<Benutzer> createNewBenutzer(@PathVariable String apothekeId, @RequestBody Benutzer benutzer) {
+        benutzer.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
+
+        if(benutzer.getNutzername() == null || benutzer.getApotheke() == null || benutzer.getVorname() == null ||
+                benutzer.getName() == null || benutzer.getPasswort() == null || benutzer.getRolle() == null){
+           throw new InvalidInputException("Ungültige oder fehlende Angaben");
+        }
+
+        if(checkIfUserExists(benutzer)) {
            throw new InvalidInputException("Benutzer existiert bereits");
         }
+
         benutzer.setId(UUID.randomUUID().toString());
         benutzerRepo.save(benutzer);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(benutzer, HttpStatus.CREATED);
     }
 
     @GetMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
@@ -50,27 +59,29 @@ public class BenutzerController {
     }
 
     @PutMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
-    public ResponseEntity updateBenutzerById(@PathVariable String benutzerId, @RequestBody Benutzer newBenutzer){
+    public ResponseEntity<Benutzer> updateBenutzerById(@PathVariable String benutzerId, @RequestBody BenutzerUpdateDetails newBenutzer){
         if(!benutzerRepo.existsById(benutzerId)){
             throw new InvalidInputException("Falsche ID");
         }
-        benutzerRepo.findById(benutzerId).map(benutzer -> {
-            try{
-                benutzer.setName(newBenutzer.getName());
-                benutzer.setVorname(newBenutzer.getVorname());
-                benutzer.setPasswort(newBenutzer.getPasswort());
-                benutzer.setRolle(newBenutzer.getRolle());
-                benutzer.setApotheke(newBenutzer.getApotheke());
-
-                benutzerRepo.save(benutzer);
-                return new ResponseEntity(HttpStatus.OK);
-
-            }catch(Exception e){
-                e.printStackTrace();
-                throw new InvalidInputException();
+        Benutzer benutzer = benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new);
+        try{
+            if(newBenutzer.getApotheke() == null){
+                throw new InvalidInputException("ApothekenId darf nicht leer sein");
             }
-        });
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            Apotheke apo = apothekeRepo.findById(newBenutzer.getApotheke()).orElseThrow(InvalidInputException::new);
+            benutzer.setName(newBenutzer.getName());
+            benutzer.setNutzername(newBenutzer.getNutzername());
+            benutzer.setVorname(newBenutzer.getVorname());
+            benutzer.setPasswort(newBenutzer.getPasswort());
+            benutzer.setRolle(newBenutzer.getRolle());
+            benutzer.setApotheke(apo);
+
+            benutzerRepo.save(benutzer);
+            return new ResponseEntity<>(benutzer, HttpStatus.OK);
+
+        }catch(Exception e){
+            throw new InvalidInputException();
+        }
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
@@ -84,7 +95,6 @@ public class BenutzerController {
 
 
     private boolean checkIfUserExists(Benutzer benutzer) {
-        //check for username
-        return false;
+        return benutzerRepo.getBenutzerByUsername(benutzer.getNutzername()) != null;
     }
 }

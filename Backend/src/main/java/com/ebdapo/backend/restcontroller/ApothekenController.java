@@ -25,9 +25,14 @@ public class ApothekenController {
 
     @PostMapping("/apotheke")
     public ResponseEntity<Apotheke> newApotheke(@RequestBody Apotheke apotheke) {
+        if(apotheke.getName() == null || apotheke.getEmail() == null || apotheke.getAnschrift() == null) {
+            throw new InvalidInputException("Ungültige oder fehlende Angaben");
+        }
+
         if(checkIfAlreadyExists(apotheke)){
             throw new InvalidInputException("Apotheke existiert bereits");
         }
+
         apotheke.setId(UUID.randomUUID().toString());
         apothekenRepo.save(apotheke);
         return new ResponseEntity<>(apotheke, HttpStatus.CREATED);

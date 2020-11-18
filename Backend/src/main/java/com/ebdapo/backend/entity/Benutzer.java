@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"btmBuchungen"})
+@JsonIgnoreProperties({"btmBuchungen", "apotheke"})
 @Table(name = "benutzer")
 public class Benutzer {
 
@@ -20,7 +20,7 @@ public class Benutzer {
     private String id;
 
     @Column(name="nutzername", nullable = false)
-    private String username;
+    private String nutzername;
 
     @Column(name="name", nullable = false)
     private String name;
