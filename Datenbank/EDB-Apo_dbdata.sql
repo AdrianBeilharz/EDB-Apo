@@ -10,9 +10,9 @@ INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('9', 'Hausstrasse',
 INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('10', 'Neckartalstrasse', '153','Stuttgart', '70376' );
 INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('11', 'Friozheimerstrasse', '7','Stuttgart', '70499' );
 
-INSERT INTO apotheke(id, name, anschrift) values ('1', 'Löwen Apotheke', '1');
-INSERT INTO apotheke(id, name, anschrift) values ('2', 'Dorf Apotheke', '2');
-INSERT INTO apotheke(id, name, anschrift) values ('3', 'Hirsch Apotheke', '5');
+INSERT INTO apotheke(id, name, email, anschrift) values ('1', 'Löwen Apotheke','benutzer1@outlook.de', '1');
+INSERT INTO apotheke(id, name, email, anschrift) values ('2', 'Dorf Apotheke', 'benutzer2@outlook.de', '2');
+INSERT INTO apotheke(id, name, email, anschrift) values ('3', 'Hirsch Apotheke', 'benutzer3@outlook.de', '5');
 
 INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('1', 'Capros Akut 20 mg', 'Tbl', 'Stk.', '1');
 INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('2', 'Carehoxal 10mg', 'RTA', 'Stk.', '1');
@@ -31,18 +31,18 @@ INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('14', 'Dipi
 INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('15', 'Palexia', 'RTA', 'Stk.', '3');
 INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('16','Elvanse 30 mg','HKP', 'Stk.', '3');
 
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('1', 'Heller', 'Helga', '123_abcd', 'ADMIN', '1');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('2', 'Kurz', 'Martin', '123_zbgvf', 'Pruefer', '1');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('3', 'Stegmiller', 'Hans', '1_zbgvf', 'Benutzer', '1');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('4', 'Votteler', 'Jana', '12xx_zbgvf', 'Benutzer', '1');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('5', 'Voigt', 'Michael', '123_abcd', 'ADMIN', '2');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('6', 'Lasten', 'Klara', '123_zbgvf', 'Pruefer', '2');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('7', 'Müller', 'Jan', '1_zbgvf', 'Benutzer', '2');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('8', 'Wolle', 'Maria', '12xx_zbgvf', 'Benutzer', '2');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('9', 'Miller', 'Karl', '123_abcs', 'ADMIN', '3');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('10', 'Last', 'Heinz', '123_zbgvf', 'Pruefer', '3');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('11', 'Maly', 'Jana', '1_zbtvf', 'Benutzer', '3');
-INSERT INTO benutzer(id , name, vorname, passwort, rolle, apotheke) values ('12', 'Wolle', 'Maria', '12xx_zbgvf', 'Benutzer', '3');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('1', 'Heller', 'Helga', 'nutzername1', '123_abcd', 'ADMIN', '1');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('2', 'Kurz', 'Martin', 'benutzername2', '123_zbgvf', 'Pruefer', '1');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('3', 'Stegmiller', 'Hans', 'benutzername3', '1_zbgvf', 'Benutzer', '1');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('4', 'Voteler', 'Jana', 'benutzername4', '12xx_zbgvf', 'Benutzer', '1');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('5', 'Voigt', 'Michael', 'benutzername5', '123_abcd', 'ADMIN', '2');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('6', 'Lasten', 'Klara', 'benutzername6', '123_zbgvf', 'Pruefer', '2');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('7', 'Müller', 'Jan', 'benutzername7', '1_zbgvf', 'Benutzer', '2');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('8', 'Wolle', 'Maria', 'benutzername7', '12xx_zbgvf', 'Benutzer', '2');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('9', 'Miller', 'Karl', 'benutzername8', '123_abcs', 'ADMIN', '3');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('10', 'Last', 'Heinz', 'benutzername9', '123_zbgvf', 'Pruefer', '3');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('11', 'Maly', 'Jana', 'benutzername10', '1_zbtvf', 'Benutzer', '3');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, apotheke) values ('12', 'Wolle', 'Maria', 'benutzername11', '12xx_zbgvf', 'Benutzer', '3');
 
 INSERT INTO lieferant (id, name, anschrift, apotheke) values ('1', 'GEHE', '10', '1');
 INSERT INTO lieferant (id, name, anschrift, apotheke) values ('2', 'GEHE', '10', '1');

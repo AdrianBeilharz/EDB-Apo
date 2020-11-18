@@ -13,7 +13,6 @@ import java.io.Serializable;
 public class Zugang implements Serializable {
 
     @Id
-//    @Column(name="btm_buchung", nullable = false)
     @OneToOne(targetEntity = BetaeubungsmittelBuchung.class, cascade = CascadeType.ALL)
     @JoinColumn(name="btm_buchung", referencedColumnName = "id")
     private BetaeubungsmittelBuchung btmBuchung;
@@ -22,9 +21,9 @@ public class Zugang implements Serializable {
     private String anfordergungsschein;
 
     @Id
-//    @Column(name="lieferant", nullable = false)
     @ManyToOne(targetEntity = Lieferant.class, cascade = CascadeType.ALL)
     @JoinColumn(name="lieferant", referencedColumnName = "id")
     private Lieferant lieferant;
+
 
 }
