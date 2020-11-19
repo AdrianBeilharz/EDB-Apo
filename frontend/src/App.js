@@ -4,10 +4,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { faCheckSquare, faBookMedical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Container from 'react-bootstrap/Container';
+
 import Startseite from './components/startseite/Startseite';
-import Impressum from './static/Impressum'
-import BTMBuch from './components/btmbuch/BTMBuch'
-import Apotheke from './components/apotheke/Apotheke'
+import BTMBuch from './components/btmbuch/BTMBuch';
+import Apotheke from './components/apotheke/Apotheke';
+import Impressum from './static/Impressum';
 
 library.add(fab, faCheckSquare, faBookMedical)
 
@@ -18,7 +20,7 @@ function App() {
         <FontAwesomeIcon size="3x" icon={faBookMedical}/>
         <h1>EDB-Apo</h1>
       </header>
-      <div class="container" >
+      <Container>
         <Router>
           <Switch>
             {/* Components */}
@@ -29,7 +31,7 @@ function App() {
             <Route path="/impressum" component={Impressum} />
           </Switch>
         </Router>
-      </div>
+      </Container>
     </div>
   );
 }

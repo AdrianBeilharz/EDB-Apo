@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-class BTMBuch extends Component {
-  render() {
-    return (
-      <div>BTMBuch</div>
-    )
-  }
+function BTMBuch () {
+  return (
+    <div>BTMBuch</div>
+  )
 }
 
 export default BTMBuch;

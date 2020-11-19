@@ -1,24 +1,37 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import {Row, Col, Button, Form} from 'react-bootstrap';
+import ApothekeModal from '../../modals/ApothekeModal';
 
-class Startseite extends Component{
-	render() {
-		return (
-			<div class="row">
-				<div class="col-6" >
-				<form class="form-inline" >
-					<input type="text" placeholder="Nutzername" />
-					<input type="text" placeholder="Passwort" />
-					<input type="submit" value="Einloggen" />
-				</form>
-				<Link to="/BTMBuch">Link</Link>
-				</div>
-				<div class="col-6" >
-					<input type="button" value="Apotheke Registrieren" />
-				</div>
-			</div>
-		)
-	}
+function Startseite() {
+	const [modalShow, setModalShow] = React.useState(false);
+
+
+	return (
+		<Row>
+			<ApothekeModal 
+				show={modalShow}
+				onHide={() => setModalShow(false)} />
+			<Col>
+			<Form class="form-inline">
+				<Form.Row>
+					<Col>
+						<Form.Control type="text" placeholder="Nutzername" />
+					</Col>
+					<Col>
+					<Form.Control type="password" placeholder="Passwort" />
+					</Col>
+					<Col>
+					<Button variant="primary" type="submit" href="BTMBuch">Login</Button>
+					</Col>
+				</Form.Row>
+			</Form>
+			</Col>
+			<Col>
+				<Button variant="primary" onClick={() => setModalShow(true)}>Apotheke Registrieren</Button>
+			</Col>
+		</Row>
+	)
+	
 }
 
 export default Startseite;
