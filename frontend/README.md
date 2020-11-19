@@ -4,12 +4,24 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Getting started
 
-Before you can start using this project you need to have nodejs and npm installed [help](https://nodejs.org/en/download/). <br>
+### Install dependencies
+Before you can start using this project you need to have nodejs and npm installed [here](https://nodejs.org/en/download/). <br>
 After you have successfully installed nodejs navigate in a the directory with any CLI and use the following command to install all dependencies:
 ```
 npm install
 ```
 For more information check the [package.json](./package.json) which dependencies are used.
+
+
+### Routing
+For routing the package react-router-dom is used. For additional information check [here](https://www.freecodecamp.org/news/a-complete-beginners-guide-to-react-router-include-router-hooks/).
+
+### Bootstrap
+Both Bootstrap and react bootstrap are installed. Normally React Bootstrap should be used, check the documentation [here](https://react-bootstrap.github.io/components/). If you can't use React Bootstrap use normal bootstrap, which is documented [here](https://getbootstrap.com/docs/4.5/components/).
+
+### Fontawesome
+free version of Fontawesome is installed. Search [here](https://fontawesome.com/icons?d=gallery&m=free) for available Icons you want to use.
+
 
 ## Available Scripts
 
