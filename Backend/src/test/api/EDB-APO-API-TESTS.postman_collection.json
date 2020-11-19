@@ -840,6 +840,345 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Betäubungsmittel",
+			"item": [
+				{
+					"name": "Create Apotheke Pass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "016162ec-ea13-48de-b531-58fa03014933",
+								"exec": [
+									"pm.test(\"Erfolgreich neue Apotheke angelegt\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.environment.set('userTestApoId', pm.response.json().id);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"testapo2\",\r\n    \"email\": \"testapo2@outlook.de\",\r\n    \"anschrift\": {\r\n        \"strasse\": \"testapostrasse2\",\r\n        \"nummer\": \"2\",\r\n        \"ort\": \"testort2\",\r\n        \"plz\": 1112\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Neues BTM anlegen Pass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "eabdec26-be10-48d3-89d6-941588ee0f13",
+								"exec": [
+									"pm.test(\"Neues BTM erfolgreich angelegt\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.environment.set(\"newBtmId\", pm.response.json().id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Elvanse 50 mg\",\r\n        \"darreichungsform\": \"HKP\",\r\n        \"einheit\": \"Stueck\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{userTestApoId}}/btm",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{userTestApoId}}",
+								"btm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Neues BTM anlegen Pass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3f8502e8-561b-4f06-aa63-eaea01520613",
+								"exec": [
+									"pm.test(\"Neues BTM erfolgreich angelegt\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.environment.set(\"newBtmId2\", pm.response.json().id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Elvanse 70 mg\",\r\n        \"darreichungsform\": \"HKP\",\r\n        \"einheit\": \"Stueck\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{userTestApoId}}/btm",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{userTestApoId}}",
+								"btm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Neues BTM anlegen Fail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c859943f-19f7-4c11-a382-44ce20e8d137",
+								"exec": [
+									"pm.test(\"BTM existiert bereits\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Elvanse 50 mg\",\r\n        \"darreichungsform\": \"HKP\",\r\n        \"einheit\": \"Stueck\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{userTestApoId}}/btm",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{userTestApoId}}",
+								"btm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alle BTM anzeigen ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "02ee9b7c-b780-4b0b-bc95-c0df269565ec",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(pm.response.json().length).to.be.eql(2);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{userTestApoId}}/btm",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{userTestApoId}}",
+								"btm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BTM Updaten Pass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cd297e55-3bb3-4953-bc0e-a21d1e93f8be",
+								"exec": [
+									"pm.test(\"Erfolgreich BTM aktualisert\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    let a = pm.response.json().name;\r",
+									"    pm.expect(a).to.eql('Elvanse 60 mg');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Elvanse 60 mg\",\r\n        \"darreichungsform\": \"HKP\",\r\n        \"einheit\": \"Stueck\",\r\n        \"apotheke\": \"{{userTestApoId}}\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{userTestApoId}}/btm/{{newBtmId}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{userTestApoId}}",
+								"btm",
+								"{{newBtmId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BTM Löschen",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "22907251-30f3-4072-acb9-10fcd92382b9",
+								"exec": [
+									"pm.test(\"Erfolgreich BTM gelöscht\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{userTestApoId}}/btm/{{newBtmId}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{userTestApoId}}",
+								"btm",
+								"{{newBtmId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Angelegte Apotheke löschen",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ea2c96d-2b36-4e40-a6d3-560c1cafb7f1",
+								"exec": [
+									"pm.test(\"Apotheke erfolgreich löschen\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    let a = pm.environment.get(\"host\")+\":\"+pm.environment.get(\"port\")+\"/apotheke/\"+pm.environment.get(\"userTestApoId\");\r",
+									"    pm.sendRequest(a, function (err, response) {\r",
+									"        pm.expect(response.code).to.eql(400);\r",
+									"    });\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/apotheke/{{userTestApoId}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"apotheke",
+								"{{userTestApoId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}

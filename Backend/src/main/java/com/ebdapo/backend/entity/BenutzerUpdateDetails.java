@@ -15,6 +15,6 @@ public class BenutzerUpdateDetails {
     private String name;
     private String passwort;
     private Rolle rolle;
-    private String apotheke;
+    private String apotheke; //id
 
 }

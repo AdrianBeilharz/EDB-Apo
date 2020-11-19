@@ -31,11 +31,11 @@ public class Betaeubungsmittel {
     @Column(name="einheit", nullable = false)
     private Einheit einheit;
 
-    @ManyToOne(targetEntity = Apotheke.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Apotheke.class)
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     private Apotheke apotheke;
 
-    @OneToMany(targetEntity = BetaeubungsmittelBuchung.class, cascade = CascadeType.ALL, mappedBy="btm")
+    @OneToMany(targetEntity = BetaeubungsmittelBuchung.class, mappedBy="btm")
     private List<BetaeubungsmittelBuchung> btmBuchungen;
 
 

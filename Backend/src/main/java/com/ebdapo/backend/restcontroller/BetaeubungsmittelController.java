@@ -1,6 +1,9 @@
 package com.ebdapo.backend.restcontroller;
 
+import com.ebdapo.backend.entity.Apotheke;
 import com.ebdapo.backend.entity.Betaeubungsmittel;
+import com.ebdapo.backend.entity.BetaeubungsmittelUpdateDetails;
+import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.repository.BetaeubungsmittelRepository;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
 import com.ebdapo.backend.restcontroller.response.InvalidInputException;
@@ -18,22 +21,27 @@ public class BetaeubungsmittelController {
     @Autowired
     BetaeubungsmittelRepository btmRepo;
 
+    @Autowired
+    ApothekenRepository apothekeRepo;
+
     @GetMapping("/apotheke/{apothekeId}/btm")
     public List<Betaeubungsmittel> getAllBtm(@PathVariable String apothekeId) {
-        if(!btmRepo.existsById(apothekeId)){
-            throw new BadRequestException("Betaeubungsmittel existiert nicht");
+        if(!apothekeRepo.existsById(apothekeId)){
+            throw new BadRequestException("Apotheke existiert nicht");
         }
         return btmRepo.findBtmWithApothekenId(apothekeId);
     }
 
     @PostMapping("/apotheke/{apothekeId}/btm")
-    public ResponseEntity createNewBtm(@RequestBody Betaeubungsmittel btm) {
+    public ResponseEntity<Betaeubungsmittel> createNewBtm(@PathVariable String apothekeId, @RequestBody Betaeubungsmittel btm) {
+        btm.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
+
         if(checkIfAlreadyExists(btm)){
             throw new InvalidInputException("Betaeubungsmittel existiert bereits");
         }
         btm.setId(UUID.randomUUID().toString());
         btmRepo.save(btm);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(btm, HttpStatus.CREATED);
     }
 
     @GetMapping("/apotheke/{apothekeId}/btm/{btmId}")
@@ -45,25 +53,27 @@ public class BetaeubungsmittelController {
     }
 
     @PutMapping("/apotheke/{apothekeId}/btm/{btmId}")
-    public ResponseEntity updateBtmById(@PathVariable String btmId, @RequestBody Betaeubungsmittel newBtm) {
+    public ResponseEntity<Betaeubungsmittel> updateBtmById(@PathVariable String btmId, @RequestBody BetaeubungsmittelUpdateDetails newBtm) {
         if(!btmRepo.existsById(btmId)){
             throw new InvalidInputException("Falsche ID");
         }
-        btmRepo.findById(btmId).map(btm -> {
-            try {
-                btm.setName(newBtm.getName());
-                btm.setDarreichungsform(newBtm.getDarreichungsform());
-                btm.setEinheit(newBtm.getEinheit());
-                btm.setApotheke(newBtm.getApotheke());
-
-                btmRepo.save(btm);
-                return new ResponseEntity(HttpStatus.OK);
-            }catch(Exception e){
-                e.printStackTrace();
-                throw new InvalidInputException();
+        Betaeubungsmittel btm = btmRepo.findById(btmId).orElseThrow(InvalidInputException::new);
+        try {
+            if(newBtm.getApotheke() == null) {
+                throw new InvalidInputException("ApothekenId darf nicht leer sein");
             }
-        });
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            Apotheke apo = apothekeRepo.findById(newBtm.getApotheke()).orElseThrow(InvalidInputException::new);
+
+            btm.setName(newBtm.getName());
+            btm.setDarreichungsform(newBtm.getDarreichungsform());
+            btm.setEinheit(newBtm.getEinheit());
+            btm.setApotheke(apo);
+
+            btmRepo.save(btm);
+            return new ResponseEntity<>(btm, HttpStatus.OK);
+        }catch(Exception e){
+            throw new InvalidInputException();
+        }
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/btm/{btmId}")
@@ -71,17 +81,15 @@ public class BetaeubungsmittelController {
         if(!btmRepo.existsById(btmId)) {
             throw new BadRequestException();
         }
-        btmRepo.delete(btmRepo.findById(btmId).get());
+        btmRepo.deleteById(btmId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     private boolean checkIfAlreadyExists(Betaeubungsmittel btm) {
-       Betaeubungsmittel btmd = btmRepo.getBtmByValues(btm.getName(),
-                btm.getDarreichungsform(),
-                btm.getEinheit(),
-                btm.getApotheke());
-       System.out.println(btmd);
-        return btmd != null;
+        return btmRepo.getBtmByValues(btm.getName(),
+                btm.getDarreichungsform().toString(),
+                btm.getEinheit().toString(),
+                btm.getApotheke().getId()).size() > 0;
     }
 
 

@@ -33,7 +33,7 @@ CREATE TABLE btm(
 	id VARCHAR (40) NOT NULL,
 	name VARCHAR (50) NOT NULL,
 	darreichungsform ENUM ('Tbl', 'Trp', 'Sup', 'RTA', 'RKA', 'Ampullen', 'Rezeptursubstanz', 'HKP', 'Pfl') NOT NULL,
-	einheit ENUM('g','mg','ml', 'Stk.') NOT NULL,
+	einheit ENUM('g','mg','ml', 'Stueck') NOT NULL,
 	apotheke VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (apotheke) REFERENCES apotheke (id) ON UPDATE CASCADE ON DELETE CASCADE
