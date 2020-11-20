@@ -1,0 +1,569 @@
+{
+	"info": {
+		"_postman_id": "fbc4deaf-2705-4351-b4c1-255223d90211",
+		"name": "EDB-LIEFERANT-API-TESTS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Alle Liefranten kriegen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d1dd4433-3b25-4c8e-b0bc-f276d03b161e",
+						"exec": [
+							"pm.test('get all Lieferanten is korrekt'), function () {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.lenght).greaterThan(0);\r",
+							"    pm.environment.set('anzahlLieferanten', jsonData.lenght)\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is OK\", function () {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"id\": \"0fb8a598-5b89-4994-8306-01679418bb10\",\r\n        \"name\": \"GEXX\",\r\n        \"anschrift\": {\r\n            \"id\": 10,\r\n            \"strasse\": \"Neckartalstrasse\",\r\n            \"nummer\": \"12\",\r\n            \"ort\": \"Stuttgart\",\r\n            \"plz\": 72345\r\n        },\r\n        \"apotheke\": {\r\n            \"id\": \"1\",\r\n            \"email\": \"benutzer2@apotheke.de\",\r\n            \"name\": \"Löwe Apotheke\",\r\n            \"anschrift\": {\r\n                \"id\": 4,\r\n                \"strasse\": \"ApothekenStrassee\",\r\n                \"nummer\": \"12\",\r\n                \"ort\": \"Horb am Neckar\",\r\n                \"plz\": 72345\r\n            }\r\n        }\r\n    },"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/apotheke/{{apothekeId}}/lieferant",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"apotheke",
+						"{{apothekeId}}",
+						"lieferant"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/apotheke/:apothekeId/lieferant",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"apotheke",
+								":apothekeId",
+								"lieferant"
+							],
+							"variable": [
+								{
+									"key": "apothekeId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Alle Liefranten kriegen ist nicht möglich",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "131e0667-58f9-425d-941e-00f81b1503e3",
+						"exec": [
+							"pm.test('Get Lieferanten should fail', function(){\r",
+							"    pm.response.to.have.status(404);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"id\": \"0fb8a598-5b89-4994-8306-01679418bb10\",\r\n        \"name\": \"GEXX\",\r\n        \"anschrift\": {\r\n            \"id\": 10,\r\n            \"strasse\": \"Neckartalstrasse\",\r\n            \"nummer\": \"12\",\r\n            \"ort\": \"Stuttgart\",\r\n            \"plz\": 72345\r\n        },\r\n        \"apotheke\": {\r\n            \"id\": \"1\",\r\n            \"email\": \"benutzer2@apotheke.de\",\r\n            \"name\": \"Löwe Apotheke\",\r\n            \"anschrift\": {\r\n                \"id\": 4,\r\n                \"strasse\": \"ApothekenStrassee\",\r\n                \"nummer\": \"12\",\r\n                \"ort\": \"Horb am Neckar\",\r\n                \"plz\": 72345\r\n            }\r\n        }\r\n    },"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/897655/{{apothekenId}}/lieferant",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"897655",
+						"{{apothekenId}}",
+						"lieferant"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/apotheke/:apothekeId/lieferant",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"apotheke",
+								":apothekeId",
+								"lieferant"
+							],
+							"variable": [
+								{
+									"key": "apothekeId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Hinzufügen einen Lieferanten",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9c55da01-140a-4d9f-82ac-db01751e15f3",
+						"exec": [
+							"pm.test('Creating user successfull', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql(\"GEXX\");\r",
+							"    pm.expect(responseJson.anschrift.strasse).to.eql(\"Neckartalstrasse\");\r",
+							"    pm.expect(responseJson.anschrift.nummer).to.eql(\"12\");\r",
+							"    pm.expect(responseJson.anschrift.ort).to.eql(\"Stuttgart\");\r",
+							"    pm.expect(responseJson.anschrift.plz).to.eql(72345);\r",
+							"    pm.expect(responseJson.apotheke.id).to.eql(\"1\");\r",
+							"    pm.expect(responseJson.apotheke.email).to.eql(\"benutzer2@apotheke.de\");\r",
+							"    pm.expect(responseJson.apotheke.name).to.eql(\"Löwe Apotheke\");\r",
+							"    pm.expect(responseJson.apotheke.anschrift.id).to.eql(4);\r",
+							"    pm.expect(responseJson.apotheke.anschrift.strasse).to.eql(\"ApothekenStrassee\");\r",
+							"    pm.expect(responseJson.apotheke.anschrift.nummer).to.eql(\"12\");\r",
+							"    pm.expect(responseJson.apotheke.anschrift.ort).to.eql(\"Horb am Neckar\");\r",
+							"    pm.expect(responseJson.apotheke.anschrift.plz).to.eql(72345);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status code is CREATED\", function () {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e89ff5f4-221d-4585-9f29-67014ab3549d",
+						"exec": [
+							"pm.globals.set(\"id\", \"4dcec82e\");\r",
+							"pm.globals.set(\"name\", \"GEXX\");\r",
+							"pm.globals.set(\"lieferantAnschriftId\", \"4\");\r",
+							"pm.globals.set(\"strasse\", \"Neckartalstrasse\");\r",
+							"pm.globals.set(\"nummer\", \"12\");\r",
+							"pm.globals.set(\"ort\", \"Stuttgart\");\r",
+							"pm.globals.set(\"plz\", \"72345\");\r",
+							"pm.globals.set(\"apothekenId\", \"1\");\r",
+							"pm.globals.set(\"email\", \"benutzer2@apotheke.de\");\r",
+							"pm.globals.set(\"apothekenName\",\"Löwe Apotheke\");\r",
+							"pm.globals.set(\"apoStrasse\",\"ApothekenStrassee\");\r",
+							"pm.globals.set(\"apoNummer\",\"12\");\r",
+							"pm.globals.set(\"apoOrt\",\"Horb am Neckar\");\r",
+							"pm.globals.set(\"apoPlz\", \"72345\");\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"{{id}}\",\n    \"name\": \"{{name}}\",\n    \"anschrift\": {\n        \"id\": \"{{idAnschrift}}\",\n        \"strasse\": \"{{strasse}}\",\n        \"nummer\": \"{{nummer}}\",\n        \"ort\": \"{{ort}}\",\n        \"plz\": {{plz}}\n    },\n    \"apotheke\": {\n        \"id\": \"{{apothekenId}}\",\n        \"email\": \"{{email}}\",\n        \"name\": \"{{apothekenName}}\",\n        \"anschrift\": {\n            \"id\": \"{{anschriftId}}\",\n            \"strasse\": \"{{apoStrasse}}\",\n            \"nummer\": \"{{apoNummer}}\",\n            \"ort\": \"{{apoOrt}}\",\n            \"plz\": {{apoPlz}}\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/apotheke/{{apothekeId}}/lieferant",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"apotheke",
+						"{{apothekeId}}",
+						"lieferant"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "not found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/apotheke/:apothekeId/lieferant",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"apotheke",
+								":apothekeId",
+								"lieferant"
+							],
+							"variable": [
+								{
+									"key": "apothekeId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Editieren eines Lieferanten",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6f2ddf73-9b3f-4cf2-9a6f-fd72b993f1b2",
+						"exec": [
+							"pm.test(\"Update name successfull\", function () {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.name).to.eql(\"ChangedName\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "918a8274-96ca-4f3f-9222-64b1bd92e1c7",
+						"exec": [
+							"pm.globals.set(\"changedName\", \"ChangedName\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"1\",\n    \"name\": \"{{changedName}}\",\n    \"anschrift\": {\n        \"id\": 10,\n        \"strasse\": \"Neckartalstrasse\",\n        \"nummer\": \"12\",\n        \"ort\": \"Stuttgart\",\n        \"plz\": 72345\n    },\n    \"apotheke\": {\n        \"id\": \"1\",\n        \"email\": \"benutzer2@apotheke.de\",\n        \"name\": \"Löwe Apotheke\",\n        \"anschrift\": {\n            \"id\": 4,\n            \"strasse\": \"ApothekenStrassee\",\n            \"nummer\": \"12\",\n            \"ort\": \"Horb am Neckar\",\n            \"plz\": 72345\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/apotheke/{{apothekeId}}/lieferant/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"apotheke",
+						"{{apothekeId}}",
+						"lieferant",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "not found",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/apotheke/:apothekeId/lieferant/:lieferantId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"apotheke",
+								":apothekeId",
+								"lieferant",
+								":lieferantId"
+							],
+							"variable": [
+								{
+									"key": "apothekeId"
+								},
+								{
+									"key": "lieferantId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Einen Lieferanten kriegen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0f1eb134-9833-4cb7-a344-2e60145100d7",
+						"exec": [
+							"pm.test('get Lieferant is correct'), function () {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.lenght).equal(1);\r",
+							"    pm.environment.set('anzahlLieferanten', jsonData.lenght);\r",
+							"    pm.response.to.have.status(200);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/apotheke/{{apothekeId}}/lieferant/9",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"apotheke",
+						"{{apothekeId}}",
+						"lieferant",
+						"9"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/apotheke/:apothekeId/lieferant/:lieferantId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"apotheke",
+								":apothekeId",
+								"lieferant",
+								":lieferantId"
+							],
+							"variable": [
+								{
+									"key": "apothekeId"
+								},
+								{
+									"key": "lieferantId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Einen Liefaranten löschen",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/apotheke/:apothekeId/lieferant/:lieferantId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"apotheke",
+						":apothekeId",
+						"lieferant",
+						":lieferantId"
+					],
+					"variable": [
+						{
+							"key": "apothekeId",
+							"value": "<long>",
+							"description": "(Required) apotheke id to delete"
+						},
+						{
+							"key": "lieferantId",
+							"value": "<long>",
+							"description": "(Required) apotheke id to delete"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "not found",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/apotheke/:apothekeId/lieferant/:lieferantId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"apotheke",
+								":apothekeId",
+								"lieferant",
+								":lieferantId"
+							],
+							"variable": [
+								{
+									"key": "apothekeId"
+								},
+								{
+									"key": "lieferantId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c6d6962b-2cd0-4f64-b7ab-8082957d428e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "813f2359-17af-46b9-8d70-927ee95a5192",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

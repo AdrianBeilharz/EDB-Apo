@@ -2,6 +2,27 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Getting started
+
+### Install dependencies
+Before you can start using this project you need to have nodejs and npm installed [here](https://nodejs.org/en/download/). <br>
+After you have successfully installed nodejs navigate in a the directory with any CLI and use the following command to install all dependencies:
+```
+npm install
+```
+For more information check the [package.json](./package.json) which dependencies are used.
+
+
+### Routing
+For routing the package react-router-dom is used. For additional information check [here](https://www.freecodecamp.org/news/a-complete-beginners-guide-to-react-router-include-router-hooks/).
+
+### Bootstrap
+Both Bootstrap and react bootstrap are installed. Normally React Bootstrap should be used, check the documentation [here](https://react-bootstrap.github.io/components/). If you can't use React Bootstrap use normal bootstrap, which is documented [here](https://getbootstrap.com/docs/4.5/components/).
+
+### Fontawesome
+free version of Fontawesome is installed. Search [here](https://fontawesome.com/icons?d=gallery&m=free) for available Icons you want to use.
+
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -14,11 +35,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
@@ -28,16 +44,6 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 ## Learn More
 
