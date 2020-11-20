@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"zugaenge"})
+@JsonIgnoreProperties({"zugaenge", "apotheke"})
 @Table(name = "lieferant")
 public class Lieferant {
 
@@ -21,42 +21,16 @@ public class Lieferant {
     @Column(name="name", nullable = false)
     private String name;
 
-    @ManyToOne(targetEntity = Adresse.class, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Adresse.class, cascade=CascadeType.ALL)
     @JoinColumn(name="anschrift", referencedColumnName = "id")
     private Adresse anschrift;
 
-    @ManyToOne(targetEntity = Apotheke.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Apotheke.class)
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     private Apotheke apotheke;
 
-    @OneToMany(targetEntity = Zugang.class, cascade = CascadeType.ALL, mappedBy="lieferant")
+    @OneToMany(targetEntity = Zugang.class, mappedBy="lieferant")
     private List<Zugang> zugaenge;
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public void setAnschrift(Adresse anschrift) {
-        this.anschrift = anschrift;
-    }
-
-    public void setApotheke(Apotheke apotheke) {
-        this.apotheke = apotheke;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Adresse getAnschrift() {
-        return anschrift;
-    }
-
-    public Apotheke getApotheke() {
-        return apotheke;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 }

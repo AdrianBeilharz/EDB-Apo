@@ -35,11 +35,11 @@ public class Benutzer {
     @Column(name="rolle", nullable = false)
     private Rolle rolle;
 
-    @ManyToOne(targetEntity = Apotheke.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Apotheke.class)
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     private Apotheke apotheke;
 
-    @OneToMany(targetEntity = BetaeubungsmittelBuchung.class, cascade = CascadeType.ALL, mappedBy="benutzer")
+    @OneToMany(targetEntity = BetaeubungsmittelBuchung.class, mappedBy="benutzer")
     private List<BetaeubungsmittelBuchung> btmBuchungen;
 
 }

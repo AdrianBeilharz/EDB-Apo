@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"benutzer", "aerzte", "lieferanten", "empfaenger"})
+@JsonIgnoreProperties({"benutzer", "aerzte", "lieferanten", "empfaenger", "betaeubungsmittel"})
 @Table(name = "apotheke")
 public class Apotheke {
 
@@ -24,7 +24,7 @@ public class Apotheke {
     @Column(name="name", nullable = false)
     private String name;
 
-    @OneToOne(targetEntity = Adresse.class, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Adresse.class, cascade=CascadeType.ALL)
     @JoinColumn(name="anschrift", referencedColumnName = "id")
     private Adresse anschrift;
 
@@ -39,5 +39,8 @@ public class Apotheke {
 
     @OneToMany(targetEntity = Empfaenger.class, cascade = CascadeType.ALL, mappedBy="apotheke")
     private List<Empfaenger> empfaenger;
+
+    @OneToMany(targetEntity = Betaeubungsmittel.class, cascade = CascadeType.ALL, mappedBy ="apotheke")
+    private List<Betaeubungsmittel> betaeubungsmittel;
 
 }

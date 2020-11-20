@@ -1,5 +1,6 @@
 package com.ebdapo.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,7 @@ public class Adresse {
 
     @Id
     @Column(name="id", nullable = false)
-    private int id;
+    private String id;
 
     @Column(name="strasse", nullable = false)
     private String strasse;
@@ -26,7 +27,6 @@ public class Adresse {
 
     @Column(name="plz", nullable = false)
     private int plz;
-
 
 
 }

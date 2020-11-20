@@ -16,7 +16,7 @@ import java.util.UUID;
 public class ApothekenController {
 
     @Autowired
-    private ApothekenRepository apothekenRepo;
+    ApothekenRepository apothekenRepo;
 
     @GetMapping("/apotheke")
     public List<Apotheke> getAll() {
@@ -32,18 +32,16 @@ public class ApothekenController {
         if(checkIfAlreadyExists(apotheke)){
             throw new InvalidInputException("Apotheke existiert bereits");
         }
-
+        apotheke.getAnschrift().setId(UUID.randomUUID().toString());
         apotheke.setId(UUID.randomUUID().toString());
+//        adresseRespo.save(apotheke.getAnschrift());
         apothekenRepo.save(apotheke);
         return new ResponseEntity<>(apotheke, HttpStatus.CREATED);
     }
 
     @GetMapping("/apotheke/{apothekeId}")
     public Apotheke getAll(@PathVariable String apothekeId) {
-        if(!apothekenRepo.existsById(apothekeId)){
-            throw new InvalidInputException("Falsche ID");
-        }
-        return apothekenRepo.findById(apothekeId).get();
+        return apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
     }
 
     @PutMapping("/apotheke/{apothekeId}")
@@ -51,11 +49,19 @@ public class ApothekenController {
         Apotheke apo = apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
 
         apo.setName(newApo.getName());
-        apo.setAnschrift(newApo.getAnschrift());
-        apo.setBenutzer(newApo.getBenutzer());
-        apo.setAerzte(newApo.getAerzte());
-        apo.setLieferanten(newApo.getLieferanten());
-        apo.setEmpfaenger(newApo.getEmpfaenger());
+        if(newApo.getAnschrift() != null){
+            apo.getAnschrift().setNummer(newApo.getAnschrift().getNummer());
+            apo.getAnschrift().setOrt(newApo.getAnschrift().getOrt());
+            apo.getAnschrift().setPlz(newApo.getAnschrift().getPlz());
+            apo.getAnschrift().setStrasse(newApo.getAnschrift().getStrasse());
+        }else {
+            throw new InvalidInputException("Anschrift ist notwendig");
+        }
+       //apo.setBenutzer(newApo.getBenutzer());
+       //apo.setAerzte(newApo.getAerzte());
+       //apo.setLieferanten(newApo.getLieferanten());
+       //apo.setEmpfaenger(newApo.getEmpfaenger());
+       //adresseRespo.save(apo.getAnschrift());
         apothekenRepo.save(apo);
         return new ResponseEntity<>(apo, HttpStatus.OK);
     }

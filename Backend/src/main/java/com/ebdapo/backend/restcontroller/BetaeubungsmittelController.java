@@ -2,7 +2,7 @@ package com.ebdapo.backend.restcontroller;
 
 import com.ebdapo.backend.entity.Apotheke;
 import com.ebdapo.backend.entity.Betaeubungsmittel;
-import com.ebdapo.backend.entity.BetaeubungsmittelUpdateDetails;
+import com.ebdapo.backend.entity.apidetails.BetaeubungsmittelAPIDetails;
 import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.repository.BetaeubungsmittelRepository;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
@@ -26,10 +26,7 @@ public class BetaeubungsmittelController {
 
     @GetMapping("/apotheke/{apothekeId}/btm")
     public List<Betaeubungsmittel> getAllBtm(@PathVariable String apothekeId) {
-        if(!apothekeRepo.existsById(apothekeId)){
-            throw new BadRequestException("Apotheke existiert nicht");
-        }
-        return btmRepo.findBtmWithApothekenId(apothekeId);
+        return apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new).getBetaeubungsmittel();
     }
 
     @PostMapping("/apotheke/{apothekeId}/btm")
@@ -45,15 +42,16 @@ public class BetaeubungsmittelController {
     }
 
     @GetMapping("/apotheke/{apothekeId}/btm/{btmId}")
-    public Betaeubungsmittel getBtmById(@PathVariable String btmId) {
-        if(!btmRepo.existsById(btmId)){
-            throw new InvalidInputException("Falsche ID");
+    public Betaeubungsmittel getBtmById(@PathVariable String apothekeId, @PathVariable String btmId) {
+        Betaeubungsmittel b =  btmRepo.findByIds(apothekeId, btmId);
+        if(b == null){
+            throw new InvalidInputException();
         }
-        return btmRepo.findById(btmId).get();
+        return b;
     }
 
     @PutMapping("/apotheke/{apothekeId}/btm/{btmId}")
-    public ResponseEntity<Betaeubungsmittel> updateBtmById(@PathVariable String btmId, @RequestBody BetaeubungsmittelUpdateDetails newBtm) {
+    public ResponseEntity<Betaeubungsmittel> updateBtmById(@PathVariable String btmId, @RequestBody BetaeubungsmittelAPIDetails newBtm) {
         if(!btmRepo.existsById(btmId)){
             throw new InvalidInputException("Falsche ID");
         }

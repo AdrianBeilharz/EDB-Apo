@@ -2,7 +2,7 @@ package com.ebdapo.backend.restcontroller;
 
 import com.ebdapo.backend.entity.Apotheke;
 import com.ebdapo.backend.entity.Benutzer;
-import com.ebdapo.backend.entity.BenutzerUpdateDetails;
+import com.ebdapo.backend.entity.apidetails.BenutzerAPIDetails;
 import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.repository.BenutzerRepository;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
@@ -52,14 +52,11 @@ public class BenutzerController {
 
     @GetMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
     public Benutzer getBenutzerById(@PathVariable String benutzerId){
-        if(!benutzerRepo.existsById(benutzerId)){
-            throw new InvalidInputException("Falsche ID");
-        }
-        return benutzerRepo.findById(benutzerId).get();
+        return benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new);
     }
 
     @PutMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
-    public ResponseEntity<Benutzer> updateBenutzerById(@PathVariable String benutzerId, @RequestBody BenutzerUpdateDetails newBenutzer){
+    public ResponseEntity<Benutzer> updateBenutzerById(@PathVariable String benutzerId, @RequestBody BenutzerAPIDetails newBenutzer){
         if(!benutzerRepo.existsById(benutzerId)){
             throw new InvalidInputException("Falsche ID");
         }

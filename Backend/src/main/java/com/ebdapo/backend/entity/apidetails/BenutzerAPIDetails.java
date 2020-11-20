@@ -1,4 +1,4 @@
-package com.ebdapo.backend.entity;
+package com.ebdapo.backend.entity.apidetails;
 
 import com.ebdapo.backend.entity.enums.Rolle;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.Id;
 
 @Data
-public class BenutzerUpdateDetails {
+public class BenutzerAPIDetails {
 
     @Id
     private String id;

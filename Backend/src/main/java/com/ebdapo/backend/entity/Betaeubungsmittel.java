@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"btmBuchungen"})
+@JsonIgnoreProperties({"btmBuchungen", "apotheke"})
 @Table(name = "btm")
 public class Betaeubungsmittel {
 
