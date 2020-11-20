@@ -19,7 +19,7 @@ CREATE TABLE adresse_t(
 	plz INTEGER NOT NULL,
 	PRIMARY KEY (id)
 );
-
+test
 CREATE TABLE apotheke(
 	id VARCHAR (40) NOT NULL,
 	name VARCHAR (50) NOT NULL,
