@@ -1,6 +1,5 @@
 # Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ EDB Apo is for electronic documentation of Betäubungsmittel in Germany
 
 ## Getting started
 
