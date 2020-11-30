@@ -20,13 +20,13 @@ function App() {
         <FontAwesomeIcon size="3x" icon={faBookMedical}/>
         <h1>EDB-Apo</h1>
       </header>
-      <Container>
+      <Container fluid>
         <Router>
           <Switch>
             {/* Components */}
             <Route path="/" exact component={Startseite} />
             <Route path="/btmbuch" exact component={BTMBuch} />
-            <Route path="/btmbuch/apotheke" exact component={Apotheke} />
+            <Route path="/apotheke" exact component={Apotheke} />
             {/* Static pages */}
             <Route path="/impressum" component={Impressum} />
           </Switch>
