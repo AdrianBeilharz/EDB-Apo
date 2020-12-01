@@ -855,15 +855,9 @@ components:
         - einheit
         - apotheke
       properties:
-        id:
-          type: string
-          format: uuid
         name:
           type: string
           example: urogesic
-        pzn:
-          type: string
-          example: 00123456
         darreichungsform:
           type: string
           enum: [Tabletten, Tropfen, Zäpfchen]
@@ -892,9 +886,6 @@ components:
         - benutzer
         - typ
       properties:
-        id:
-          type: string
-          format: uuid
         benutzer:
           type: string
           format: uuid
@@ -905,7 +896,7 @@ components:
           type: integer
           format: int64
           example: 3
-        datum: 
+        pruefdatum:
           type: string
           format: date
         typ:
@@ -916,36 +907,29 @@ components:
           type: string
           example: 08786234
         lieferant:
-          $ref: '#/components/schemas/lieferant'
-        rezeptnr:
+          type: string
+          format: uuid
+        rezept:
           type: string
           example: 0038483
         arzt:
-          $ref: '#/components/schemas/arzt'
+          type: string
+          format: uuid
         empfaenger:
-          $ref: '#/components/schemas/empfaenger'
+          type: string
+          format: uuid
     arzt:
       type: object
       required:
-        - vorname
         - name
         - anschrift
         - apotheke
       properties:
-        id:
-          type: string
-          format: uuid
-        vorname:
-          type: string
-          example: Holger
         name:
           type: string
-          example: Streicher
+          example: Dr. Streicher
         anschrift:
           $ref: '#/components/schemas/anschrift'
-        apotheke:
-          type: string
-          format: uuid
     lieferant:
       type: object
       required:
@@ -953,17 +937,11 @@ components:
         - anschrift
         - apotheke
       properties:
-        id:
-          type: string
-          format: uuid
         name:
           type: string
           example: Liefer GmbH
         anschrift:
           $ref: '#/components/schemas/anschrift'
-        apotheke:
-          type: string
-          format: uuid
     empfaenger:
       type: object
       required:
@@ -972,9 +950,6 @@ components:
         - anschrift
         - apotheke
       properties:
-        id:
-          type: string
-          format: uuid
         vorname:
           type: string
           example: Heiz
@@ -983,9 +958,6 @@ components:
           example: Wagner
         anschrift:
           $ref: '#/components/schemas/anschrift'
-        apotheke:
-          type: string
-          format: uuid
   requestBodies:
     apotheke:
       content:
@@ -1025,7 +997,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/lieferant'
+            $ref: '#/components/schemas/empfaenger'
   securitySchemes:
     apothekearzt_auth:
       type: oauth2
