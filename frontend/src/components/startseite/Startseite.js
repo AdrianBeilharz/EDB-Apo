@@ -4,13 +4,24 @@ import ApothekeModal from '../../modals/ApothekeModal';
 
 function Startseite() {
 	const [modalShow, setModalShow] = React.useState(false);
-
+	var apotheke = {
+		id: "",
+		name: "",
+		email: "",
+		adresse: {
+			strasse: "",
+			nummer: "",
+			plz: "",
+			ort: ""
+		}
+	}
 
 	return (
 		<Row>
 			<ApothekeModal 
 				show={modalShow}
-				onHide={() => setModalShow(false)} />
+				onHide={() => setModalShow(false)}
+				apotheke = {apotheke} />
 			<Col>
 			<Form class="form-inline">
 				<Form.Row>
