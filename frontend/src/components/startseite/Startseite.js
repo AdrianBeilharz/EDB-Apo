@@ -1,6 +1,6 @@
 import React from 'react';
 import {Row, Col, Button, Form} from 'react-bootstrap';
-import ApothekeModal from '../../modals/ApothekeModal';
+import ApothekeRegisterModal from '../../modals/ApothekeRegisterModal';
 
 function Startseite() {
 	const [modalShow, setModalShow] = React.useState(false);
@@ -18,7 +18,7 @@ function Startseite() {
 
 	return (
 		<Row>
-			<ApothekeModal 
+			<ApothekeRegisterModal 
 				show={modalShow}
 				onHide={() => setModalShow(false)}
 				apotheke = {apotheke} />

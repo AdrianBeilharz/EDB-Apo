@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Button, Table } from 'react-bootstrap';
-import ApothekeModal from '../../modals/ApothekeModal';
+import ApothekeEditModal from '../../modals/ApothekeEditModal';
 
 function Apotheke(props) {
   //static objects and lists must be swapped to api calls to load all the data
@@ -192,7 +192,7 @@ function Apotheke(props) {
 
   return (
     <div>
-      <ApothekeModal 
+      <ApothekeEditModal 
 				show={modalShow}
         onHide={() => setModalShow(false)}
         submitApotheke = {(apo) => updateApotheke(apo)}

@@ -28,7 +28,7 @@ function App() {
             <Route path="/btmbuch" exact component={BTMBuch} />
             <Route path="/apotheke" exact component={Apotheke} />
             {/* Static pages */}
-            <Route path="/impressum" component={Impressum} />
+            <Route path="/impressum" exact component={Impressum} />
           </Switch>
         </Router>
       </Container>

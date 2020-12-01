@@ -79,13 +79,14 @@ class ApothekeModal extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     console.log("something should happen");
+    //put apotheke.then status = 200 -> refresh data
     this.props.submitApotheke(this.state.apotheke);
     this.props.onHide();
   }
   
   render() {
     return (
-      <Modal show={this.props.show} onHide={this.props.onHide} centered>
+      <Modal show={this.props.show} onHide={this.props.onHide} centered backdrop="static">
         <Modal.Header>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
