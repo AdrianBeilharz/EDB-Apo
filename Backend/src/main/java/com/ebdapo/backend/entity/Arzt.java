@@ -29,7 +29,9 @@ public class Arzt {
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     private Apotheke apotheke;
 
-    @OneToMany(targetEntity = Abgang.class, mappedBy="arzt")
+    @OneToMany(targetEntity = Abgang.class, cascade=CascadeType.ALL, mappedBy="arzt")
     private List<Abgang> abgaenge;
+
+
 
 }

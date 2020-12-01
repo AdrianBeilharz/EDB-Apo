@@ -10,18 +10,16 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @Table(name = "zugang")
-public class Zugang implements Serializable {
+public class Zugang extends BetaeubungsmittelBuchung{
 
-    @Id
-    @OneToOne(targetEntity = BetaeubungsmittelBuchung.class, cascade = CascadeType.ALL)
-    @JoinColumn(name="btm_buchung", referencedColumnName = "id")
-    private BetaeubungsmittelBuchung btmBuchung;
+//    @OneToOne(targetEntity = BetaeubungsmittelBuchung.class, cascade = CascadeType.ALL)
+//    @JoinColumn(name="btm_buchung", referencedColumnName = "id")
+//    private BetaeubungsmittelBuchung btmBuchung;
 
     @Column(name="anfordergungsschein", nullable = false)
     private String anfordergungsschein;
 
-    @Id
-    @ManyToOne(targetEntity = Lieferant.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Lieferant.class)
     @JoinColumn(name="lieferant", referencedColumnName = "id")
     private Lieferant lieferant;
 

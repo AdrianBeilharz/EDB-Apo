@@ -14,6 +14,7 @@ public class BenutzerAPIDetails {
     private String vorname;
     private String name;
     private String passwort;
+    private boolean aktiv;
     private Rolle rolle;
     private String apotheke; //id
 

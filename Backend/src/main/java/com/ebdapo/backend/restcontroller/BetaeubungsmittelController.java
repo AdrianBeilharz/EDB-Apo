@@ -43,7 +43,7 @@ public class BetaeubungsmittelController {
 
     @GetMapping("/apotheke/{apothekeId}/btm/{btmId}")
     public Betaeubungsmittel getBtmById(@PathVariable String apothekeId, @PathVariable String btmId) {
-        Betaeubungsmittel b =  btmRepo.findByIds(apothekeId, btmId);
+        Betaeubungsmittel b =  btmRepo.findByIds(btmId, apothekeId);
         if(b == null){
             throw new InvalidInputException();
         }
@@ -51,27 +51,22 @@ public class BetaeubungsmittelController {
     }
 
     @PutMapping("/apotheke/{apothekeId}/btm/{btmId}")
-    public ResponseEntity<Betaeubungsmittel> updateBtmById(@PathVariable String btmId, @RequestBody BetaeubungsmittelAPIDetails newBtm) {
-        if(!btmRepo.existsById(btmId)){
-            throw new InvalidInputException("Falsche ID");
-        }
-        Betaeubungsmittel btm = btmRepo.findById(btmId).orElseThrow(InvalidInputException::new);
-        try {
-            if(newBtm.getApotheke() == null) {
-                throw new InvalidInputException("ApothekenId darf nicht leer sein");
-            }
-            Apotheke apo = apothekeRepo.findById(newBtm.getApotheke()).orElseThrow(InvalidInputException::new);
+    public ResponseEntity<Betaeubungsmittel> updateBtmById(@PathVariable String apothekeId, @PathVariable String btmId, @RequestBody BetaeubungsmittelAPIDetails newBtm) {
+        Betaeubungsmittel btm = btmRepo.findByIds(btmId, apothekeId);
 
-            btm.setName(newBtm.getName());
-            btm.setDarreichungsform(newBtm.getDarreichungsform());
-            btm.setEinheit(newBtm.getEinheit());
-            btm.setApotheke(apo);
-
-            btmRepo.save(btm);
-            return new ResponseEntity<>(btm, HttpStatus.OK);
-        }catch(Exception e){
-            throw new InvalidInputException();
+        if(btm == null){
+            throw new InvalidInputException("Betaeubungsmittel konnte nicht gefunden werden");
         }
+
+        Apotheke apo = apothekeRepo.findById(newBtm.getApotheke()).orElseThrow(InvalidInputException::new);
+
+        btm.setName(newBtm.getName());
+        btm.setDarreichungsform(newBtm.getDarreichungsform());
+        btm.setEinheit(newBtm.getEinheit());
+        btm.setApotheke(apo);
+
+        btmRepo.save(btm);
+        return new ResponseEntity<>(btm, HttpStatus.OK);
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/btm/{btmId}")
