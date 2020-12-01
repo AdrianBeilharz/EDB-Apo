@@ -16,16 +16,19 @@ public class Empfaenger {
 
     @Id
     @Column(name="id", nullable = false)
-    private int id;
+    private String id;
 
     @Column(name="name", nullable = false)
     private String name;
+
+    @Column(name="vorname", nullable = false)
+    private String vorname;
 
     @OneToOne(targetEntity = Adresse.class, cascade = CascadeType.ALL)
     @JoinColumn(name="anschrift", referencedColumnName = "id")
     private Adresse anschrift;
 
-    @ManyToOne(targetEntity = Apotheke.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Apotheke.class)
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     private Apotheke apotheke;
 

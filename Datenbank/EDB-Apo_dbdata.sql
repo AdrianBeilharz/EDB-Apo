@@ -10,9 +10,9 @@ INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('9', 'Hausstrasse',
 INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('10', 'Neckartalstrasse', '153','Stuttgart', '70376' );
 INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('11', 'Friozheimerstrasse', '7','Stuttgart', '70499' );
 
-INSERT INTO apotheke(id, name, email, anschrift) values ('1', 'Löwen Apotheke','benutzer1@outlook.de', '1');
-INSERT INTO apotheke(id, name, email, anschrift) values ('2', 'Dorf Apotheke', 'benutzer2@outlook.de', '2');
-INSERT INTO apotheke(id, name, email, anschrift) values ('3', 'Hirsch Apotheke', 'benutzer3@outlook.de', '5');
+INSERT INTO apotheke(id, name, email, anschrift) values ('1', 'Löwen Apotheke','apo1@outlook.de', '1');
+INSERT INTO apotheke(id, name, email, anschrift) values ('2', 'Dorf Apotheke', 'apo2@outlook.de', '2');
+INSERT INTO apotheke(id, name, email, anschrift) values ('3', 'Hirsch Apotheke', 'apo3@outlook.de', '5');
 
 INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('1', 'Capros Akut 20 mg', 'Tbl', 'Stueck', '1');
 INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('2', 'Carehoxal 10mg', 'RTA', 'Stueck', '1');
@@ -85,21 +85,21 @@ INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('10'
 INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('11', '2020-09-25', '5',  '2020-09-23', '15', '12');
 INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('12', '2020-09-25', '20',  '2020-09-22', '16', '12');
 
-INSERT INTO zugang (btm_buchung, anfordergungsschein, lieferant) value ('1', '63671547', '1');
-INSERT INTO zugang (btm_buchung, anfordergungsschein, lieferant) value ('2', '65571547', '1');
-INSERT INTO zugang (btm_buchung, anfordergungsschein, lieferant) value ('3', '63688479', '2');
-INSERT INTO zugang (btm_buchung, anfordergungsschein, lieferant) value ('4', '65571993', '3');
-INSERT INTO zugang (btm_buchung, anfordergungsschein, lieferant) value ('5', '63678548', '1');
-INSERT INTO zugang (btm_buchung, anfordergungsschein, lieferant) value ('6', '65571547', '1');
-INSERT INTO zugang (btm_buchung, anfordergungsschein, lieferant) value ('7', '63688471', '2');
-INSERT INTO zugang (btm_buchung, anfordergungsschein, lieferant) value ('8', '65571997', '3');
+INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('1', '63671547', '1');
+INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('2', '65571547', '1');
+INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('3', '63688479', '2');
+INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('4', '65571993', '3');
+INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('5', '63678548', '1');
+INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('6', '65571547', '1');
+INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('7', '63688471', '2');
+INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('8', '65571997', '3');
 
-INSERT INTO abgang (btm_buchung, empfaenger, arzt, rezept) value ('1', '1', '2', '636715473');
-INSERT INTO abgang (btm_buchung, empfaenger, arzt, rezept) value ('2', '1', '3', '655715475');
-INSERT INTO abgang (btm_buchung, empfaenger, arzt, rezept) value ('3', '2', '4', '636884795');
-INSERT INTO abgang (btm_buchung, empfaenger, arzt, rezept) value ('4', '2', '5', '655719937');
-INSERT INTO abgang (btm_buchung, empfaenger, arzt, rezept) value ('5', '3', '6', '636785489');
-INSERT INTO abgang (btm_buchung, empfaenger, arzt, rezept) value ('6', '4', '7', '655715476');
-INSERT INTO abgang (btm_buchung, empfaenger, arzt, rezept) value ('7', '5', '8', '636884716');
-INSERT INTO abgang (btm_buchung, empfaenger, arzt, rezept) value ('8', '7', '8', '655719972');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('1', '1', '2', '636715473');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('2', '1', '3', '655715475');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('3', '2', '4', '636884795');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('4', '2', '5', '655719937');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('5', '3', '6', '636785489');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('6', '4', '7', '655715476');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('7', '5', '8', '636884716');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('8', '7', '8', '655719972');
 

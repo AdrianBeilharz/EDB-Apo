@@ -69,14 +69,18 @@ public class LieferantController {
             throw new InvalidInputException("Lieferant konnte nicht gefunden werden");
         }
 
-        found.setName(newLiefer.getName());
-        if(newLiefer.getAnschrift() != null){
-            found.getAnschrift().setNummer(newLiefer.getAnschrift().getNummer());
-            found.getAnschrift().setOrt(newLiefer.getAnschrift().getOrt());
-            found.getAnschrift().setPlz(newLiefer.getAnschrift().getPlz());
-            found.getAnschrift().setStrasse(newLiefer.getAnschrift().getStrasse());
+        if(newLiefer.getApotheke() == null || newLiefer.getApotheke().isEmpty()){
+            throw new InvalidInputException("ApothekenId darf nicht leer sein");
         }
-        found.setApotheke(apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
+
+        found.setName(newLiefer.getName());
+        found.getAnschrift().setPlz(newLiefer.getAnschrift().getPlz());
+        found.getAnschrift().setOrt(newLiefer.getAnschrift().getOrt());
+        found.getAnschrift().setStrasse(newLiefer.getAnschrift().getStrasse());
+        found.getAnschrift().setNummer(newLiefer.getAnschrift().getNummer());
+
+        found.setApotheke(apothekenRepo.findById(newLiefer.getApotheke()).orElseThrow(InvalidInputException::new));
+
         lieferantRepo.save(found);
         return new ResponseEntity<>(found, HttpStatus.OK);
     }

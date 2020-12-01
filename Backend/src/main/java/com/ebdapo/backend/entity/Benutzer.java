@@ -31,6 +31,9 @@ public class Benutzer {
     @Column(name="passwort", nullable = false)
     private String passwort;
 
+    @Column(name="aktiv", nullable = false)
+    private boolean aktiv;
+
     @Enumerated(EnumType.STRING)
     @Column(name="rolle", nullable = false)
     private Rolle rolle;
@@ -39,7 +42,7 @@ public class Benutzer {
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     private Apotheke apotheke;
 
-    @OneToMany(targetEntity = BetaeubungsmittelBuchung.class, mappedBy="benutzer")
+    @OneToMany(targetEntity = BetaeubungsmittelBuchung.class, cascade = CascadeType.ALL, mappedBy="benutzer")
     private List<BetaeubungsmittelBuchung> btmBuchungen;
 
 }

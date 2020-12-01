@@ -46,6 +46,7 @@ public class BenutzerController {
         }
 
         benutzer.setId(UUID.randomUUID().toString());
+        benutzer.setAktiv(true);
         benutzerRepo.save(benutzer);
         return new ResponseEntity<>(benutzer, HttpStatus.CREATED);
     }
@@ -70,6 +71,7 @@ public class BenutzerController {
             benutzer.setNutzername(newBenutzer.getNutzername());
             benutzer.setVorname(newBenutzer.getVorname());
             benutzer.setPasswort(newBenutzer.getPasswort());
+            benutzer.setAktiv(newBenutzer.isAktiv());
             benutzer.setRolle(newBenutzer.getRolle());
             benutzer.setApotheke(apo);
 

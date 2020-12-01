@@ -23,9 +23,6 @@ public class ArztController {
     @Autowired
     ApothekenRepository apothekenRepo;
 
-//    @Autowired
-//    private AdresseRespository adresseRespo;
-
     @GetMapping("/apotheke/{apothekeId}/arzt")
     public List<Arzt> getAllAerzte(@PathVariable String apothekeId) {
         return apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new).getAerzte();
@@ -73,15 +70,17 @@ public class ArztController {
             throw new InvalidInputException("Arzt konnte nicht gefunden werden");
         }
 
-        found.setName(arzt.getName());
-        if(arzt.getAnschrift() != null){
-            found.getAnschrift().setPlz(arzt.getAnschrift().getPlz());
-            found.getAnschrift().setOrt(arzt.getAnschrift().getOrt());
-            found.getAnschrift().setStrasse(arzt.getAnschrift().getStrasse());
-            found.getAnschrift().setNummer(arzt.getAnschrift().getNummer());
+        if(arzt.getApotheke() == null || arzt.getApotheke().isEmpty()){
+            throw new InvalidInputException("ApothekenId darf nicht leer sein");
         }
+        found.setName(arzt.getName());
 
-        found.setApotheke(apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
+        found.getAnschrift().setPlz(arzt.getAnschrift().getPlz());
+        found.getAnschrift().setOrt(arzt.getAnschrift().getOrt());
+        found.getAnschrift().setStrasse(arzt.getAnschrift().getStrasse());
+        found.getAnschrift().setNummer(arzt.getAnschrift().getNummer());
+
+        found.setApotheke(apothekenRepo.findById(arzt.getApotheke()).orElseThrow(InvalidInputException::new));
         arztRepo.save(found);
         return new ResponseEntity<>(found, HttpStatus.OK);
     }

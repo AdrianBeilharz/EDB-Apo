@@ -10,6 +10,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Table(name = "btm_buchung")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class BetaeubungsmittelBuchung {
 
     @Id
@@ -27,15 +28,13 @@ public class BetaeubungsmittelBuchung {
     @Column(name="datum", nullable = false)
     private Date datum;
 
-    @ManyToOne(targetEntity = Betaeubungsmittel.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Betaeubungsmittel.class)
     @JoinColumn(name="btm", referencedColumnName = "id")
     private Betaeubungsmittel btm;
 
     @ManyToOne(targetEntity = Benutzer.class, cascade = CascadeType.ALL)
     @JoinColumn(name="benutzer", referencedColumnName = "id")
     private Benutzer benutzer;
-
-
 
 
 }
