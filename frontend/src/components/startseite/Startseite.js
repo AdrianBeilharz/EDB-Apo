@@ -1,6 +1,8 @@
 import React from 'react';
-import {Row, Col, Button, Form} from 'react-bootstrap';
+import {Row, Col, Button} from 'react-bootstrap';
 import ApothekeRegisterModal from '../../modals/ApothekeRegisterModal';
+import Login from './Login';
+import AuthorizationService from '../../services/AuthorizationService';
 
 function Startseite() {
 	const [modalShow, setModalShow] = React.useState(false);
@@ -16,6 +18,12 @@ function Startseite() {
 		}
 	}
 
+	const login = (nutzername, passwort) => {
+		new AuthorizationService().login(nutzername, passwort);
+	}
+
+
+
 	return (
 		<Row>
 			<ApothekeRegisterModal 
@@ -23,19 +31,8 @@ function Startseite() {
 				onHide={() => setModalShow(false)}
 				apotheke = {apotheke} />
 			<Col>
-			<Form class="form-inline">
-				<Form.Row>
-					<Col>
-						<Form.Control type="text" placeholder="Nutzername" />
-					</Col>
-					<Col>
-					<Form.Control type="password" placeholder="Passwort" />
-					</Col>
-					<Col>
-					<Button variant="primary" type="submit" href="BTMBuch">Login</Button>
-					</Col>
-				</Form.Row>
-			</Form>
+				<Login 
+				login={(nutzername, password) => login(nutzername, password)}/>
 			</Col>
 			<Col>
 				<Button variant="primary" onClick={() => setModalShow(true)}>Apotheke Registrieren</Button>
