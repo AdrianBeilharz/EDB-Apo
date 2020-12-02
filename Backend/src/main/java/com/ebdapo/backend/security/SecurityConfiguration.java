@@ -37,7 +37,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .and().httpBasic()
 //                .and().formLogin().defaultSuccessUrl("/apotheke", true).permitAll()
                 .and().logout().permitAll()
-                .and().csrf().disable();
+                .and().csrf().disable()
+                .cors();
     }
 
     @Bean
