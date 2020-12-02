@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Button, Table } from 'react-bootstrap';
 import ApothekeEditModal from '../../modals/ApothekeEditModal';
+import ApothekeDetails from './ApothekeDetails';
 
 function Apotheke(props) {
   //static objects and lists must be swapped to api calls to load all the data
@@ -199,9 +200,7 @@ function Apotheke(props) {
         apotheke={apotheke} />
       <Row>
         <Col md={{ span: 2, offset: 1 }} >
-          <h3>Apotheken Details</h3>
-          <ApoDetails />
-          <Button variant="primary" onClick={() => setModalShow(true)}>Apotheke editieren</Button>
+          <ApothekeDetails />
         </Col>
         <Col md={{ span: 4, offset: 3 }}>
           <h3>Pharmazeutisches Personal</h3>

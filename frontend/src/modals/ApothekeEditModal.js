@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 
-class ApothekeModal extends React.Component {
+class ApothekeEditModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {apotheke: props.apotheke};
@@ -37,6 +37,7 @@ class ApothekeModal extends React.Component {
       apotheke: {
         ...prevState.apotheke,
         adresse: {
+          ...prevState.apotheke.adresse,
           strasse: event.target.value
         }
       }
@@ -48,6 +49,7 @@ class ApothekeModal extends React.Component {
       apotheke: {
         ...prevState.apotheke,
         adresse: {
+          ...prevState.apotheke.adresse,
           nummer: event.target.value
         }
       }
@@ -59,6 +61,7 @@ class ApothekeModal extends React.Component {
       apotheke: {
         ...prevState.apotheke,
         adresse: {
+          ...prevState.apotheke.adresse,
           plz: event.target.value
         }
       }
@@ -70,24 +73,23 @@ class ApothekeModal extends React.Component {
       apotheke: {
         ...prevState.apotheke,
         adresse: {
+          ...prevState.apotheke.adresse,
           ort: event.target.value
         }
       }
     }))
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    console.log("something should happen");
+  handleSubmit() {
+    console.log("save changes");
     //put apotheke.then status = 200 -> refresh data
-    this.props.submitApotheke(this.state.apotheke);
     this.props.onHide();
   }
   
   render() {
     return (
       <Modal show={this.props.show} onHide={this.props.onHide} centered backdrop="static">
-        <Modal.Header>
+        <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -118,7 +120,7 @@ class ApothekeModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={this.props.onHide}>Cancel</Button>
-          <Button variant="primary" type="Submit" onClick={this.handleSubmit}>OK</Button>
+          <Button variant="primary" type="Submit" onClick={this.handleSubmit}>Ändern</Button>
         </Modal.Footer>
       </Modal>
     )
@@ -126,4 +128,4 @@ class ApothekeModal extends React.Component {
   
 }
 
-export default ApothekeModal;
+export default ApothekeEditModal;
