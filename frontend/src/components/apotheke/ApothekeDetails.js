@@ -23,7 +23,6 @@ class ApothekeDetails extends Component {
   }
 
   componentDidMount() {
-    this.setState({ isLoading: true });
     fetch("http://localhost:8080/apotheke/1")
     .then(res => res.json())
     .then(data => this.setState({apotheke: data}))
@@ -33,16 +32,13 @@ class ApothekeDetails extends Component {
     modalShow: !this.state.modalShow
   })
 
-  
-
   render() {
     return (
       <Fragment>
         <ApothekeEditModal 
-        show={this.state.modalShow}
-        onHide={() => this.toggleModal()}
-        
-        apotheke={this.state.apotheke} />
+          show={this.state.modalShow}
+          onHide={() => this.toggleModal()}
+          apotheke={this.state.apotheke} />
         <h3>Apotheken Details</h3>
             
             
