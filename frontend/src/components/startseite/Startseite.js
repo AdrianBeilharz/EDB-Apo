@@ -1,16 +1,27 @@
 import React from 'react';
 import {Row, Col, Button, Form} from 'react-bootstrap';
-import ApothekeModal from '../../modals/ApothekeModal';
+import ApothekeRegisterModal from '../../modals/ApothekeRegisterModal';
 
 function Startseite() {
 	const [modalShow, setModalShow] = React.useState(false);
-
+	var apotheke = {
+		id: "",
+		name: "",
+		email: "",
+		adresse: {
+			strasse: "",
+			nummer: "",
+			plz: "",
+			ort: ""
+		}
+	}
 
 	return (
 		<Row>
-			<ApothekeModal 
+			<ApothekeRegisterModal 
 				show={modalShow}
-				onHide={() => setModalShow(false)} />
+				onHide={() => setModalShow(false)}
+				apotheke = {apotheke} />
 			<Col>
 			<Form class="form-inline">
 				<Form.Row>
