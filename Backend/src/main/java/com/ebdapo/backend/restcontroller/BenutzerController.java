@@ -10,6 +10,7 @@ import com.ebdapo.backend.restcontroller.response.InvalidInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class BenutzerController {
         }
 
         benutzer.setId(UUID.randomUUID().toString());
+        benutzer.setPasswort(new BCryptPasswordEncoder().encode(benutzer.getPasswort()));
         benutzer.setAktiv(true);
         benutzerRepo.save(benutzer);
         return new ResponseEntity<>(benutzer, HttpStatus.CREATED);
@@ -70,7 +72,7 @@ public class BenutzerController {
             benutzer.setName(newBenutzer.getName());
             benutzer.setNutzername(newBenutzer.getNutzername());
             benutzer.setVorname(newBenutzer.getVorname());
-            benutzer.setPasswort(newBenutzer.getPasswort());
+            benutzer.setPasswort(new BCryptPasswordEncoder().encode(newBenutzer.getPasswort()));
             benutzer.setAktiv(newBenutzer.isAktiv());
             benutzer.setRolle(newBenutzer.getRolle());
             benutzer.setApotheke(apo);

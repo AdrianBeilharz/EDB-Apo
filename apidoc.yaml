@@ -37,7 +37,7 @@ paths:
       summary: Add a new apotheke
       operationId: getapotheke
       responses:
-        '405':
+        '400':
           description: Invalid input
     post:
       tags:
@@ -45,7 +45,7 @@ paths:
       summary: Add a new apotheke
       operationId: addapotheke
       responses:
-        '405':
+        '400':
           description: Invalid input
       security:
         - apothekearzt_auth:
@@ -63,7 +63,7 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: ID of apotheke to return
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -92,7 +92,7 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: ID of apotheke that needs to be updated
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -129,7 +129,7 @@ paths:
             type: string
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -143,7 +143,7 @@ paths:
         - apothekearzt_auth:
             - 'write:apothekes'
             - 'read:apothekes'
-  
+
   /apotheke/{apothekeId}/btm:
     get:
       tags:
@@ -152,7 +152,7 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -167,17 +167,17 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/btm'
-          
+
   '/apotheke/{apothekeId}/btm/{btmId}':
     get:
       tags:
@@ -186,14 +186,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: btmId
           in: path
-          description: apotheke id to delete
+          description: ID des Betäubungsmittels
           required: true
           schema:
             type: integer
@@ -208,21 +208,21 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: btmId
           in: path
-          description: apotheke id to delete
+          description: id of the btm
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/btm'
     delete:
@@ -232,21 +232,21 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description:  ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: btmId
           in: path
-          description: apotheke id to delete
+          description: ID des Betäubungsmittels
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
   /apotheke/{apothekeId}/btmbuchung:
     get:
       tags:
@@ -255,7 +255,7 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -270,14 +270,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/btmbuchung'
   /apotheke/{apothekeId}/btmbuchung/{btmbuchungId}:
@@ -288,14 +288,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: btmbuchungId
           in: path
-          description: apotheke id to delete
+          description: ID der Buchung
           required: true
           schema:
             type: integer
@@ -310,21 +310,21 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: btmbuchungId
           in: path
-          description: apotheke id to delete
+          description: ID der Buchung
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/btmbuchung'
     delete:
@@ -334,22 +334,22 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: btmbuchungId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
-  
+          description: not found
+
   /apotheke/{apothekeId}/benutzer:
     get:
       tags:
@@ -358,7 +358,7 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -373,14 +373,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/benutzer'
   /apotheke/{apothekeId}/benutzer/{benutzerId}:
@@ -391,14 +391,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: benutzerId
           in: path
-          description: apotheke id to delete
+          description: ID des Benutzers
           required: true
           schema:
             type: integer
@@ -413,21 +413,21 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: benutzerId
           in: path
-          description: apotheke id to delete
+          description: ID des Benutzers
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/benutzer'
     delete:
@@ -437,22 +437,22 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: benutzerId
           in: path
-          description: apotheke id to delete
+          description: ID des Benutzers
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
-  
+          description: not found
+
   /apotheke/{apothekeId}/arzt:
     get:
       tags:
@@ -461,7 +461,7 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -476,14 +476,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/arzt'
   /apotheke/{apothekeId}/arzt/{arztId}:
@@ -494,14 +494,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: arztId
           in: path
-          description: apotheke id to delete
+          description: ID des Arztes
           required: true
           schema:
             type: integer
@@ -516,21 +516,21 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: arztId
           in: path
-          description: apotheke id to delete
+          description: ID des Arztes
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/arzt'
     delete:
@@ -540,22 +540,22 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: arztId
           in: path
-          description: apotheke id to delete
+          description: ID des Arztes
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
-  
+          description: not found
+
   /apotheke/{apothekeId}/lieferant:
     get:
       tags:
@@ -564,7 +564,7 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -579,14 +579,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/lieferant'
   /apotheke/{apothekeId}/lieferant/{lieferantId}:
@@ -597,14 +597,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: lieferantId
           in: path
-          description: apotheke id to delete
+          description: ID des Lieferanten
           required: true
           schema:
             type: integer
@@ -619,21 +619,21 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: lieferantId
           in: path
-          description: apotheke id to delete
+          description: ID des Lieferanten
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/lieferant'
     delete:
@@ -643,22 +643,22 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: lieferantId
           in: path
-          description: apotheke id to delete
+          description: ID des Lieferanten
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
-          
+          description: not found
+
   /apotheke/{apothekeId}/empfaenger:
     get:
       tags:
@@ -667,7 +667,7 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
@@ -682,14 +682,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '400':
-          description: not found 
+          description: not found
       requestBody:
         $ref: '#/components/requestBodies/empfaenger'
   /apotheke/{apothekeId}/empfaenger/{empfaengerId}:
@@ -700,14 +700,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: empfaengerId
           in: path
-          description: apotheke id to delete
+          description: ID des Empfängers
           required: true
           schema:
             type: integer
@@ -722,14 +722,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: empfaengerId
           in: path
-          description: apotheke id to delete
+          description: ID des Empfängers
           required: true
           schema:
             type: integer
@@ -746,14 +746,14 @@ paths:
       parameters:
         - name: apothekeId
           in: path
-          description: apotheke id to delete
+          description: ID der Apotheke
           required: true
           schema:
             type: integer
             format: int64
         - name: empfaengerId
           in: path
-          description: apotheke id to delete
+          description: ID des Empfängers
           required: true
           schema:
             type: integer

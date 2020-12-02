@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BenutzerRepository extends JpaRepository<Benutzer, String> {
 
@@ -13,4 +14,5 @@ public interface BenutzerRepository extends JpaRepository<Benutzer, String> {
 
     @Query(value = "SELECT * FROM benutzer WHERE nutzername = ?1", nativeQuery = true)
     Benutzer getBenutzerByUsername(String username);
+
 }
