@@ -44,7 +44,7 @@ CREATE TABLE benutzer (
 	name VARCHAR (30) NOT NULL,
 	vorname VARCHAR (30) NOT NULL,
 	nutzername VARCHAR (30) NOT NULL,
-	passwort VARCHAR (40) NOT NULL,
+	passwort VARCHAR (60) NOT NULL,
 	rolle ENUM ('ADMIN', 'PRUEFER', 'BENUTZER') NOT NULL,
 	aktiv BOOLEAN,
 	apotheke VARCHAR (40) NOT NULL,

@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {Table, Button} from 'react-bootstrap';
 import ApothekeEditModal from '../../modals/ApothekeEditModal';
+import ApothekeService from '../../services/ApothekeService';
 
 class ApothekeDetails extends Component {
   constructor(props) {
@@ -20,29 +21,26 @@ class ApothekeDetails extends Component {
       modalShow: false,
       isLoading: false
     };
+    this.apothekeService = new ApothekeService();
   }
 
   componentDidMount() {
-    this.setState({ isLoading: true });
-    fetch("http://localhost:8080/apotheke/1")
-    .then(res => res.json())
-    .then(data => this.setState({apotheke: data}))
+    this.apothekeService.getApotheke("1").then(data => {
+      console.log(data);
+    })
   }
 
   toggleModal = () => this.setState({
     modalShow: !this.state.modalShow
   })
 
-  
-
   render() {
     return (
       <Fragment>
         <ApothekeEditModal 
-        show={this.state.modalShow}
-        onHide={() => this.toggleModal()}
-        
-        apotheke={this.state.apotheke} />
+          show={this.state.modalShow}
+          onHide={() => this.toggleModal()}
+          apotheke={this.state.apotheke} />
         <h3>Apotheken Details</h3>
             
             
@@ -55,7 +53,6 @@ class ApothekeDetails extends Component {
         </tbody>
         </Table>
         <Button variant="primary" onClick={this.toggleModal}>Apotheke editieren</Button>
-        <Button variant="secondary" onClick={this.getData}>Fetch</Button>
       </Fragment>
     )
   }

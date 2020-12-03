@@ -44,6 +44,11 @@ INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apo
 INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apotheke) values ('11', 'Maly', 'Jana', 'benutzername10', '1_zbtvf', 'Benutzer', true, '3');
 INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apotheke) values ('12', 'Wolle', 'Maria', 'benutzername11', '12xx_zbgvf', 'Benutzer', true, '3');
 
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apotheke) values ('13', 'admin', 'admin', 'admin', '$2a$10$IDK/q0ORORPcNiNQ62ChCOhuyVtEkCAFTZCey1dx1ez//m5XDHmRS', 'ADMIN', true, '1');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apotheke) values ('14', 'user', 'user', 'user', '$2a$10$DldU5zlP7Iw1Le7m5e/eJ.aBTLR3RRRJ45i23Tb42jsW550C3QsXW', 'BENUTZER', true, '1');
+INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apotheke) values ('15', 'pruefer', 'pruefer', 'pruefer', '$2a$10$HkldGXpGNCKV/u1c9dT1ZuUgCEHvtFgDGcVEQjAMNzz96ERJodIyW', 'PRUEFER', true, '1');
+
+
 INSERT INTO lieferant (id, name, anschrift, apotheke) values ('1', 'GEHE', '10', '1');
 INSERT INTO lieferant (id, name, anschrift, apotheke) values ('2', 'GEHE', '10', '1');
 INSERT INTO lieferant (id, name, anschrift, apotheke) values ('3', 'GEHE', '10', '1');
