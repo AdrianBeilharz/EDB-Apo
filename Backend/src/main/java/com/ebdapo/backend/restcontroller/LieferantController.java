@@ -5,31 +5,34 @@ import com.ebdapo.backend.entity.apidetails.LieferantAPIDetails;
 import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.repository.LieferantRepository;
 import com.ebdapo.backend.restcontroller.response.InvalidInputException;
+import com.ebdapo.backend.security.auth.AuthenticationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("apotheke/{apothekeId}")
 public class LieferantController {
 
-    @Autowired
-    LieferantRepository lieferantRepo;
+    @Autowired private LieferantRepository lieferantRepo;
+    @Autowired private ApothekenRepository apothekenRepo;
+    @Autowired private AuthenticationController authController;
 
-    @Autowired
-    ApothekenRepository apothekenRepo;
-
-    @GetMapping("/lieferant")
-    public List<Lieferant> getAll(@PathVariable String apothekeId) {
-        return apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new).getLieferanten();
+    @GetMapping("apotheke/{apothekeId}/lieferant")
+    public ResponseEntity<?> getAll(@PathVariable String apothekeId) {
+       if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new).getLieferanten(), HttpStatus.OK);
     }
 
-    @PostMapping("/lieferant")
-    public ResponseEntity<Lieferant> addLieferant(@PathVariable String apothekeId, @RequestBody LieferantAPIDetails lieferant) {
+    @PostMapping("apotheke/{apothekeId}/lieferant")
+    public ResponseEntity<?> addLieferant(@PathVariable String apothekeId, @RequestBody LieferantAPIDetails lieferant) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
         Lieferant newLieferant = lieferantRepo.findLieferantByValues(apothekeId,
                 lieferant.getName(),
@@ -52,8 +55,12 @@ public class LieferantController {
         }
     }
 
-    @GetMapping("/lieferant/{lieferantId}")
-    public ResponseEntity<Lieferant> getLieferant(@PathVariable String apothekeId, @PathVariable String lieferantId) {
+    @GetMapping("apotheke/{apothekeId}/lieferant/{lieferantId}")
+    public ResponseEntity<?> getLieferant(@PathVariable String apothekeId, @PathVariable String lieferantId) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Lieferant l =  lieferantRepo.findByIds(lieferantId, apothekeId);
         if(l == null){
             throw new InvalidInputException("Lieferant konnte nicht gefunden werden");
@@ -61,8 +68,12 @@ public class LieferantController {
         return  new ResponseEntity<>(l, HttpStatus.OK);
     }
 
-    @PutMapping("/lieferant/{lieferantId}")
+    @PutMapping("apotheke/{apothekeId}/lieferant/{lieferantId}")
     public ResponseEntity<Lieferant> updateLieferant(@PathVariable String apothekeId, @PathVariable String lieferantId, @RequestBody LieferantAPIDetails newLiefer){
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Lieferant found = lieferantRepo.findByIds(lieferantId, apothekeId);
 
         if(found == null) {
@@ -85,8 +96,8 @@ public class LieferantController {
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
-    @DeleteMapping("/lieferant/{lieferantId}")
-    public ResponseEntity deleteApotheke(@PathVariable String apothekeId, @PathVariable String lieferantId){
+    @DeleteMapping("apotheke/{apothekeId}/lieferant/{lieferantId}")
+    public ResponseEntity<?> deleteApotheke(@PathVariable String apothekeId, @PathVariable String lieferantId){
         Lieferant found = lieferantRepo.findByIds(lieferantId, apothekeId);
         if(found == null) {
             throw new InvalidInputException("Lieferant konnte nicht gefunden werden");
@@ -94,5 +105,10 @@ public class LieferantController {
         lieferantRepo.delete(found);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+
+
+
+
 
 }

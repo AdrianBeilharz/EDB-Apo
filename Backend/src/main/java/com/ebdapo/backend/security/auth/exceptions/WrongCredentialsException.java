@@ -1,4 +1,4 @@
-package com.ebdapo.backend.security.auth;
+package com.ebdapo.backend.security.auth.exceptions;
 
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
