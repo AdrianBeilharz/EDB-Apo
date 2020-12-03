@@ -3,12 +3,14 @@ package com.ebdapo.backend.restcontroller;
 import com.ebdapo.backend.entity.*;
 import com.ebdapo.backend.entity.apidetails.BtmBuchungAPIDetails;
 import com.ebdapo.backend.entity.enums.BtmBuchungTyp;
+import com.ebdapo.backend.entity.enums.Rolle;
 import com.ebdapo.backend.repository.*;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
 import com.ebdapo.backend.restcontroller.response.InvalidInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -101,27 +103,36 @@ public class BetaeubungsmittelBuchungController {
 
     @PutMapping("/apotheke/{apothekeId}/btmbuchung/{btmbuchungId}")
     public ResponseEntity<BetaeubungsmittelBuchung> updateBtmById(@PathVariable String apothekeId, @PathVariable String btmbuchungId, @RequestBody BtmBuchungAPIDetails newBtmBuchung) {
+        SecurityContextHolder.getContext().getAuthentication().getAuthorities().forEach(System.out::println);
+        boolean pruefer = false;
+        if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains("ROLE_"+Rolle.PRUEFER.toString())) {
+            pruefer = true;
+        }
 
-        Zugang z = zugangRepository.findById(btmbuchungId).orElse(null);
-        Abgang a = abgangRepository.findById(btmbuchungId).orElse(null);
+        Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
+        Abgang a = abgangRepository.findByIds(btmbuchungId, apothekeId);
 
         if(z != null){
-            z.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
-            z.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
-            z.setMenge(newBtmBuchung.getMenge());
-            z.setAnfordergungsschein(newBtmBuchung.getAnforderungsschein());
-            z.setLieferant(lieferantRepo.findById(newBtmBuchung.getLieferant()).orElseThrow(InvalidInputException::new));
+            if(!pruefer){
+                z.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
+                z.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
+                z.setMenge(newBtmBuchung.getMenge());
+                z.setAnfordergungsschein(newBtmBuchung.getAnforderungsschein());
+                z.setLieferant(lieferantRepo.findById(newBtmBuchung.getLieferant()).orElseThrow(InvalidInputException::new));
+            }
             z.setPruefdatum(newBtmBuchung.getPruefdatum());
             zugangRepository.save(z);
             return new ResponseEntity<>(z, HttpStatus.OK);
         }else if(a != null){
-            a.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
-            a.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
-            a.setMenge(newBtmBuchung.getMenge());
+            if(!pruefer){
+                a.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
+                a.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
+                a.setMenge(newBtmBuchung.getMenge());
+                a.setEmpfaenger(empfRepository.findById(newBtmBuchung.getEmpfaenger()).orElseThrow(InvalidInputException::new));
+                a.setRezept(newBtmBuchung.getRezept());
+                a.setArzt(arztRepository.findById(newBtmBuchung.getArzt()).orElseThrow(InvalidInputException::new));
+            }
             a.setPruefdatum(newBtmBuchung.getPruefdatum());
-            a.setEmpfaenger(empfRepository.findById(newBtmBuchung.getEmpfaenger()).orElseThrow(InvalidInputException::new));
-            a.setRezept(newBtmBuchung.getRezept());
-            a.setArzt(arztRepository.findById(newBtmBuchung.getArzt()).orElseThrow(InvalidInputException::new));
             abgangRepository.save(a);
             return new ResponseEntity<>(a, HttpStatus.OK);
         }else {
