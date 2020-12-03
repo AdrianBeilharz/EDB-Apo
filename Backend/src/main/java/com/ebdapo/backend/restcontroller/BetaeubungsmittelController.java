@@ -7,30 +7,36 @@ import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.repository.BetaeubungsmittelRepository;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
 import com.ebdapo.backend.restcontroller.response.InvalidInputException;
+import com.ebdapo.backend.security.auth.AuthenticationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 public class BetaeubungsmittelController {
 
-    @Autowired
-    BetaeubungsmittelRepository btmRepo;
+    @Autowired private BetaeubungsmittelRepository btmRepo;
+    @Autowired private ApothekenRepository apothekeRepo;
+    @Autowired private AuthenticationController authController;
 
-    @Autowired
-    ApothekenRepository apothekeRepo;
 
     @GetMapping("/apotheke/{apothekeId}/btm")
-    public List<Betaeubungsmittel> getAllBtm(@PathVariable String apothekeId) {
-        return apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new).getBetaeubungsmittel();
+    public ResponseEntity<?> getAllBtm(@PathVariable String apothekeId) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new).getBetaeubungsmittel(), HttpStatus.OK);
     }
 
     @PostMapping("/apotheke/{apothekeId}/btm")
-    public ResponseEntity<Betaeubungsmittel> createNewBtm(@PathVariable String apothekeId, @RequestBody Betaeubungsmittel btm) {
+    public ResponseEntity<?> createNewBtm(@PathVariable String apothekeId, @RequestBody Betaeubungsmittel btm) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         btm.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
 
         if(checkIfAlreadyExists(btm)){
@@ -42,18 +48,25 @@ public class BetaeubungsmittelController {
     }
 
     @GetMapping("/apotheke/{apothekeId}/btm/{btmId}")
-    public Betaeubungsmittel getBtmById(@PathVariable String apothekeId, @PathVariable String btmId) {
+    public ResponseEntity<?> getBtmById(@PathVariable String apothekeId, @PathVariable String btmId) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Betaeubungsmittel b =  btmRepo.findByIds(btmId, apothekeId);
         if(b == null){
             throw new InvalidInputException();
         }
-        return b;
+        return new ResponseEntity<>(b, HttpStatus.OK);
     }
 
     @PutMapping("/apotheke/{apothekeId}/btm/{btmId}")
-    public ResponseEntity<Betaeubungsmittel> updateBtmById(@PathVariable String apothekeId, @PathVariable String btmId, @RequestBody BetaeubungsmittelAPIDetails newBtm) {
-        Betaeubungsmittel btm = btmRepo.findByIds(btmId, apothekeId);
+    public ResponseEntity<?> updateBtmById(@PathVariable String apothekeId, @PathVariable String btmId, @RequestBody BetaeubungsmittelAPIDetails newBtm) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
+        Betaeubungsmittel btm = btmRepo.findByIds(btmId, apothekeId);
         if(btm == null){
             throw new InvalidInputException("Betaeubungsmittel konnte nicht gefunden werden");
         }
@@ -70,12 +83,12 @@ public class BetaeubungsmittelController {
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/btm/{btmId}")
-    public ResponseEntity deleteBtm(@PathVariable String btmId){
+    public ResponseEntity<?> deleteBtm(@PathVariable String btmId){
         if(!btmRepo.existsById(btmId)) {
             throw new BadRequestException();
         }
         btmRepo.deleteById(btmId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private boolean checkIfAlreadyExists(Betaeubungsmittel btm) {

@@ -4,6 +4,7 @@ import com.ebdapo.backend.entity.Apotheke;
 import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
 import com.ebdapo.backend.restcontroller.response.InvalidInputException;
+import com.ebdapo.backend.security.auth.AuthenticationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,17 @@ import java.util.UUID;
 @RestController
 public class ApothekenController {
 
-    @Autowired
-    ApothekenRepository apothekenRepo;
+    @Autowired private ApothekenRepository apothekenRepo;
+    @Autowired private AuthenticationController authController;
+
 
     @GetMapping("/apotheke")
-    public List<Apotheke> getAll() {
+    public List<?> getAll() {
         return apothekenRepo.findAll();
     }
 
     @PostMapping("/apotheke")
-    public ResponseEntity<Apotheke> newApotheke(@RequestBody Apotheke apotheke) {
+    public ResponseEntity<?> newApotheke(@RequestBody Apotheke apotheke) {
         if(apotheke.getName() == null || apotheke.getEmail() == null || apotheke.getAnschrift() == null) {
             throw new InvalidInputException("Ungültige oder fehlende Angaben");
         }
@@ -34,20 +36,28 @@ public class ApothekenController {
         }
         apotheke.getAnschrift().setId(UUID.randomUUID().toString());
         apotheke.setId(UUID.randomUUID().toString());
-//        adresseRespo.save(apotheke.getAnschrift());
         apothekenRepo.save(apotheke);
         return new ResponseEntity<>(apotheke, HttpStatus.CREATED);
     }
 
     @GetMapping("/apotheke/{apothekeId}")
-    public Apotheke getAll(@PathVariable String apothekeId) {
-        return apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
+    public ResponseEntity<?> getAll(@PathVariable String apothekeId) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Apotheke apo = apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
+        return new ResponseEntity<>(apo, HttpStatus.OK);
     }
 
-    @PutMapping("/apotheke/{apothekeId}")
-    public ResponseEntity<Apotheke> updateApotheke(@PathVariable String apothekeId, @RequestBody Apotheke newApo) {
-        Apotheke apo = apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
 
+    @PutMapping("/apotheke/{apothekeId}")
+    public ResponseEntity<?> updateApotheke(@PathVariable String apothekeId, @RequestBody Apotheke newApo) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Apotheke apo = apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
         apo.setName(newApo.getName());
         if(newApo.getAnschrift() != null){
             apo.getAnschrift().setNummer(newApo.getAnschrift().getNummer());
@@ -57,22 +67,17 @@ public class ApothekenController {
         }else {
             throw new InvalidInputException("Anschrift ist notwendig");
         }
-       //apo.setBenutzer(newApo.getBenutzer());
-       //apo.setAerzte(newApo.getAerzte());
-       //apo.setLieferanten(newApo.getLieferanten());
-       //apo.setEmpfaenger(newApo.getEmpfaenger());
-       //adresseRespo.save(apo.getAnschrift());
         apothekenRepo.save(apo);
         return new ResponseEntity<>(apo, HttpStatus.OK);
     }
 
     @DeleteMapping("/apotheke/{apothekeId}")
-    public ResponseEntity deleteApotheke(@PathVariable String apothekeId){
+    public ResponseEntity<?> deleteApotheke(@PathVariable String apothekeId) {
         if(!apothekenRepo.existsById(apothekeId)) {
             throw new BadRequestException();
         }
         apothekenRepo.deleteById(apothekeId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

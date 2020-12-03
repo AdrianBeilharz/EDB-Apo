@@ -1,11 +1,11 @@
 package com.ebdapo.backend.restcontroller;
 
 import com.ebdapo.backend.entity.Arzt;
-import com.ebdapo.backend.entity.Lieferant;
 import com.ebdapo.backend.entity.apidetails.ArztAPIDetails;
 import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.repository.ArztRepository;
 import com.ebdapo.backend.restcontroller.response.InvalidInputException;
+import com.ebdapo.backend.security.auth.AuthenticationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +17,26 @@ import java.util.UUID;
 @RestController
 public class ArztController {
 
-    @Autowired
-    ArztRepository arztRepo;
+    @Autowired private ArztRepository arztRepo;
+    @Autowired private ApothekenRepository apothekenRepo;
+    @Autowired private AuthenticationController authController;
 
-    @Autowired
-    ApothekenRepository apothekenRepo;
+
 
     @GetMapping("/apotheke/{apothekeId}/arzt")
-    public List<Arzt> getAllAerzte(@PathVariable String apothekeId) {
-        return apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new).getAerzte();
+    public ResponseEntity<?> getAllAerzte(@PathVariable String apothekeId) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        List<Arzt> aerzte = apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new).getAerzte();
+        return new ResponseEntity<>(aerzte, HttpStatus.OK);
     }
 
     @PostMapping("/apotheke/{apothekeId}/arzt")
-    public ResponseEntity<Arzt> addArzt(@PathVariable String apothekeId, @RequestBody ArztAPIDetails arzt) {
+    public ResponseEntity<?> addArzt(@PathVariable String apothekeId, @RequestBody ArztAPIDetails arzt) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
         Arzt newArzt = arztRepo.findArztByValues(apothekeId,
                 arzt.getName(),
@@ -37,7 +44,6 @@ public class ArztController {
                 arzt.getAnschrift().getNummer(),
                 arzt.getAnschrift().getPlz(),
                 arzt.getAnschrift().getOrt());
-
 
         if(newArzt == null) {
             newArzt = new Arzt();
@@ -54,7 +60,11 @@ public class ArztController {
     }
 
     @GetMapping("/apotheke/{apothekeId}/arzt/{arztId}")
-    public ResponseEntity<Arzt> getArzt(@PathVariable String apothekeId, @PathVariable String arztId) {
+    public ResponseEntity<?> getArzt(@PathVariable String apothekeId, @PathVariable String arztId) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Arzt l =  arztRepo.findByIds(arztId, apothekeId);
         if(l == null){
             throw new InvalidInputException("Arzt konnte nicht gefunden werden");
@@ -63,7 +73,11 @@ public class ArztController {
     }
 
     @PutMapping("/apotheke/{apothekeId}/arzt/{arztId}")
-    public ResponseEntity<Arzt> updateArzt(@PathVariable String apothekeId, @PathVariable String arztId, @RequestBody ArztAPIDetails arzt){
+    public ResponseEntity<?> updateArzt(@PathVariable String apothekeId, @PathVariable String arztId, @RequestBody ArztAPIDetails arzt){
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Arzt found = arztRepo.findByIds(arztId, apothekeId);
 
         if(found == null) {
@@ -86,14 +100,14 @@ public class ArztController {
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/arzt/{arztId}")
-    public ResponseEntity deleteApotheke(@PathVariable String apothekeId, @PathVariable String arztId){
+    public ResponseEntity<?> deleteApotheke(@PathVariable String apothekeId, @PathVariable String arztId){
         Arzt found = arztRepo.findByIds(arztId, apothekeId);
         if(found == null) {
             throw new InvalidInputException("Arzt konnte nicht gefunden werden");
         }
 
         arztRepo.delete(found);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

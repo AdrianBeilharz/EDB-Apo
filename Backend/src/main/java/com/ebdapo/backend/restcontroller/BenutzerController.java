@@ -7,34 +7,41 @@ import com.ebdapo.backend.repository.ApothekenRepository;
 import com.ebdapo.backend.repository.BenutzerRepository;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
 import com.ebdapo.backend.restcontroller.response.InvalidInputException;
+import com.ebdapo.backend.security.auth.AuthenticationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 public class BenutzerController {
 
-    @Autowired
-    private BenutzerRepository benutzerRepo;
+    @Autowired private BenutzerRepository benutzerRepo;
+    @Autowired private ApothekenRepository apothekeRepo;
+    @Autowired private AuthenticationController authController;
 
-    @Autowired
-    private ApothekenRepository apothekeRepo;
 
     @GetMapping("/apotheke/{apothekeId}/benutzer")
-    public List<Benutzer> getAll(@PathVariable String apothekeId) {
+    public ResponseEntity<?> getAll(@PathVariable String apothekeId) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         if(!apothekeRepo.existsById(apothekeId)){
             throw new BadRequestException("Apotheke existiert nicht");
         }
-        return benutzerRepo.findBenutzerWithApothekeId(apothekeId);
+        return new ResponseEntity<>(benutzerRepo.findBenutzerWithApothekeId(apothekeId), HttpStatus.OK);
     }
 
     @PostMapping("/apotheke/{apothekeId}/benutzer")
-    public ResponseEntity<Benutzer> createNewBenutzer(@PathVariable String apothekeId, @RequestBody Benutzer benutzer) {
+    public ResponseEntity<?> createNewBenutzer(@PathVariable String apothekeId, @RequestBody Benutzer benutzer) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         benutzer.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
 
         if(benutzer.getNutzername() == null || benutzer.getApotheke() == null || benutzer.getVorname() == null ||
@@ -54,44 +61,50 @@ public class BenutzerController {
     }
 
     @GetMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
-    public Benutzer getBenutzerById(@PathVariable String benutzerId){
-        return benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new);
+    public ResponseEntity<?> getBenutzerById(@PathVariable String apothekeId, @PathVariable String benutzerId){
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new), HttpStatus.OK);
     }
 
     @PutMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
-    public ResponseEntity<Benutzer> updateBenutzerById(@PathVariable String benutzerId, @RequestBody BenutzerAPIDetails newBenutzer){
+    public ResponseEntity<?> updateBenutzerById(@PathVariable String apothekeId, @PathVariable String benutzerId, @RequestBody BenutzerAPIDetails newBenutzer){
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         if(!benutzerRepo.existsById(benutzerId)){
             throw new InvalidInputException("Falsche ID");
         }
         Benutzer benutzer = benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new);
-        try{
-            if(newBenutzer.getApotheke() == null){
-                throw new InvalidInputException("ApothekenId darf nicht leer sein");
-            }
-            Apotheke apo = apothekeRepo.findById(newBenutzer.getApotheke()).orElseThrow(InvalidInputException::new);
-            benutzer.setName(newBenutzer.getName());
-            benutzer.setNutzername(newBenutzer.getNutzername());
-            benutzer.setVorname(newBenutzer.getVorname());
-            benutzer.setPasswort(new BCryptPasswordEncoder().encode(newBenutzer.getPasswort()));
-            benutzer.setAktiv(newBenutzer.isAktiv());
-            benutzer.setRolle(newBenutzer.getRolle());
-            benutzer.setApotheke(apo);
-
-            benutzerRepo.save(benutzer);
-            return new ResponseEntity<>(benutzer, HttpStatus.OK);
-
-        }catch(Exception e){
-            throw new InvalidInputException();
+        if(newBenutzer.getApotheke() == null){
+            throw new InvalidInputException("ApothekenId darf nicht leer sein");
         }
+        Apotheke apo = apothekeRepo.findById(newBenutzer.getApotheke()).orElseThrow(InvalidInputException::new);
+        benutzer.setName(newBenutzer.getName());
+        benutzer.setNutzername(newBenutzer.getNutzername());
+        benutzer.setVorname(newBenutzer.getVorname());
+        benutzer.setPasswort(new BCryptPasswordEncoder().encode(newBenutzer.getPasswort()));
+        benutzer.setAktiv(newBenutzer.isAktiv());
+        benutzer.setRolle(newBenutzer.getRolle());
+        benutzer.setApotheke(apo);
+
+        benutzerRepo.save(benutzer);
+        return new ResponseEntity<>(benutzer, HttpStatus.OK);
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
-    public ResponseEntity deleteUser(@PathVariable String benutzerId) {
+    public ResponseEntity<?> deleteUser(@PathVariable String apothekeId, @PathVariable String benutzerId) {
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         if(!benutzerRepo.existsById(benutzerId)) {
             throw new BadRequestException();
         }
         benutzerRepo.deleteById(benutzerId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

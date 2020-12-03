@@ -6,9 +6,11 @@ import lombok.Data;
 public class AuthenticationResponse {
 
     private String jwt;
+    private String apothekeId;
 
-    public AuthenticationResponse(String jwt){
+    public AuthenticationResponse(String jwt, String apothekeId){
         this.jwt = jwt;
+        this.apothekeId = apothekeId;
     }
 
 }
