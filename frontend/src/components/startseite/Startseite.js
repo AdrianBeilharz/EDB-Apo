@@ -69,7 +69,6 @@ function Startseite() {
 			</Col>
 		</Row>
 	)
-	
 }
 
 export default Startseite;
