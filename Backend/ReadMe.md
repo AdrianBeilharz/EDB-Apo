@@ -2,20 +2,20 @@
 
 Als Backend-Framework wird SpringBoot verwendet mit einer Anbindung zu einer MySQL Datenbank, welche über Docker gestartet wird.
 
-###1. Datenbank starten
+### 1. Datenbank starten
 um die Datenbank zu starten wird docker-compose verwendet
 ```
 cd Datenbank
 docker-compose up
 ```
 
-###2. SpringBoot starten
+### 2. SpringBoot starten
 ```
 cd Backend
 mvn spring-boot:run
 ```
 
-#Login
+# Login
 Um ein JWT (JSON Web Token) zu bekommen:
 ```
 POST /login
