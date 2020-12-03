@@ -36,8 +36,8 @@ class ApothekeEditModal extends React.Component {
     this.setState(prevState => ({
       apotheke: {
         ...prevState.apotheke,
-        adresse: {
-          ...prevState.apotheke.adresse,
+        anschrift: {
+          ...prevState.apotheke.anschrift,
           strasse: event.target.value
         }
       }
@@ -48,8 +48,8 @@ class ApothekeEditModal extends React.Component {
     this.setState(prevState => ({
       apotheke: {
         ...prevState.apotheke,
-        adresse: {
-          ...prevState.apotheke.adresse,
+        anschrift: {
+          ...prevState.apotheke.anschrift,
           nummer: event.target.value
         }
       }
@@ -60,8 +60,8 @@ class ApothekeEditModal extends React.Component {
     this.setState(prevState => ({
       apotheke: {
         ...prevState.apotheke,
-        adresse: {
-          ...prevState.apotheke.adresse,
+        anschrift: {
+          ...prevState.apotheke.anschrift,
           plz: event.target.value
         }
       }
@@ -72,8 +72,8 @@ class ApothekeEditModal extends React.Component {
     this.setState(prevState => ({
       apotheke: {
         ...prevState.apotheke,
-        adresse: {
-          ...prevState.apotheke.adresse,
+        anschrift: {
+          ...prevState.apotheke.anschrift,
           ort: event.target.value
         }
       }
@@ -102,18 +102,18 @@ class ApothekeEditModal extends React.Component {
             </Form.Group>
             <Form.Group as={Row}>
               <Col sm={9}>
-                <Form.Control type="text" placeholder="Straße" value={this.state.apotheke.adresse.strasse} onChange={this.handleChangeStrasse} />
+                <Form.Control type="text" placeholder="Straße" value={this.state.apotheke.anschrift.strasse} onChange={this.handleChangeStrasse} />
               </Col>
               <Col>
-                <Form.Control type="number" placeholder="Nummer" value={this.state.apotheke.adresse.nummer} onChange={this.handleChangeNummer} />
+                <Form.Control type="number" placeholder="Nummer" value={this.state.apotheke.anschrift.nummer} onChange={this.handleChangeNummer} />
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
               <Col>
-                <Form.Control type="text" placeholder="PLZ" value={this.state.apotheke.adresse.plz} onChange={this.handleChangePlz} />
+                <Form.Control type="text" placeholder="PLZ" value={this.state.apotheke.anschrift.plz} onChange={this.handleChangePlz} />
               </Col>
               <Col sm={9}>
-                <Form.Control type="text" placeholder="Ort" value={this.state.apotheke.adresse.ort} onChange={this.handleChangeOrt} />
+                <Form.Control type="text" placeholder="Ort" value={this.state.apotheke.anschrift.ort} onChange={this.handleChangeOrt} />
               </Col>
             </Form.Group>
           </Form>

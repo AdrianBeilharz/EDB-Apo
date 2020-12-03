@@ -2,14 +2,18 @@
 class ApothekeService {
 
   async getApotheke(id) {
-    fetch(process.env.REACT_APP_BACKEND_URL + "/apotheke/" + id, {
-      credentials: "same-origin",
-      headers: {
-        "authorization": localStorage.getItem("authorization")
-      }
+
+    return new Promise((resolve,reject) => {
+      fetch(process.env.REACT_APP_BACKEND_URL + "/apotheke/" + id, {
+        headers:{
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(json => resolve(json))
+      .catch(err => reject(err))
     })
-    .then(res => {return res.json()})
-    .catch(err => {console.log(err); alert(err)})
+    
   }
 }
 

@@ -9,7 +9,7 @@ class AuthorizationService {
       "headers": {
         "authorization": this.nutzerPasswortToBase64(nutzername, passwort)
       },
-      credentials: "same-origin"
+      "credentials": "same-origin"
     }).then(res => {
       if(res.status ===200) {
         localStorage.setItem("authorization", this.nutzerPasswortToBase64(nutzername, passwort));
@@ -19,6 +19,15 @@ class AuthorizationService {
         throw new Error(res.status, res.statusText);
       }
     }).catch(err => {console.log(err); alert(err)})
+  }
+
+  async logout() {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/logout", {
+      "headers": {
+
+      },
+      "credentials": "same-origin"
+    }).then(res => localStorage.removeItem("authorization"))
   }
 }
 export default AuthorizationService;
