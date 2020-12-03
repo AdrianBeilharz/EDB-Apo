@@ -28,8 +28,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/apotheke/**").hasAnyRole("BENUTZER", "ADMIN", "PRUEFER")
+        http.authorizeRequests().antMatchers("/**").permitAll();
+                /*.antMatchers(HttpMethod.GET, "/apotheke/**").hasAnyRole("BENUTZER", "ADMIN", "PRUEFER")
                 .antMatchers(HttpMethod.DELETE, "/apotheke/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/apotheke/**").hasAnyRole("BENUTZER","ADMIN")
                 .antMatchers("/login").hasAnyRole("BENUTZER","ADMIN", "PRUEFER")
@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 //                .and().formLogin().defaultSuccessUrl("/apotheke", true).permitAll()
                 .and().logout().permitAll()
                 .and().csrf().disable()
-                .cors();
+                .cors();*/
     }
 
     @Bean
