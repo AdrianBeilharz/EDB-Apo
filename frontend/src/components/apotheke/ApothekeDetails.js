@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {Table, Button} from 'react-bootstrap';
+import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 import ApothekeEditModal from '../../modals/ApothekeEditModal';
 import ApothekeService from '../../services/ApothekeService';
 
@@ -8,14 +9,14 @@ class ApothekeDetails extends Component {
     super(props);
     this.state = {
       apotheke: {
-        id: "78067284-f459-4723-a7c7-9094dbc92ae1",
-        name: "Apotheke Ohmenhausen",
-        email: "apo@apo.de",
+        id: "",
+        name: "",
+        email: "",
         anschrift: {
-          strasse: "Gomaringer Straße",
-          nummer: 33,
-          plz: "72770",
-          ort: "Reutlingen"
+          strasse: "",
+          nummer: "",
+          plz: "",
+          ort: ""
         }
       },
       modalShow: false,
@@ -25,13 +26,9 @@ class ApothekeDetails extends Component {
   }
 
   async componentDidMount() {
-    let data = await this.apothekeService.getApotheke("1")
-    console.log(data)
-    this.setState(
-      {
-        apotheke: data
-      }
-    )
+    this.apothekeService.getUserApotheke()
+    .then(data => this.setState({apotheke: data}))
+    .catch(err => alert(err))
   }
 
   toggleModal = () => this.setState({

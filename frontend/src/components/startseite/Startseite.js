@@ -7,8 +7,8 @@ import AuthorizationService from '../../services/AuthorizationService';
 function Startseite() {
 	const [modalShow, setModalShow] = React.useState(false);
 	const [credentials, setState] = React.useState({
-		nutzername: "",
-		passwort: ""
+		username: "",
+		password: ""
 	});
 	function handleChange(event) {
 		setState({
@@ -32,13 +32,14 @@ function Startseite() {
 
 	const login = (e) => {
 		e.preventDefault()
-		console.log("get status ok and redirect to BTMBuch of user")
-		authService.login(credentials.nutzername, credentials.passwort)
-		.then(status => {
-			console.log(status)
+		authService.login(credentials)
+		.then(tokens => {
+			console.log(tokens)
+			sessionStorage.setItem("jwt", tokens.jwt);
+			sessionStorage.setItem("apothekeId", tokens.apothekeId);
 			history.push("BTMBuch")
-		}) // doesnt wait for async function call so i dont know what to do but here is the code
-
+		})
+		.catch(err => alert(err))
 	}
 
 
@@ -53,10 +54,10 @@ function Startseite() {
 			<Form class="form-inline" onSubmit={e => login(e)}>
 				<Form.Row>
 					<Col>
-						<Form.Control type="text" name="nutzername" placeholder="Nutzername" value={credentials.nutzername} onChange={handleChange} />
+						<Form.Control type="text" name="username" placeholder="Nutzername" value={credentials.username} onChange={handleChange} />
 					</Col>
 					<Col>
-            <Form.Control type="password" name="passwort" placeholder="Passwort" value={credentials.passwort} onChange={handleChange} />
+            <Form.Control type="password" name="password" placeholder="Passwort" value={credentials.password} onChange={handleChange} />
           </Col>
 					<Col>
 					<Button variant="primary" type="submit">Login</Button>
