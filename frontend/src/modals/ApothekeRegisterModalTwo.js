@@ -1,10 +1,11 @@
 import React from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 
-class ApothekeEditModal extends React.Component {
+class ApothekeModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {apotheke: props.apotheke};
+    this.state = {apotheke: props.apotheke, benutzer: props.benutzer};
     this.handleChangeName = this.handleChangeName.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangeStrasse = this.handleChangeStrasse.bind(this);
@@ -36,8 +37,7 @@ class ApothekeEditModal extends React.Component {
     this.setState(prevState => ({
       apotheke: {
         ...prevState.apotheke,
-        anschrift: {
-          ...prevState.apotheke.anschrift,
+        adresse: {
           strasse: event.target.value
         }
       }
@@ -48,8 +48,7 @@ class ApothekeEditModal extends React.Component {
     this.setState(prevState => ({
       apotheke: {
         ...prevState.apotheke,
-        anschrift: {
-          ...prevState.apotheke.anschrift,
+        adresse: {
           nummer: event.target.value
         }
       }
@@ -60,8 +59,7 @@ class ApothekeEditModal extends React.Component {
     this.setState(prevState => ({
       apotheke: {
         ...prevState.apotheke,
-        anschrift: {
-          ...prevState.apotheke.anschrift,
+        adresse: {
           plz: event.target.value
         }
       }
@@ -72,60 +70,61 @@ class ApothekeEditModal extends React.Component {
     this.setState(prevState => ({
       apotheke: {
         ...prevState.apotheke,
-        anschrift: {
-          ...prevState.apotheke.anschrift,
+        adresse: {
           ort: event.target.value
         }
       }
     }))
   }
 
-  handleSubmit() {
-    console.log("save changes");
+  handleSubmit(event) {
+    event.preventDefault();
+    console.log("something should happen");
     //put apotheke.then status = 200 -> refresh data
+    this.props.submitApotheke(this.state.apotheke);
     this.props.onHide();
   }
   
   render() {
     return (
-      <Modal show={this.props.show} onHide={this.props.onHide} centered backdrop="static">
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+      <Modal show={this.props.showtwo} onWeiter={this.props.onWeiter} centered backdrop="static">
+        <Modal.Header>
+          <Modal.Title>Neue Apotheke registrieren</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={this.handleSubmit}>
+            <Form.Label>2. Schritt Apotheke erstellen</Form.Label>
             <Form.Group>
-              <Form.Control type="text" placeholder="Name der Apotheke" name="name" value={this.state.apotheke.name} onChange={this.handleChangeName}/>
+              <Form.Control type="text" placeholder="Vorname" name="name" value={this.state.apotheke.name} onChange={this.handleChangeName}/>
             </Form.Group>
             <Form.Group>
               <Form.Control type="email" placeholder="E-Mail der Apotheke" value={this.state.apotheke.email} onChange={this.handleChangeEmail} />
             </Form.Group>
             <Form.Group as={Row}>
               <Col sm={9}>
-                <Form.Control type="text" placeholder="Straße" value={this.state.apotheke.anschrift.strasse} onChange={this.handleChangeStrasse} />
+                <Form.Control type="text" placeholder="Straße" value={this.state.apotheke.adresse.strasse} onChange={this.handleChangeStrasse} />
               </Col>
               <Col>
-                <Form.Control type="number" placeholder="Nummer" value={this.state.apotheke.anschrift.nummer} onChange={this.handleChangeNummer} />
+                <Form.Control type="number" placeholder="Nummer" value={this.state.apotheke.adresse.nummer} onChange={this.handleChangeNummer} />
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
               <Col>
-                <Form.Control type="text" placeholder="PLZ" value={this.state.apotheke.anschrift.plz} onChange={this.handleChangePlz} />
+                <Form.Control type="text" placeholder="PLZ" value={this.state.apotheke.adresse.plz} onChange={this.handleChangePlz} />
               </Col>
               <Col sm={9}>
-                <Form.Control type="text" placeholder="Ort" value={this.state.apotheke.anschrift.ort} onChange={this.handleChangeOrt} />
+                <Form.Control type="text" placeholder="Ort" value={this.state.apotheke.adresse.ort} onChange={this.handleChangeOrt} />
               </Col>
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={this.props.onHide}>Cancel</Button>
-          <Button variant="primary" type="Submit" onClick={this.handleSubmit}>Ändern</Button>
+          <Button variant="primary" type="Submit" onClick={this.handleSubmit}>OK</Button>      
         </Modal.Footer>
       </Modal>
     )
-  }
-  
+  }  
 }
 
-export default ApothekeEditModal;
+export default ApothekeModal;
