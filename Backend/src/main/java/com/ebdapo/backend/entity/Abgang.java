@@ -12,10 +12,6 @@ import java.io.Serializable;
 @Table(name = "abgang")
 public class Abgang extends BetaeubungsmittelBuchung{
 
-//    @OneToOne(targetEntity = BetaeubungsmittelBuchung.class, cascade = CascadeType.ALL)
-//    @JoinColumn(name="btm_buchung", referencedColumnName = "id")
-//    private BetaeubungsmittelBuchung btmBuchung;
-
     @ManyToOne(targetEntity = Arzt.class)
     @JoinColumn(name="arzt", referencedColumnName = "id")
     private Arzt arzt;

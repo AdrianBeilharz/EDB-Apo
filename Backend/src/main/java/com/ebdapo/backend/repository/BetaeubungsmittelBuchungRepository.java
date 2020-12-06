@@ -6,12 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
-import java.util.List;
 
 public interface BetaeubungsmittelBuchungRepository extends JpaRepository<BetaeubungsmittelBuchung, String> {
 
-    @Query(value = "SELECT bb.*, 0 AS clazz_ FROM btm_buchung bb JOIN btm b ON bb.btm = b.id WHERE b.apotheke = :apothekeId", nativeQuery = true)
-    List<BetaeubungsmittelBuchung> findBtmBuchungWithApothekenId(@Param("apothekeId") String apothekeId);
+    @Query(value = "SELECT *, 0 AS clazz_ FROM btm_buchung bb JOIN btm b ON bb.btm = b.id JOIN abgang a on bb.id = a.id JOIN zugang z on bb.id = z.id WHERE b.apotheke = :apothekeId", nativeQuery = true)
+    Object findBtmBuchungWithApothekenId(@Param("apothekeId") String apothekeId);
 
     @Query(value = "SELECT * FROM btm_buchung WHERE pruefdatum = :pruefdatum AND menge = :menge AND btm = :btm AND benutzer = :benutzer", nativeQuery = true)
     BetaeubungsmittelBuchung getBtmBuchungByValues(@Param("pruefdatum") Date pruefdatum,
