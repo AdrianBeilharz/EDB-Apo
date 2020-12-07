@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 @RestController
@@ -22,6 +23,24 @@ public class BenutzerController {
     @Autowired private BenutzerRepository benutzerRepo;
     @Autowired private ApothekenRepository apothekeRepo;
     @Autowired private AuthenticationController authController;
+
+
+    @GetMapping("/benutzer/me")
+    public ResponseEntity<?> getUserData() {
+        try {
+            Benutzer b = benutzerRepo.getBenutzerByUsername(authController.getCurrentUsername());
+            HashMap<String, String> data = new HashMap<>();
+            data.put("id", b.getId());
+            data.put("nutzername", b.getNutzername());
+            data.put("name", b.getName());
+            data.put("vorname", b.getVorname());
+            data.put("aktiv", Boolean.toString(b.isAktiv()));
+            data.put("rolle", b.getRolle().toString());
+            return new ResponseEntity<>(data, HttpStatus.OK);
+        }catch(Exception e){
+            throw new InvalidInputException();
+        }
+    }
 
 
     @GetMapping("/apotheke/{apothekeId}/benutzer")

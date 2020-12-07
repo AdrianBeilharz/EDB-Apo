@@ -18,4 +18,9 @@ public interface BetaeubungsmittelRepository extends JpaRepository<Betaeubungsmi
     @Query(value = "SELECT * FROM btm b JOIN apotheke a on b.apotheke = a.id WHERE b.id = :btmId AND a.id = :apothekenId", nativeQuery = true)
     Betaeubungsmittel findByIds(@Param("btmId") String btmId,
                                 @Param("apothekenId") String apothekenId);
+
+
+
+    @Query(value = "SELECT * FROM btm WHERE apotheke = :apothekenId", nativeQuery = true)
+    List<Betaeubungsmittel> getByApotheke(@Param("apothekenId")String apothekeId);
 }

@@ -78,17 +78,17 @@ INSERT INTO empfaenger (id, name, vorname, anschrift, apotheke) value ('7', 'Mas
 INSERT INTO empfaenger (id, name, vorname, anschrift, apotheke) value ('8', 'Hase', 'Mike', '9', '3');
 
 INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('1', '2020-11-10', '100',  '2020-11-01', '1', '3');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('2', '2020-10-03', '20',  '2020-10-01', '2', '3');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('3', '2020-09-10', '20',  '2020-09-09', '2', '3');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('4', '2020-09-03', '5',  '2020-09-01', '3', '3');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('2', '2020-10-03', '20',  '2020-10-01', '1', '3');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('3', '2020-09-10', '20',  '2020-09-09', '1', '3');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('4', '2020-09-03', '5',  '2020-09-01', '1', '3');
 INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('5', '2020-11-10', '5',  '2020-11-01', '7', '7');
 INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('6', '2020-10-03', '10',  '2020-10-01', '7', '7');
 INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('7', '2020-10-10', '20',  '2020-10-05', '8', '7');
 INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('8', '2020-10-03', '60',  '2020-10-01', '8', '7');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('9', '2020-11-10', '5',  '2020-11-01', '13', '12');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('10', '2020-09-03', '10',  '2020-09-01', '14', '12');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('11', '2020-09-25', '5',  '2020-09-23', '15', '12');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('12', '2020-09-25', '20',  '2020-09-22', '16', '12');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('9', '2020-11-10', '5',  '2020-11-01', '1', '12');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('10', '2020-09-03', '10',  '2020-09-01', '1', '12');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('11', '2020-09-25', '5',  '2020-09-23', '1', '12');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('12', '2020-09-25', '20',  '2020-09-22', '1', '12');
 
 INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('1', '63671547', '1');
 INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('2', '65571547', '1');
@@ -99,12 +99,10 @@ INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('6', '65571547', 
 INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('7', '63688471', '2');
 INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('8', '65571997', '3');
 
-INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('1', '1', '2', '636715473');
-INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('2', '1', '3', '655715475');
-INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('3', '2', '4', '636884795');
-INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('4', '2', '5', '655719937');
-INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('5', '3', '6', '636785489');
-INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('6', '4', '7', '655715476');
-INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('7', '5', '8', '636884716');
-INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('8', '7', '8', '655719972');
+
+
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('9', '1', '2', '636715473');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('10', '1', '3', '655715475');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('11', '2', '4', '636884795');
+INSERT INTO abgang (id, empfaenger, arzt, rezept) value ('12', '2', '5', '655719937');
 
