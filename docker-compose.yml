@@ -13,6 +13,9 @@ services:
        MYSQL_ROOT_PASSWORD: edbapoadmin
     networks:
       - edbaponet
+    volumes:
+      - ./Datenbank/EDB-Apo_dbdec.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./Datenbank/EDB-Apo_dbdata.sql:/docker-entrypoint-initdb.d/2.sql
 
   backend:
     build:
