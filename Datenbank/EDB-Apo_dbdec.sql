@@ -86,7 +86,7 @@ CREATE TABLE btm_buchung (
 	id VARCHAR (40) NOT NULL,
 	pruefdatum DATE NOT NULL,
 	menge INTEGER NOT NULL,
-	datum DATE  NOT NULL,
+	datum TIMESTAMP NOT NULL,
 	btm VARCHAR (40) NOT NULL,
 	benutzer VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),

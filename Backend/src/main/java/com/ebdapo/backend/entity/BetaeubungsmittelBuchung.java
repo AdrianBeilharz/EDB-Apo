@@ -2,6 +2,7 @@ package com.ebdapo.backend.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,7 +25,8 @@ public class BetaeubungsmittelBuchung {
     @Column(name="menge", nullable = false)
     private int menge;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     @Column(name="datum", nullable = false)
     private Date datum;
 
