@@ -115,7 +115,7 @@ public class BetaeubungsmittelBuchungController {
             buchungen.addAll(zugaenge);
             buchungen.addAll(abgaenge);
 
-            List<BtmBuchung> sortedBuchungen = buchungen.stream().sorted(Comparator.comparing(BtmBuchung::getDatum)).collect(Collectors.toList());
+            List<BtmBuchung> sortedBuchungen = buchungen.stream().sorted(Collections.reverseOrder(Comparator.comparing(BtmBuchung::getDatum))).collect(Collectors.toList());
             bResponse.setBuchungen(sortedBuchungen);
             response.add(bResponse);
         }

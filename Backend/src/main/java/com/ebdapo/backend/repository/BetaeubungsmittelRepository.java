@@ -22,5 +22,5 @@ public interface BetaeubungsmittelRepository extends JpaRepository<Betaeubungsmi
 
 
     @Query(value = "SELECT * FROM btm WHERE apotheke = :apothekenId", nativeQuery = true)
-    List<Betaeubungsmittel> getByApotheke(@Param("apothekenId")String apothekeId);
+    List<Betaeubungsmittel> getByApotheke(@Param("apothekenId") String apothekeId);
 }
