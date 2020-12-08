@@ -96,7 +96,8 @@ public class BenutzerController {
 
     @PutMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
     public ResponseEntity<?> updateBenutzerById(@PathVariable String apothekeId, @PathVariable String benutzerId, @RequestBody BenutzerAPIDetails newBenutzer){
-        if(!authController.checkIfAuthorizedAndSameUserOrAdmin(authController.getCurrentUsername(), apothekeId, benutzerId)) {
+        String authorized = authController.checkIfAuthorizedAndSameUserOrAdmin(authController.getCurrentUsername(), apothekeId, benutzerId);
+        if(authorized == null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -104,27 +105,41 @@ public class BenutzerController {
             throw new InvalidInputException("Falsche ID");
         }
 
+
         Benutzer benutzer = benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new);
+        boolean reqFromAdmin = authorized.equals("admin");
 
         //checks if the user is authorized to change it (entering valid password)
         String pw = newBenutzer.getOldPassword() ;
-        if(pw != null && !pw.isBlank() && !benutzer.getRolle().toString().toLowerCase().equals("admin")){
-            if(!new BCryptPasswordEncoder().matches(pw, benutzer.getPasswort())) {
-                throw new InvalidInputException("Falsches Passwort");
+
+        if(!reqFromAdmin){
+            if(pw != null && !pw.isBlank()){
+                if(!new BCryptPasswordEncoder().matches(pw, benutzer.getPasswort())) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
+            }else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-        }else {
-            throw new InvalidInputException("Passwort wird benötigt");
         }
 
         Apotheke apo = apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
         benutzer.setName(newBenutzer.getName());
         benutzer.setNutzername(newBenutzer.getNutzername());
         benutzer.setVorname(newBenutzer.getVorname());
+
+        //Nur Admin kann aktiv oder inaktiv setzen
+        if(reqFromAdmin){
+            benutzer.setAktiv(newBenutzer.isAktiv());
+        }
+        //nur admin kann Rolle ändern
+        if(reqFromAdmin && newBenutzer.getRolle() != null){
+            benutzer.setRolle(newBenutzer.getRolle());
+        }
+
         if(newBenutzer.getNewPassword() != null){
             benutzer.setPasswort(new BCryptPasswordEncoder().encode(newBenutzer.getNewPassword()));
         }
-        benutzer.setAktiv(newBenutzer.isAktiv());
-        benutzer.setRolle(newBenutzer.getRolle());
+
         benutzer.setApotheke(apo);
 
         benutzerRepo.save(benutzer);

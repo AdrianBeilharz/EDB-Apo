@@ -65,11 +65,17 @@ public class AuthenticationController {
         }
     }
 
-    public boolean checkIfAuthorizedAndSameUserOrAdmin(String username, String apothekeId, String benutzerId) {
+    public String checkIfAuthorizedAndSameUserOrAdmin(String username, String apothekeId, String benutzerId) {
         if(username == null || apothekeId == null){
-            return false;
+            return null;
         }
         Benutzer b  = benutzerRepo.getBenutzerWithApotheke(username, apothekeId);
-        return b.getRolle().toString().toLowerCase().equals("admin") || b.getId().equals(benutzerId);
+        if(b.getRolle().toString().toLowerCase().equals("admin")){
+            return "admin";
+        }else if(b.getId().equals(benutzerId)) {
+            return "user";
+        }
+        //unauthorized
+        return null ;
     }
 }
