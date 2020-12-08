@@ -1,10 +1,18 @@
-.App {
-  text-align: left;
+$primary-red: rgb(244, 67, 54);
+$primary-yellow: rgb(255, 152, 0);
+
+.status-header {
+    text-align: center;
 }
 
-.App-header {
-  background-color: #ffffff;
-  display: -webkit-inline-box;
-  flex-direction: column;
-  color: #000000;
+.red-background {
+    background-color: $primary-red;
+}
+
+.yellow-background {
+    background-color: $primary-yellow;
+}
+
+.white-font {
+    color: white;
 }

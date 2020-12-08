@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import "../../App.scss";
 
-function ApothekeDetails(props) {
+function ApothekenDetails(props) {
   const[apotheke, setApotheke] = useState({anschrift:{}});
   const[neuesBtmModalShow, setneuesBtmModalShow] = useState(false);
 
@@ -42,4 +42,4 @@ function ApothekeDetails(props) {
       </div>
   )
 }
-export default ApothekeDetails;
+export default ApothekenDetails;
