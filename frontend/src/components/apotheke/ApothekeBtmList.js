@@ -20,19 +20,13 @@ export default function ApothekeBtmList(props) {
     });
 
     if (response.status === 200) {
-      setBtms(await JSON.stringify(btms));
-      console.log('btms >>> nr. 1' + btms[0].buchungen);
-      // console.log(JSON.stringify(btms));
+      setBtms(await response.json());
     } else if (response.status === 403) {
       props.history.push("/forbidden");
     } else if (response.status === 400) {
       props.history.push("/badrequest");
     }
   };
-
-  /**
-
- */
 
   //wird aufgerufen von NeuesBtmModal wenn ein neues BTM hinzugefügt wurde
   props.apothekeRefFunctions.updateBtmList = getBtms;
@@ -49,9 +43,7 @@ export default function ApothekeBtmList(props) {
         type="text"
         placeholder="Betäubungsmittel suchen"
       />
-      {btms.map(btm =>
-                <BuchungTabelle {...props} btm={btm} />
-            )}
+      {btms.map(btm => <BuchungTabelle {...props} btm={btm} /> )}
     </div>
   );
 }

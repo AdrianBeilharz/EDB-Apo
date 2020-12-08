@@ -11,7 +11,7 @@ function NeueBuchungModal(props) {
     const [empfaenger, setEmpfaenger] = useState([]);
 
     const sendNewBuchungAnfrage = async (buchungData) => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/apotheke/${props.apothekeId}/btmbuchung`, {
+        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/btmbuchung`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ function NeueBuchungModal(props) {
 
 
     const loadLieferanten = async () => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/apotheke/${props.apothekeId}/lieferant`, {
+        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/lieferant`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function NeueBuchungModal(props) {
     }
 
     const loadAerzte = async () => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/apotheke/${props.apothekeId}/arzt`, {
+        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/arzt`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ function NeueBuchungModal(props) {
     }
 
     const loadEmpfaenger = async () => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/apotheke/${props.apothekeId}/empfaenger`, {
+        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/empfaenger`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

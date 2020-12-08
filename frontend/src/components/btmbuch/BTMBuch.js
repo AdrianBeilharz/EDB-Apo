@@ -5,6 +5,7 @@ import ApothekenDetails from '../apotheke/ApothekenDetails';
 import UserDetails from '../../user/UserDetails';
 import ApothekeBtmList from '../apotheke/ApothekeBtmList';
 import {Row, Col} from 'react-bootstrap';
+import './BTMBuch.scss'
  
 function BTMBuch (props) {
   let paths = props.location.pathname.split("/");
@@ -53,7 +54,7 @@ function BTMBuch (props) {
               <Col><ApothekenDetails {...props} apothekeRefFunctions={apothekeRefFunctions} apothekeId={apothekeId}/></Col>
               <Col>{isLoggedIn ? <UserDetails {...props} user={user} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle}/> : null }</Col>
           </Row> 
-           
+          <ApothekeBtmList apothekeId={apothekeId} user={user} apothekeRefFunctions={apothekeRefFunctions} {...props}/>    
       </React.Fragment>
   )
 }
