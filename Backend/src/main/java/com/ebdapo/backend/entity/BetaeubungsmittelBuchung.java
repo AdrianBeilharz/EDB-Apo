@@ -34,7 +34,7 @@ public class BetaeubungsmittelBuchung {
     @JoinColumn(name="btm", referencedColumnName = "id")
     private Betaeubungsmittel btm;
 
-    @ManyToOne(targetEntity = Benutzer.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Benutzer.class)
     @JoinColumn(name="benutzer", referencedColumnName = "id")
     private Benutzer benutzer;
 

@@ -237,14 +237,21 @@ public class BetaeubungsmittelBuchungController {
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/btmbuchung/{btmbuchungId}")
-    public ResponseEntity<?> deleteBtm(@PathVariable String btmbuchungId){
+    public ResponseEntity<?> deleteBtm(@PathVariable String apothekeId, @PathVariable String btmbuchungId){
         if(!btmBuchungRepo.existsById(btmbuchungId)) {
             throw new BadRequestException();
         }
-        btmBuchungRepo.deleteById(btmbuchungId);
-        abgangRepository.deleteById(btmbuchungId);
-        zugangRepository.deleteById(btmbuchungId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Abgang a = abgangRepository.findByIds(btmbuchungId,apothekeId);
+        Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
+        if(a != null){
+            abgangRepository.delete(a);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        if(z != null){
+            zugangRepository.delete(z);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     private boolean checkIfAlreadyExists(BtmBuchungAPIDetails btmBuchung) {
