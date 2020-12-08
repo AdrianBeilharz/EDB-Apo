@@ -1,0 +1,49 @@
+
+$grey: rgb(211, 211, 211);
+
+.btm-buchung-wrapper {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 3em;
+
+    table{
+        width: 100%;
+    }
+
+    #searchBtmField{
+        margin: 0 auto;
+        display: inherit;
+        width: 100%;
+        margin-bottom: 1em;
+    }
+}
+
+.btm-table-header-name {
+    padding: 0.5em;
+    background-color: $grey;
+    font-size: 15pt;
+    cursor: pointer;
+}
+
+.details-list {
+    margin: 1em 0 1em 7em;
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 14pt;
+        margin-bottom: 0.5em;
+    }
+}
+
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 1px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 1.42857;
+    font-weight: bold;
+}

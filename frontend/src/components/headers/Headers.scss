@@ -1,0 +1,18 @@
+$primary-red: rgb(244, 67, 54);
+$primary-yellow: rgb(255, 152, 0);
+
+.status-header {
+    text-align: center;
+}
+
+.red-background {
+    background-color: $primary-red;
+}
+
+.yellow-background {
+    background-color: $primary-yellow;
+}
+
+.white-font {
+    color: white;
+}
