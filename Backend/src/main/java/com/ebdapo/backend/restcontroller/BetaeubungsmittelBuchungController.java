@@ -238,6 +238,10 @@ public class BetaeubungsmittelBuchungController {
 
     @DeleteMapping("/apotheke/{apothekeId}/btmbuchung/{btmbuchungId}")
     public ResponseEntity<?> deleteBtm(@PathVariable String apothekeId, @PathVariable String btmbuchungId){
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         if(!btmBuchungRepo.existsById(btmbuchungId)) {
             throw new BadRequestException();
         }
