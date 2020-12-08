@@ -206,7 +206,6 @@ public class BetaeubungsmittelBuchungController {
         }
 
         Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
-        Abgang a = abgangRepository.findByIds(btmbuchungId, apothekeId);
 
         if(z != null){
             if(!pruefer){
@@ -219,7 +218,10 @@ public class BetaeubungsmittelBuchungController {
             z.setPruefdatum(newBtmBuchung.getPruefdatum());
             zugangRepository.save(z);
             return new ResponseEntity<>(z, HttpStatus.OK);
-        }else if(a != null){
+        }
+
+        Abgang a = abgangRepository.findByIds(btmbuchungId, apothekeId);
+        if(a != null){
             if(!pruefer){
                 a.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
                 a.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
@@ -246,11 +248,11 @@ public class BetaeubungsmittelBuchungController {
             throw new BadRequestException();
         }
         Abgang a = abgangRepository.findByIds(btmbuchungId,apothekeId);
-        Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
         if(a != null){
             abgangRepository.delete(a);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+        Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
         if(z != null){
             zugangRepository.delete(z);
             return new ResponseEntity<>(HttpStatus.OK);
