@@ -9,11 +9,10 @@ import java.util.Date;
 @Data
 public class BtmBuchungAPIDetails {
 
-    @Id
-    private String id;
     private String benutzer;    //id
     private String btm;         //id
     private int menge;
+    private Date datum;
     private BtmBuchungTyp typ;
     private String anforderungsschein;
     private Date pruefdatum;

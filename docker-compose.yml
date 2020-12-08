@@ -1,0 +1,43 @@
+version: '3'
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+     - "3306:3306"
+     - "33060:33060"
+    environment:
+       MYSQL_DATABASE: edb-apo-db
+       MYSQL_USER: edbapo
+       MYSQL_PASSWORD: edbapoadmin
+       MYSQL_ROOT_PASSWORD: edbapoadmin
+    networks:
+      - edbaponet
+    volumes:
+      - ./Datenbank/EDB-Apo_dbdec.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./Datenbank/EDB-Apo_dbdata.sql:/docker-entrypoint-initdb.d/2.sql
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - edbaponet
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - edbaponet
+    depends_on:
+      - backend
+
+networks:
+  edbaponet:

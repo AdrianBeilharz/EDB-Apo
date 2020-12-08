@@ -8,14 +8,15 @@ import com.ebdapo.backend.repository.*;
 import com.ebdapo.backend.restcontroller.response.BadRequestException;
 import com.ebdapo.backend.restcontroller.response.InvalidInputException;
 import com.ebdapo.backend.security.auth.AuthenticationController;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class BetaeubungsmittelBuchungController {
@@ -31,6 +32,58 @@ public class BetaeubungsmittelBuchungController {
     @Autowired private BetaeubungsmittelRepository btmRepo;
     @Autowired private AuthenticationController authController;
 
+    @Data
+    private class BtmBuchungsResponse {
+        Betaeubungsmittel btm;
+        List<BtmBuchung> buchungen;
+    }
+
+    @Data
+    private class BtmBuchung {
+        private String id;
+        private Date datum;
+        private Date pruefdatum;
+        private int menge;
+        private String TYP; //ZUGANG ODER ABGANG
+
+        public BtmBuchung() {}
+
+        public BtmBuchung(String id, Date datum, Date pruefdatum, int menge, String TYP) {
+            this.id = id;
+            this.datum = datum;
+            this.pruefdatum = pruefdatum;
+            this.menge = menge;
+            this.TYP = TYP;
+        }
+    }
+
+    @Data
+    private class BtmBuchungZugang extends BtmBuchung {
+        private String anforderungsschein;
+        private Lieferant lieferant;
+
+        public BtmBuchungZugang(String id, Date datum , Date pruefdatum, int menge, String TYP, String anforderungsschein, Lieferant lieferant) {
+            super(id, datum, pruefdatum, menge, TYP);
+            this.anforderungsschein = anforderungsschein;
+            this.lieferant = lieferant;
+        }
+    }
+
+    @Data
+    private class BtmBuchungAbgang extends BtmBuchung {
+        private Empfaenger empfaenger;
+        private Arzt arzt;
+        private String rezept;
+
+        public BtmBuchungAbgang(String id, Date datum, Date pruefdatum, int menge, String TYP, Empfaenger empfaenger, Arzt arzt, String rezept) {
+            super(id, datum, pruefdatum, menge, TYP);
+            this.empfaenger = empfaenger;
+            this.arzt = arzt;
+            this.rezept = rezept;
+        }
+    }
+
+
     @GetMapping("/apotheke/{apothekeId}/btmbuchung")
     public ResponseEntity<?> getAllBtm(@PathVariable String apothekeId) {
         if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
@@ -40,7 +93,34 @@ public class BetaeubungsmittelBuchungController {
         if(!apoRepo.existsById(apothekeId)){
             throw new BadRequestException("Apotheke existiert nicht");
         }
-        return new ResponseEntity<>(btmBuchungRepo.findBtmBuchungWithApothekenId(apothekeId), HttpStatus.OK);
+
+        List<Betaeubungsmittel> btms = btmRepo.getByApotheke(apothekeId);
+
+        List<BtmBuchungsResponse> response = new ArrayList<>();
+        for(Betaeubungsmittel b: btms) {
+            BtmBuchungsResponse bResponse = new BtmBuchungsResponse();
+            bResponse.setBtm(b);
+
+            List<BtmBuchungZugang> zugaenge = zugangRepository.getBtmBuchungZugaenge(apothekeId, b.getId())
+                    .stream()
+                    .map(e -> new BtmBuchungZugang(e.getId(), e.getDatum(), e.getPruefdatum(), e.getMenge(), "ZUGANG", e.getAnfordergungsschein(), e.getLieferant()))
+                    .collect(Collectors.toList());
+
+            List<BtmBuchungAbgang> abgaenge = abgangRepository.getBtmBuchungAbgaenge(apothekeId, b.getId())
+                    .stream()
+                    .map(e -> new BtmBuchungAbgang(e.getId(), e.getDatum(), e.getPruefdatum(), e.getMenge(), "ABGANG", e.getEmpfaenger(), e.getArzt(), e.getRezept()))
+                    .collect(Collectors.toList());
+
+            List<BtmBuchung> buchungen = new ArrayList<>();
+            buchungen.addAll(zugaenge);
+            buchungen.addAll(abgaenge);
+
+            List<BtmBuchung> sortedBuchungen = buchungen.stream().sorted(Collections.reverseOrder(Comparator.comparing(BtmBuchung::getDatum))).collect(Collectors.toList());
+            bResponse.setBuchungen(sortedBuchungen);
+            response.add(bResponse);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/apotheke/{apothekeId}/btmbuchung")
@@ -114,7 +194,7 @@ public class BetaeubungsmittelBuchungController {
     }
 
     @PutMapping("/apotheke/{apothekeId}/btmbuchung/{btmbuchungId}")
-    public ResponseEntity<BetaeubungsmittelBuchung> updateBtmById(@PathVariable String apothekeId, @PathVariable String btmbuchungId, @RequestBody BtmBuchungAPIDetails newBtmBuchung) {
+    public ResponseEntity<?> updateBtmById(@PathVariable String apothekeId, @PathVariable String btmbuchungId, @RequestBody BtmBuchungAPIDetails newBtmBuchung) {
         if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -126,7 +206,6 @@ public class BetaeubungsmittelBuchungController {
         }
 
         Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
-        Abgang a = abgangRepository.findByIds(btmbuchungId, apothekeId);
 
         if(z != null){
             if(!pruefer){
@@ -139,7 +218,10 @@ public class BetaeubungsmittelBuchungController {
             z.setPruefdatum(newBtmBuchung.getPruefdatum());
             zugangRepository.save(z);
             return new ResponseEntity<>(z, HttpStatus.OK);
-        }else if(a != null){
+        }
+
+        Abgang a = abgangRepository.findByIds(btmbuchungId, apothekeId);
+        if(a != null){
             if(!pruefer){
                 a.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
                 a.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
@@ -157,14 +239,25 @@ public class BetaeubungsmittelBuchungController {
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/btmbuchung/{btmbuchungId}")
-    public ResponseEntity<?> deleteBtm(@PathVariable String btmbuchungId){
+    public ResponseEntity<?> deleteBtm(@PathVariable String apothekeId, @PathVariable String btmbuchungId){
+        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         if(!btmBuchungRepo.existsById(btmbuchungId)) {
             throw new BadRequestException();
         }
-        btmBuchungRepo.deleteById(btmbuchungId);
-        abgangRepository.deleteById(btmbuchungId);
-        zugangRepository.deleteById(btmbuchungId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Abgang a = abgangRepository.findByIds(btmbuchungId,apothekeId);
+        if(a != null){
+            abgangRepository.delete(a);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
+        if(z != null){
+            zugangRepository.delete(z);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     private boolean checkIfAlreadyExists(BtmBuchungAPIDetails btmBuchung) {

@@ -19,11 +19,10 @@ CREATE TABLE adresse_t(
 	plz INTEGER NOT NULL,
 	PRIMARY KEY (id)
 );
-test
 CREATE TABLE apotheke(
 	id VARCHAR (40) NOT NULL,
 	name VARCHAR (50) NOT NULL,
-	email VARCHAR (50) NOT NUll,
+	email VARCHAR (50) NOT NULL,
 	anschrift VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (anschrift) REFERENCES adresse_t(id) ON UPDATE CASCADE ON DELETE CASCADE
@@ -87,7 +86,7 @@ CREATE TABLE btm_buchung (
 	id VARCHAR (40) NOT NULL,
 	pruefdatum DATE NOT NULL,
 	menge INTEGER NOT NULL,
-	datum DATE  NOT NULL,
+	datum TIMESTAMP NOT NULL,
 	btm VARCHAR (40) NOT NULL,
 	benutzer VARCHAR (40) NOT NULL,
 	PRIMARY KEY (id),
