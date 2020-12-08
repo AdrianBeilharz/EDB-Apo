@@ -15,7 +15,7 @@ function BTMBuch (props) {
   const [aktiveRolle, setAktiveRolle] = useState('');
 
   const getUserDetails = async event => {
-      const response = await fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/benutzer/me`, {
+      const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
           method: 'GET',
           headers: {
               'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
@@ -27,6 +27,7 @@ function BTMBuch (props) {
 
       if(response.status === 200) {
           let u = await response.json();
+          console.log(JSON.stringify(u))
           setUser(u);
           setAktiveRolle(u.rolle);
           setLoggedIn(true);
@@ -52,7 +53,7 @@ function BTMBuch (props) {
               <Col><ApothekenDetails {...props} apothekeRefFunctions={apothekeRefFunctions} apothekeId={apothekeId}/></Col>
               <Col>{isLoggedIn ? <UserDetails {...props} user={user} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle}/> : null }</Col>
           </Row> 
-          <ApothekeBtmList apothekeId={apothekeId} user={user} apothekeRefFunctions={apothekeRefFunctions} {...props}/>    
+           
       </React.Fragment>
   )
 }

@@ -8,7 +8,7 @@ function ApothekenDetails(props) {
 
 
   const getApothekeData = async () => {
-      const response = await fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/apotheke/${props.match.params.id}`, {
+      const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.match.params.id}`, {
           method: 'GET',
           headers: {
               'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),

@@ -6,8 +6,7 @@ export default function ApothekeBtmList(props) {
   const [btms, setBtms] = useState([]);
 
   const getBtms = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_HOSTNAME}/apotheke/${props.match.params.id}/btmbuchung`,
+    const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.match.params.id}/btmbuchung`,
       {
         method: "GET",
         headers: {
@@ -21,9 +20,8 @@ export default function ApothekeBtmList(props) {
     });
 
     if (response.status === 200) {
-      console.log('response: ' , response);
       setBtms(await JSON.stringify(btms));
-      // console.log('btms >>> nr. 1' + btms[0].buchungen);
+      console.log('btms >>> nr. 1' + btms[0].buchungen);
       // console.log(JSON.stringify(btms));
     } else if (response.status === 403) {
       props.history.push("/forbidden");

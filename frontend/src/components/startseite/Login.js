@@ -9,7 +9,7 @@ function Login(props) {
     const [user, setUser] = useState({username:'', password:''});
     
     const login = async event => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/login`, {
+        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
