@@ -63,9 +63,16 @@ public class BenutzerController {
 
         benutzer.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
 
-        if(benutzer.getNutzername() == null || benutzer.getApotheke() == null || benutzer.getVorname() == null ||
-                benutzer.getName() == null || benutzer.getPasswort() == null || benutzer.getRolle() == null){
+        String nutzername = benutzer.getNutzername();
+        String name = benutzer.getName();
+        String vorname = benutzer.getVorname();
+        String passwort = benutzer.getPasswort();
+
+        if(nutzername == null || benutzer.getApotheke() == null || vorname == null || name == null ||
+                passwort == null || benutzer.getRolle() == null){
            throw new InvalidInputException("Ungültige oder fehlende Angaben");
+        }else if(nutzername.length() < 4 ||vorname.length() < 1 || name.length() < 1 || passwort.length() < 5) {
+            throw new InvalidInputException("Ungültige oder fehlende Angaben");
         }
 
         if(checkIfUserExists(benutzer)) {
@@ -89,22 +96,33 @@ public class BenutzerController {
 
     @PutMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
     public ResponseEntity<?> updateBenutzerById(@PathVariable String apothekeId, @PathVariable String benutzerId, @RequestBody BenutzerAPIDetails newBenutzer){
-        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+        if(!authController.checkIfAuthorizedAndSameUserOrAdmin(authController.getCurrentUsername(), apothekeId, benutzerId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         if(!benutzerRepo.existsById(benutzerId)){
             throw new InvalidInputException("Falsche ID");
         }
+
         Benutzer benutzer = benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new);
-        if(newBenutzer.getApotheke() == null){
-            throw new InvalidInputException("ApothekenId darf nicht leer sein");
+
+        //checks if the user is authorized to change it (entering valid password)
+        String pw = newBenutzer.getOldPassword() ;
+        if(pw != null && !pw.isBlank() && !benutzer.getRolle().toString().toLowerCase().equals("admin")){
+            if(!new BCryptPasswordEncoder().matches(pw, benutzer.getPasswort())) {
+                throw new InvalidInputException("Falsches Passwort");
+            }
+        }else {
+            throw new InvalidInputException("Passwort wird benötigt");
         }
-        Apotheke apo = apothekeRepo.findById(newBenutzer.getApotheke()).orElseThrow(InvalidInputException::new);
+
+        Apotheke apo = apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
         benutzer.setName(newBenutzer.getName());
         benutzer.setNutzername(newBenutzer.getNutzername());
         benutzer.setVorname(newBenutzer.getVorname());
-        benutzer.setPasswort(new BCryptPasswordEncoder().encode(newBenutzer.getPasswort()));
+        if(newBenutzer.getNewPassword() != null){
+            benutzer.setPasswort(new BCryptPasswordEncoder().encode(newBenutzer.getNewPassword()));
+        }
         benutzer.setAktiv(newBenutzer.isAktiv());
         benutzer.setRolle(newBenutzer.getRolle());
         benutzer.setApotheke(apo);
@@ -124,6 +142,15 @@ public class BenutzerController {
         }
         benutzerRepo.deleteById(benutzerId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/apotheke/{apothekeId}/benutzer/{username}/checkUsername")
+    public ResponseEntity<?> checkIfUsernameTagenUsername(@PathVariable String apothekeId, @PathVariable String username) {
+
+        if (username.length() >= 4 && benutzerRepo.getBenutzerByUsername(username) == null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 

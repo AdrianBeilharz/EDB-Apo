@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"btmBuchungen", "apotheke"})
+@JsonIgnoreProperties({"btmBuchungen", "apotheke", "passwort"})
 @Table(name = "benutzer")
 public class Benutzer {
 
