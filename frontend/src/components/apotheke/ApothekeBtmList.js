@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { FormControl } from "react-bootstrap";
 import BuchungTabelle from "../btmbuch/BuchungTabelle";
 
-export default function ApothekeBtmList(props) {
+function ApothekeBtmList(props) {
   const [btms, setBtms] = useState([]);
+  const [input, setInput] = useState("");
 
   const getBtms = async () => {
-    const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.match.params.id}/btmbuchung`,
+    const response = await fetch(
+      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.match.params.id}/btmbuchung`,
       {
         method: "GET",
         headers: {
@@ -33,18 +35,35 @@ export default function ApothekeBtmList(props) {
 
   useEffect(() => {
     getBtms();
-
   }, []);
 
   return (
     <div className="btm-buchung-wrapper">
-      <FormControl
+      <input
         id="searchBtmField"
         type="text"
         placeholder="Betäubungsmittel suchen"
+        onChange={(event) => {
+          setInput(event.target.value);
+        }}
+        value={input}
       />
-      {btms.map(btm => <BuchungTabelle {...props} btm={btm} /> )}
+      {btms
+        .filter((val) => {
+          if (input === "") {
+            console.log("namen der Liste", val.btm.name);
+            return val;
+          } else if (val.btm.name.toLowerCase().includes(input.toLowerCase())){
+              return val;
+          }
+        })
+        .map((btm, key) => (
+          <BuchungTabelle {...props} btm={btm} />
+        ))}
     </div>
   );
 }
 
+export default ApothekeBtmList;
+
+/*{btms.map(btm => <BuchungTabelle {...props} btm={btm} /> )}*/
