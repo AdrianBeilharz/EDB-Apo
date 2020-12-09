@@ -105,8 +105,13 @@ public class BenutzerController {
             throw new InvalidInputException("Falsche ID");
         }
 
-
         Benutzer benutzer = benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new);
+
+        if(usernameIsTaken(benutzer.getNutzername(), newBenutzer.getNutzername())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
         boolean reqFromAdmin = authorized.equals("admin");
 
         //checks if the user is authorized to change it (entering valid password)
@@ -144,6 +149,10 @@ public class BenutzerController {
 
         benutzerRepo.save(benutzer);
         return new ResponseEntity<>(benutzer, HttpStatus.OK);
+    }
+
+    private boolean usernameIsTaken(String current, String newName) {
+        return !current.equals(newName) && benutzerRepo.getBenutzerByUsername(newName) != null;
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
