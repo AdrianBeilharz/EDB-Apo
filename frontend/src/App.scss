@@ -1,18 +1,37 @@
-$primary-red: rgb(244, 67, 54);
-$primary-yellow: rgb(255, 152, 0);
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,300&display=swap');
 
-.status-header {
-    text-align: center;
+$base-green: rgb(0, 255, 136);
+$base-blue: rgb(0, 212, 255);
+
+$theme-colors: (
+  "primary": $base-green,
+);
+
+#root {
+  margin: 0;
+  padding: 0;
+  // font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13pt;
 }
 
-.red-background {
-    background-color: $primary-red;
+.header{
+  color: white;
+  background-color: $base-green; 
+  background: linear-gradient(90deg,  $base-green 0%, $base-blue 100%);
+  padding: 1em;
+  padding-left: 7em;
 }
 
-.yellow-background {
-    background-color: $primary-yellow;
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently*/
 }
 
-.white-font {
-    color: white;
+.apo-details {
+    padding-left: 5em;
 }

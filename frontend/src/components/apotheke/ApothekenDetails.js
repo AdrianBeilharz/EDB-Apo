@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import "../../App.scss";
+import NeuesBtmModal from '../btmbuch/NeuesBtmModal';
+import '../../App.scss'
 
 function ApothekenDetails(props) {
   const[apotheke, setApotheke] = useState({anschrift:{}});
@@ -32,13 +33,14 @@ function ApothekenDetails(props) {
   }, [])
 
   return(
-      <div>
+      <div className="apo-details">
           <ul>
               <li>Name: {apotheke.name}</li>
               <li>E-Mail: {apotheke.email}</li>            
           </ul>
           <Button>Apotheke Einstellungen</Button>
-          <Button onClick={() => setneuesBtmModalShow(true)} style={{marginLeft:'1em'}}>Neues Betäubungsmittel anlegen</Button>         
+          <Button onClick={() => setneuesBtmModalShow(true)} style={{marginLeft:'1em'}}>Neues Betäubungsmittel anlegen</Button>
+          <NeuesBtmModal show={neuesBtmModalShow} {...props} onHide={() => setneuesBtmModalShow(false)} />        
       </div>
   )
 }
