@@ -59,6 +59,7 @@ public class ApothekenController {
 
         Apotheke apo = apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
         apo.setName(newApo.getName());
+        apo.setEmail(newApo.getEmail());
         if(newApo.getAnschrift() != null){
             apo.getAnschrift().setNummer(newApo.getAnschrift().getNummer());
             apo.getAnschrift().setOrt(newApo.getAnschrift().getOrt());
