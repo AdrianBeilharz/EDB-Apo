@@ -77,6 +77,7 @@ public class BetaeubungsmittelController {
         btm.setDarreichungsform(newBtm.getDarreichungsform());
         btm.setEinheit(newBtm.getEinheit());
         btm.setApotheke(apo);
+        btm.setMenge(newBtm.getMenge());
 
         btmRepo.save(btm);
         return new ResponseEntity<>(btm, HttpStatus.OK);
