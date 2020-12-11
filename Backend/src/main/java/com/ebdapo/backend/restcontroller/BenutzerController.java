@@ -101,6 +101,7 @@ public class BenutzerController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
+
         if(!benutzerRepo.existsById(benutzerId)){
             throw new InvalidInputException("Falsche ID");
         }
@@ -136,6 +137,7 @@ public class BenutzerController {
         if(reqFromAdmin){
             benutzer.setAktiv(newBenutzer.isAktiv());
         }
+
         //nur admin kann Rolle ändern
         if(reqFromAdmin && newBenutzer.getRolle() != null){
             benutzer.setRolle(newBenutzer.getRolle());

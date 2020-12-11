@@ -14,22 +14,22 @@ INSERT INTO apotheke(id, name, email, anschrift) values ('1', 'Löwen Apotheke',
 INSERT INTO apotheke(id, name, email, anschrift) values ('2', 'Dorf Apotheke', 'apo2@outlook.de', '2');
 INSERT INTO apotheke(id, name, email, anschrift) values ('3', 'Hirsch Apotheke', 'apo3@outlook.de', '5');
 
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('1', 'Capros Akut 20 mg', 'Tbl', 'Stueck', '1');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('2', 'Carehoxal 10mg', 'RTA', 'Stueck', '1');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('3', 'Dipidolor', 'Ampullen', 'Stueck', '1');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('4', 'Dronabinol 25mg/ml','Rezeptursubstanz','mg', '1');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('5', 'Elvanse 30 mg', 'HKP', 'Stueck', '1');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('6', 'Fentanyl-Hexal Pfl 37,5 ug/Std.', 'Pfl', 'Stueck', '2');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('7', 'Carehoxal 10mg', 'RTA', 'Stueck', '2');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('8', 'Dipidolor', 'Ampullen', 'Stueck', '2');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('9', 'Equasim Ret. 20mg', 'HKP', 'Stueck', '2');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('10','Elvanse 30 mg' ,'HKP', 'Stueck', '2');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('11', 'Oxycodon/Nalox Beta 10/5', 'RTA', 'Stueck', '3');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('12', 'Oxycodon/Nalox 20/10 mg Beta', 'RTA', 'Stueck', '3');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('13', 'Oxiconoica 10 mg', 'RTA', 'Stueck', '3');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('14', 'Dipidolor', 'Ampullen', 'Stueck', '3');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('15', 'Palexia', 'RTA', 'Stueck', '3');
-INSERT INTO btm(id,name, darreichungsform, einheit,apotheke) values ('16','Elvanse 30 mg','HKP', 'Stueck', '3');
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('1', 'Capros Akut 20 mg', 'Tbl', 'Stueck', '1', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('2', 'Carehoxal 10mg', 'RTA', 'Stueck', '1', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('3', 'Dipidolor', 'Ampullen', 'Stueck', '1', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('4', 'Dronabinol 25mg/ml','Rezeptursubstanz','mg', '1', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('5', 'Elvanse 30 mg', 'HKP', 'Stueck', '1', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('6', 'Fentanyl-Hexal Pfl 37,5 ug/Std.', 'Pfl', 'Stueck', '2', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('7', 'Carehoxal 10mg', 'RTA', 'Stueck', '2', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('8', 'Dipidolor', 'Ampullen', 'Stueck', '2', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('9', 'Equasim Ret. 20mg', 'HKP', 'Stueck', '2', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('10','Elvanse 30 mg' ,'HKP', 'Stueck', '2', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('11', 'Oxycodon/Nalox Beta 10/5', 'RTA', 'Stueck', '3', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('12', 'Oxycodon/Nalox 20/10 mg Beta', 'RTA', 'Stueck', '3', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('13', 'Oxiconoica 10 mg', 'RTA', 'Stueck', '3', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('14', 'Dipidolor', 'Ampullen', 'Stueck', '3', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('15', 'Palexia', 'RTA', 'Stueck', '3', 0);
+INSERT INTO btm(id,name, darreichungsform, einheit,apotheke, menge) values ('16','Elvanse 30 mg','HKP', 'Stueck', '3', 0);
 
 INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apotheke) values ('1', 'Heller', 'Helga', 'nutzername1', '123_abcd', 'ADMIN', true, '1');
 INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apotheke) values ('2', 'Kurz', 'Martin', 'benutzername2', '123_zbgvf', 'Pruefer', true, '1');
