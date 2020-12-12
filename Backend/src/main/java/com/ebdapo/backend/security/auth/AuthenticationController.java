@@ -78,4 +78,12 @@ public class AuthenticationController {
         //unauthorized
         return null ;
     }
+
+    public boolean isAdmin(String username, String apothekeId) {
+        if(username == null ){
+            return false;
+        }
+        Benutzer b  = benutzerRepo.getBenutzerWithApotheke(username, apothekeId);
+        return b.getRolle().toString().toLowerCase().equals("admin");
+    }
 }

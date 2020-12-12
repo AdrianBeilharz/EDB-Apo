@@ -9,6 +9,15 @@ INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('8', 'Honigstrasse'
 INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('9', 'Hausstrasse', '16/1a','Reutlingen', '72764' );
 INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('10', 'Neckartalstrasse', '153','Stuttgart', '70376' );
 INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('11', 'Friozheimerstrasse', '7','Stuttgart', '70499' );
+INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('12', 'Milchstrasse', '14a','Dresden', '01139' );
+INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('13', 'Hasenbergstrasse', '8','Dresden', '01139' );
+INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('14', 'Königstrasse', '56','Dresden', '01139' );
+INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('15', 'Apothekerstrasse', '23','Dresden', '01126' );
+INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('16', 'Honigstrasse', '1','Reutlingen', '72764' );
+INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('17', 'Hausstrasse', '24','Reutlingen', '72764' );
+INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('18', 'Echazstrasse', '65/1','Reutlingen', '54326' );
+INSERT INTO adresse_t(id, strasse, nummer, ort, plz) values ('19', 'Honigstrasse', '5','Reutlingen', '72764' );
+
 
 INSERT INTO apotheke(id, name, email, anschrift) values ('1', 'Löwen Apotheke','apo1@outlook.de', '1');
 INSERT INTO apotheke(id, name, email, anschrift) values ('2', 'Dorf Apotheke', 'apo2@outlook.de', '2');
@@ -49,15 +58,15 @@ INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apo
 INSERT INTO benutzer(id , name, vorname, nutzername, passwort, rolle, aktiv, apotheke) values ('15', 'pruefer', 'pruefer', 'pruefer', '$2a$10$HkldGXpGNCKV/u1c9dT1ZuUgCEHvtFgDGcVEQjAMNzz96ERJodIyW', 'PRUEFER', true, '1');
 
 
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('1', 'GEHE', '10', '1');
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('2', 'GEHE', '10', '1');
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('3', 'GEHE', '10', '1');
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('4', 'Alliance Healthcare GmbH', '11', '2');
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('5', 'Alliance Healthcare GmbH', '11', '2');
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('6', 'Alliance Healthcare GmbH', '11', '2');
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('7', 'Noweda','1', '3');
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('8', 'Noweda','1', '3');
-INSERT INTO lieferant (id, name, anschrift, apotheke) values ('9', 'Noweda','1', '3');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('1', 'Browsecat', '11', '1');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('2', 'Wikivu', '12', '1');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('3', 'Demizz', '13', '1');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('4', 'Rhyzio', '14', '2');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('5', 'Tagtune', '15', '2');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('6', 'Jayo', '16', '2');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('7', 'Mymm','17', '3');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('8', 'Jabberbean','18', '3');
+INSERT INTO lieferant (id, name, anschrift, apotheke) values ('9', 'Topiczoom','19', '3');
 
 INSERT INTO arzt (id, name, anschrift, apotheke) value ('1', 'Dr. Krause', '6', '1');
 INSERT INTO arzt (id, name, anschrift, apotheke) value ('2', 'Dr. Michellmann', '7', '1');

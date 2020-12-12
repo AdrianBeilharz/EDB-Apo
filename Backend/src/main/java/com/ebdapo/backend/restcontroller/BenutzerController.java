@@ -56,31 +56,34 @@ public class BenutzerController {
     }
 
     @PostMapping("/apotheke/{apothekeId}/benutzer")
-    public ResponseEntity<?> createNewBenutzer(@PathVariable String apothekeId, @RequestBody Benutzer benutzer) {
+    public ResponseEntity<?> createNewBenutzer(@PathVariable String apothekeId, @RequestBody BenutzerAPIDetails benutzerData) {
         if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        benutzer.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
-
-        String nutzername = benutzer.getNutzername();
-        String name = benutzer.getName();
-        String vorname = benutzer.getVorname();
-        String passwort = benutzer.getPasswort();
-
-        if(nutzername == null || benutzer.getApotheke() == null || vorname == null || name == null ||
-                passwort == null || benutzer.getRolle() == null){
+        if(benutzerData.getPasswort() == null || benutzerData.getVorname() == null || benutzerData.getName() == null
+                || benutzerData.getRolle() == null) {
            throw new InvalidInputException("Ungültige oder fehlende Angaben");
-        }else if(nutzername.length() < 4 ||vorname.length() < 1 || name.length() < 1 || passwort.length() < 5) {
+        }else if(benutzerData.getNutzername().length() < 4 || benutzerData.getVorname().length() < 1 ||
+                benutzerData.getName().length() < 1 || benutzerData.getPasswort().length() < 5) {
             throw new InvalidInputException("Ungültige oder fehlende Angaben");
         }
 
-        if(checkIfUserExists(benutzer)) {
+        if(checkIfUserExists(benutzerData)) {
            throw new InvalidInputException("Benutzer existiert bereits");
         }
 
+        Benutzer benutzer = new Benutzer();
+
+        benutzer.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
+        benutzer.setNutzername(benutzerData.getNutzername());
+        benutzer.setName(benutzerData.getName());
+        benutzer.setVorname(benutzerData.getVorname());
+        benutzer.setPasswort(benutzerData.getPasswort());
+        benutzer.setRolle(benutzerData.getRolle());
+
         benutzer.setId(UUID.randomUUID().toString());
-        benutzer.setPasswort(new BCryptPasswordEncoder().encode(benutzer.getPasswort()));
+        benutzer.setPasswort(new BCryptPasswordEncoder().encode(benutzerData.getPasswort()));
         benutzer.setAktiv(true);
         benutzerRepo.save(benutzer);
         return new ResponseEntity<>(benutzer, HttpStatus.CREATED);
@@ -180,7 +183,7 @@ public class BenutzerController {
     }
 
 
-    private boolean checkIfUserExists(Benutzer benutzer) {
+    private boolean checkIfUserExists(BenutzerAPIDetails benutzer) {
         return benutzerRepo.getBenutzerByUsername(benutzer.getNutzername()) != null;
     }
 }

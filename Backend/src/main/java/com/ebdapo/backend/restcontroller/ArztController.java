@@ -83,10 +83,6 @@ public class ArztController {
         if(found == null) {
             throw new InvalidInputException("Arzt konnte nicht gefunden werden");
         }
-
-        if(arzt.getApotheke() == null || arzt.getApotheke().isEmpty()){
-            throw new InvalidInputException("ApothekenId darf nicht leer sein");
-        }
         found.setName(arzt.getName());
 
         found.getAnschrift().setPlz(arzt.getAnschrift().getPlz());
@@ -94,7 +90,6 @@ public class ArztController {
         found.getAnschrift().setStrasse(arzt.getAnschrift().getStrasse());
         found.getAnschrift().setNummer(arzt.getAnschrift().getNummer());
 
-        found.setApotheke(apothekenRepo.findById(arzt.getApotheke()).orElseThrow(InvalidInputException::new));
         arztRepo.save(found);
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
