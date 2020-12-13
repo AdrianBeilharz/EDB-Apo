@@ -1,0 +1,27 @@
+@import '../../../App.scss';
+
+
+.menu-list {
+    li {
+        cursor: pointer;
+    }
+
+
+    li:not(.active):hover{
+        background-color: $base-green;
+    }
+}
+
+.main-content {
+    .row {
+        margin: 1em 0 1em 7em;
+    }
+    
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 14pt;
+        margin-bottom: 0.5em;
+    }
+}

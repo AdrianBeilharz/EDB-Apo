@@ -7,12 +7,18 @@ $theme-colors: (
   "primary": $base-green,
 );
 
+.main-container {
+  min-height: 100vh;
+  height: 100vh;
+  display: block;
+  position: relative;
+}
+
 #root {
-  margin: 0;
-  padding: 0;
-  // font-family: Helvetica, Arial, sans-serif;
   font-family: 'Roboto', sans-serif;
   font-size: 13pt;
+  word-wrap: break-word;
+  overflow-x: hidden;
 }
 
 .header{
@@ -34,4 +40,8 @@ $theme-colors: (
 
 .apo-details {
     padding-left: 5em;
+}
+
+.basic-padding {
+  padding: 3em;
 }
