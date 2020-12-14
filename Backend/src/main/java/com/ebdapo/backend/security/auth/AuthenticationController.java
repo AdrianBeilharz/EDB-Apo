@@ -49,7 +49,7 @@ public class AuthenticationController {
         }
         //check if the user is related to the apotheke if yes he is authorized to see the data
         Benutzer b  = benutzerRepo.getBenutzerWithApotheke(username, apothekeId);
-        return b != null || isAdmin();
+        return b != null;// || isAdmin();
     }
 
     private boolean isAdmin() {
