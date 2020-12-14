@@ -38,7 +38,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .antMatchers(HttpMethod.DELETE, "/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "​/apotheke​/*​/btmbuchung​/*").hasAnyRole("PRUEFER")
                 .antMatchers(HttpMethod.PUT, "/apotheke/**").hasAnyRole("BENUTZER","ADMIN")
-                .antMatchers(HttpMethod.POST, "/apotheke").hasAnyRole("BENUTZER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/apotheke").permitAll()
+                .antMatchers(HttpMethod.POST, "/apotheke/*").permitAll()
                 .antMatchers("/login", "/logout").permitAll()
 
                 //disable cross site forgery and disable cors protection

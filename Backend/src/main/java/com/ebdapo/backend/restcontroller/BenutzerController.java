@@ -57,7 +57,13 @@ public class BenutzerController {
 
     @PostMapping("/apotheke/{apothekeId}/benutzer")
     public ResponseEntity<?> createNewBenutzer(@PathVariable String apothekeId, @RequestBody BenutzerAPIDetails benutzerData) {
-        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+
+        //first user does not have to be authorized
+        boolean firstUser = apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new)
+                .getBenutzer().size() == 0;
+
+
+        if(!firstUser && !authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
