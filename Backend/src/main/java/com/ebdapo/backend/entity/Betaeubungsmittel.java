@@ -31,6 +31,9 @@ public class Betaeubungsmittel {
     @Column(name="einheit", nullable = false)
     private Einheit einheit;
 
+    @Column(name="menge")
+    private int menge;
+
     @ManyToOne(targetEntity = Apotheke.class)
     @JoinColumn(name="apotheke", referencedColumnName = "id")
     private Apotheke apotheke;

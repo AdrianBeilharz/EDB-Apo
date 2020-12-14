@@ -19,5 +19,6 @@ public class BenutzerAPIDetails {
     private String apotheke; //id
     private String oldPassword;
     private String newPassword;
+    private String passwort;
 
 }

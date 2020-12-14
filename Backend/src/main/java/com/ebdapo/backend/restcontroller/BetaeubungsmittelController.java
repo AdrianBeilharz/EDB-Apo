@@ -71,12 +71,13 @@ public class BetaeubungsmittelController {
             throw new InvalidInputException("Betaeubungsmittel konnte nicht gefunden werden");
         }
 
-        Apotheke apo = apothekeRepo.findById(newBtm.getApotheke()).orElseThrow(InvalidInputException::new);
+        Apotheke apo = apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
 
         btm.setName(newBtm.getName());
         btm.setDarreichungsform(newBtm.getDarreichungsform());
         btm.setEinheit(newBtm.getEinheit());
         btm.setApotheke(apo);
+        btm.setMenge(newBtm.getMenge());
 
         btmRepo.save(btm);
         return new ResponseEntity<>(btm, HttpStatus.OK);

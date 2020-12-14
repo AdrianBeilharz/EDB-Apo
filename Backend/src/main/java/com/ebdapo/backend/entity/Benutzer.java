@@ -4,6 +4,7 @@ import com.ebdapo.backend.entity.enums.Rolle;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,7 +32,8 @@ public class Benutzer {
     @Column(name="passwort", nullable = false)
     private String passwort;
 
-    @Column(name="aktiv", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    @Column(name="aktiv",columnDefinition = "TINYINT", nullable = false)
     private boolean aktiv;
 
     @Enumerated(EnumType.STRING)

@@ -12,7 +12,6 @@ public class LieferantAPIDetails {
     private String id;
     private String name;
     private Adresse anschrift;
-    private String apotheke; //id
 
 
 }

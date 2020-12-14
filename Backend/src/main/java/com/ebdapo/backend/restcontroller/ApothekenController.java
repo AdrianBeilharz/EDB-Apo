@@ -27,6 +27,7 @@ public class ApothekenController {
 
     @PostMapping("/apotheke")
     public ResponseEntity<?> newApotheke(@RequestBody Apotheke apotheke) {
+
         if(apotheke.getName() == null || apotheke.getEmail() == null || apotheke.getAnschrift() == null) {
             throw new InvalidInputException("Ungültige oder fehlende Angaben");
         }
@@ -53,12 +54,14 @@ public class ApothekenController {
 
     @PutMapping("/apotheke/{apothekeId}")
     public ResponseEntity<?> updateApotheke(@PathVariable String apothekeId, @RequestBody Apotheke newApo) {
-        if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
+        //only admin can update apotheke
+        if(!authController.isAdmin(authController.getCurrentUsername(), apothekeId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Apotheke apo = apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
         apo.setName(newApo.getName());
+        apo.setEmail(newApo.getEmail());
         if(newApo.getAnschrift() != null){
             apo.getAnschrift().setNummer(newApo.getAnschrift().getNummer());
             apo.getAnschrift().setOrt(newApo.getAnschrift().getOrt());
@@ -73,9 +76,15 @@ public class ApothekenController {
 
     @DeleteMapping("/apotheke/{apothekeId}")
     public ResponseEntity<?> deleteApotheke(@PathVariable String apothekeId) {
+        //only admin can delete apotheke
+        if(!authController.isAdmin(authController.getCurrentUsername(), apothekeId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         if(!apothekenRepo.existsById(apothekeId)) {
             throw new BadRequestException();
         }
+
         apothekenRepo.deleteById(apothekeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
