@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { FormControl } from "react-bootstrap";
+import { useParams } from 'react-router-dom';
 import BuchungTabelle from "../btmbuch/BuchungTabelle";
 
 function ApothekeBtmList(props) {
+
+  const { apoId } = useParams();
   const [btms, setBtms] = useState([]);
   const [input, setInput] = useState("");
 
   const getBtms = async () => {
     const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.match.params.id}/btmbuchung`,
+      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung`,
       {
         method: "GET",
         headers: {

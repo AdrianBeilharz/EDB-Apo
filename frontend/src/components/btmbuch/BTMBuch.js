@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '../headers/Header'
 import StatusHeader from '../headers/StatusHeader'
 import ApothekenDetails from '../apotheke/ApothekenDetails';
@@ -8,9 +9,8 @@ import {Row, Col} from 'react-bootstrap';
 import './BTMBuch.scss'
  
 function BTMBuch (props) {
-  let paths = props.location.pathname.split("/");
+  const { apoId } = useParams();
 
-  const [apothekeId, setApothekeId] = useState(paths[paths.length-1])
   const [user, setUser] = useState({});
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [aktiveRolle, setAktiveRolle] = useState('');
@@ -51,10 +51,10 @@ function BTMBuch (props) {
           {aktiveRolle.toLowerCase() !== 'benutzer' ?<StatusHeader aktiveRolle={aktiveRolle}/> : null}
           <Header />
           <Row className="details-list">
-              <Col><ApothekenDetails {...props} apothekeRefFunctions={apothekeRefFunctions} apothekeId={apothekeId}/></Col>
-              <Col>{isLoggedIn ? <UserDetails {...props} user={user} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle}/> : null }</Col>
+              <Col><ApothekenDetails {...props} apothekeRefFunctions={apothekeRefFunctions} apothekeId={apoId}/></Col>
+              <Col>{isLoggedIn ? <UserDetails {...props} user={user} setUser={setUser} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle}/> : null }</Col>
           </Row> 
-          <ApothekeBtmList apothekeId={apothekeId} user={user} apothekeRefFunctions={apothekeRefFunctions} {...props}/>    
+          <ApothekeBtmList apothekeId={apoId} user={user} apothekeRefFunctions={apothekeRefFunctions} {...props}/>    
       </React.Fragment>
   )
 }

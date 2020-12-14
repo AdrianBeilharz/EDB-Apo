@@ -1,15 +1,18 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 import { Button } from "react-bootstrap";
 import NeuesBtmModal from '../btmbuch/NeuesBtmModal';
 import '../../App.scss'
 
 function ApothekenDetails(props) {
-  const[apotheke, setApotheke] = useState({anschrift:{}});
-  const[neuesBtmModalShow, setneuesBtmModalShow] = useState(false);
+
+    const { apoId } = useParams();
+    const[apotheke, setApotheke] = useState({anschrift:{}});
+    const[neuesBtmModalShow, setneuesBtmModalShow] = useState(false);
 
 
   const getApothekeData = async () => {
-      const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.match.params.id}`, {
+      const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}`, {
           method: 'GET',
           headers: {
               'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),

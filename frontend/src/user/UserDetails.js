@@ -1,9 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Button, Col, Row, Form } from 'react-bootstrap';
+import { Settings } from '@material-ui/icons';
+import UserDetailsUpdateModal from '../modals/UserDetailsUpdateModal';
 
 function UserDetails(props) {
     //eslint disable-next-line
    const {rolle, vorname, name, nutzername, aktiv} = props.user;
+   const [showUserSettings, setShowUserSettings] = useState(false);
 
    var allRoles = {
        ADMIN : { 0: "Admin", 1 : "Pruefer", 2: "Benutzer"},
@@ -18,6 +21,8 @@ function UserDetails(props) {
 
    return(
        <Row>
+           <UserDetailsUpdateModal {...props} loggedInUser={props.user} show={showUserSettings} onHide={() => setShowUserSettings(false)}/>
+
            <Col><b>Nutzername:</b> {nutzername}</Col>
            <Col>
                <Form.Control as="select" onChange={(event) => props.setAktiveRolle(event.target.value.toUpperCase())}>
@@ -25,7 +30,10 @@ function UserDetails(props) {
                </Form.Control>
            </Col>
            <Col>
-               <Button>Einstellungen</Button>
+                <Button onClick={() => setShowUserSettings(true)}>
+                    <Settings />
+                    Einstellungen
+                </Button>
            </Col>
            <Col>
                <Button onClick={logout}>Logout</Button>
