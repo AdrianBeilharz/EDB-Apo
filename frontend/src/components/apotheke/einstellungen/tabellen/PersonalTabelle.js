@@ -1,21 +1,32 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
-import { Edit, DeleteForever } from '@material-ui/icons';
+import { AddBox, Edit, DeleteForever } from '@material-ui/icons';
 import { Table, Button } from 'react-bootstrap';
+
+import PersonalAddModal from '../../../../modals/PersonalAddModal';
+import PersonalEditModal from '../../../../modals/PersonalEditModal';
+import DeleteModal from '../../../../modals/DeleteModal';
+import { useSnackbar } from 'notistack';
 
 function PersonalTabelle(props) {
   const { id } = useParams();
   const [personal, setPersonal] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showPersonalAddModal, setShowPersonalAddModal] = useState(false);
+  const [showPersonalEditModal, setShowPersonalEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+
 
   const getPersonalData = async () => {
     fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${id}/benutzer`, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
-        }
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
+      }
     }).then((res) => {
-      if(res.status === 200) {
+      if (res.status === 200) {
         return res.json()
       } else if (res.status === 403) {
         props.history.push('forbidden');
@@ -23,9 +34,41 @@ function PersonalTabelle(props) {
         props.history.push('badrequest');
       }
     }).then((data) => setPersonal(data)).catch((err) => {
-        //SHOW ERROR
-        return;
+      //SHOW ERROR
+      return;
     });
+  }
+
+  const deleteUser = async () => {
+    console.log("user should get deleted");
+    fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/apotheke/${id}/benutzer/${selectedUser.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
+      },
+    }).then((res) => {
+      if (res && res.status === 200) {
+        props.updateUserList();
+        enqueueSnackbar('Benutzer erfolgreich gelöscht', { variant: 'success', autoHideDuration: 3000 });
+      } else {
+        //SHOW ERROR
+        console.log(res);
+      }
+    }).catch((err) => {
+      //SHOW ERROR
+      console.log(err);
+    });
+
+
+  }
+
+  const del = user => {
+    setSelectedUser(user);
+    setShowDeleteModal(true);
+  }
+  const edit = user => {
+    setSelectedUser(user);
+    setShowPersonalEditModal(true);
   }
 
   useEffect(() => {
@@ -34,6 +77,11 @@ function PersonalTabelle(props) {
 
   return (
     <Fragment>
+      <PersonalAddModal {...props} show={showPersonalAddModal} onHide={() => setShowPersonalAddModal(false)} />
+      {selectedUser ? <PersonalEditModal {...props} user={selectedUser} show={showPersonalEditModal} onHide={() => setShowPersonalEditModal(false)} /> : null}
+      <DeleteModal {...props} headertext={'Benutzer löschen'}
+        maintext={'Möchtest du diesen Benutzer wirklich löschen?'} onSubmit={deleteUser} subtext={'Dieser Vorgang kann nicht rückgängig gemacht werden'}
+        show={showDeleteModal} onHide={() => setShowDeleteModal(false)} />
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -42,7 +90,9 @@ function PersonalTabelle(props) {
             <th>Vorname</th>
             <th>Aktiv</th>
             <th>Rolle</th>
-            <th>Aktionen</th>
+            <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+              <Button onClick={() => setShowPersonalAddModal(true)} >Hinzufügen <AddBox /></Button>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -53,9 +103,9 @@ function PersonalTabelle(props) {
               <td>{user.vorname}</td>
               <td>{user.aktiv ? 'ja' : 'nein'}</td>
               <td>{user.rolle}</td>
-              <td>
-                <Button onClick={() => console.log("update")}><Edit /></Button>
-                <Button onClick={() =>  console.log("delete")}><DeleteForever /></Button>
+              <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                <Button onClick={() => edit(user)}><Edit /></Button>
+                <Button onClick={() => del(user)}><DeleteForever /></Button>
               </td>
             </tr>
           )}
