@@ -56,31 +56,34 @@ public class BenutzerController {
     }
 
     @PostMapping("/apotheke/{apothekeId}/benutzer")
-    public ResponseEntity<?> createNewBenutzer(@PathVariable String apothekeId, @RequestBody Benutzer benutzer) {
+    public ResponseEntity<?> createNewBenutzer(@PathVariable String apothekeId, @RequestBody BenutzerAPIDetails benutzerData) {
         if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        benutzer.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
-
-        String nutzername = benutzer.getNutzername();
-        String name = benutzer.getName();
-        String vorname = benutzer.getVorname();
-        String passwort = benutzer.getPasswort();
-
-        if(nutzername == null || benutzer.getApotheke() == null || vorname == null || name == null ||
-                passwort == null || benutzer.getRolle() == null){
+        if(benutzerData.getPasswort() == null || benutzerData.getVorname() == null || benutzerData.getName() == null
+                || benutzerData.getRolle() == null) {
            throw new InvalidInputException("Ungültige oder fehlende Angaben");
-        }else if(nutzername.length() < 4 ||vorname.length() < 1 || name.length() < 1 || passwort.length() < 5) {
+        }else if(benutzerData.getNutzername().length() < 4 || benutzerData.getVorname().length() < 1 ||
+                benutzerData.getName().length() < 1 || benutzerData.getPasswort().length() < 5) {
             throw new InvalidInputException("Ungültige oder fehlende Angaben");
         }
 
-        if(checkIfUserExists(benutzer)) {
+        if(checkIfUserExists(benutzerData)) {
            throw new InvalidInputException("Benutzer existiert bereits");
         }
 
+        Benutzer benutzer = new Benutzer();
+
+        benutzer.setApotheke(apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new));
+        benutzer.setNutzername(benutzerData.getNutzername());
+        benutzer.setName(benutzerData.getName());
+        benutzer.setVorname(benutzerData.getVorname());
+        benutzer.setPasswort(benutzerData.getPasswort());
+        benutzer.setRolle(benutzerData.getRolle());
+
         benutzer.setId(UUID.randomUUID().toString());
-        benutzer.setPasswort(new BCryptPasswordEncoder().encode(benutzer.getPasswort()));
+        benutzer.setPasswort(new BCryptPasswordEncoder().encode(benutzerData.getPasswort()));
         benutzer.setAktiv(true);
         benutzerRepo.save(benutzer);
         return new ResponseEntity<>(benutzer, HttpStatus.CREATED);
@@ -96,9 +99,11 @@ public class BenutzerController {
 
     @PutMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
     public ResponseEntity<?> updateBenutzerById(@PathVariable String apothekeId, @PathVariable String benutzerId, @RequestBody BenutzerAPIDetails newBenutzer){
-        if(!authController.checkIfAuthorizedAndSameUserOrAdmin(authController.getCurrentUsername(), apothekeId, benutzerId)) {
+        String authorized = authController.checkIfAuthorizedAndSameUserOrAdmin(authController.getCurrentUsername(), apothekeId, benutzerId);
+        if(authorized == null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+
 
         if(!benutzerRepo.existsById(benutzerId)){
             throw new InvalidInputException("Falsche ID");
@@ -106,29 +111,53 @@ public class BenutzerController {
 
         Benutzer benutzer = benutzerRepo.findById(benutzerId).orElseThrow(InvalidInputException::new);
 
+        if(usernameIsTaken(benutzer.getNutzername(), newBenutzer.getNutzername())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+        boolean reqFromAdmin = authorized.equals("admin");
+
         //checks if the user is authorized to change it (entering valid password)
         String pw = newBenutzer.getOldPassword() ;
-        if(pw != null && !pw.isBlank() && !benutzer.getRolle().toString().toLowerCase().equals("admin")){
-            if(!new BCryptPasswordEncoder().matches(pw, benutzer.getPasswort())) {
-                throw new InvalidInputException("Falsches Passwort");
+
+        if(!reqFromAdmin){
+            if(pw != null && !pw.isBlank()){
+                if(!new BCryptPasswordEncoder().matches(pw, benutzer.getPasswort())) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
+            }else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-        }else {
-            throw new InvalidInputException("Passwort wird benötigt");
         }
 
         Apotheke apo = apothekeRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
         benutzer.setName(newBenutzer.getName());
         benutzer.setNutzername(newBenutzer.getNutzername());
         benutzer.setVorname(newBenutzer.getVorname());
+
+        //Nur Admin kann aktiv oder inaktiv setzen
+        if(reqFromAdmin){
+            benutzer.setAktiv(newBenutzer.isAktiv());
+        }
+
+        //nur admin kann Rolle ändern
+        if(reqFromAdmin && newBenutzer.getRolle() != null){
+            benutzer.setRolle(newBenutzer.getRolle());
+        }
+
         if(newBenutzer.getNewPassword() != null){
             benutzer.setPasswort(new BCryptPasswordEncoder().encode(newBenutzer.getNewPassword()));
         }
-        benutzer.setAktiv(newBenutzer.isAktiv());
-        benutzer.setRolle(newBenutzer.getRolle());
+
         benutzer.setApotheke(apo);
 
         benutzerRepo.save(benutzer);
         return new ResponseEntity<>(benutzer, HttpStatus.OK);
+    }
+
+    private boolean usernameIsTaken(String current, String newName) {
+        return !current.equals(newName) && benutzerRepo.getBenutzerByUsername(newName) != null;
     }
 
     @DeleteMapping("/apotheke/{apothekeId}/benutzer/{benutzerId}")
@@ -154,7 +183,7 @@ public class BenutzerController {
     }
 
 
-    private boolean checkIfUserExists(Benutzer benutzer) {
+    private boolean checkIfUserExists(BenutzerAPIDetails benutzer) {
         return benutzerRepo.getBenutzerByUsername(benutzer.getNutzername()) != null;
     }
 }

@@ -142,6 +142,7 @@ public class BetaeubungsmittelBuchungController {
             zugang.setPruefdatum(btDetails.getPruefdatum());
 
             Betaeubungsmittel btm = btmRepo.findById(btDetails.getBtm()).orElseThrow(InvalidInputException::new);
+            btm.setMenge(btm.getMenge()+zugang.getMenge());
             zugang.setBtm(btm);
 
             Benutzer benutzer = benutzerRepository.findById(btDetails.getBenutzer()).orElseThrow(InvalidInputException::new);
@@ -151,6 +152,9 @@ public class BetaeubungsmittelBuchungController {
             Lieferant lieferant = lieferantRepo.findById(btDetails.getLieferant()).orElseThrow(InvalidInputException::new);
             zugang.setLieferant(lieferant);
             zugang.setAnfordergungsschein(btDetails.getAnforderungsschein());
+
+
+            btmRepo.save(btm);
             zugangRepository.save(zugang);
             return new ResponseEntity<>(zugang, HttpStatus.CREATED);
 
@@ -163,6 +167,7 @@ public class BetaeubungsmittelBuchungController {
             abgang.setPruefdatum(btDetails.getPruefdatum());
 
             Betaeubungsmittel btm = btmRepo.findById(btDetails.getBtm()).orElseThrow(InvalidInputException::new);
+            btm.setMenge(btm.getMenge()-abgang.getMenge());
             abgang.setBtm(btm);
 
             Benutzer benutzer = benutzerRepository.findById(btDetails.getBenutzer()).orElseThrow(InvalidInputException::new);
@@ -174,6 +179,8 @@ public class BetaeubungsmittelBuchungController {
             Arzt arzt = arztRepository.findById(btDetails.getArzt()).orElseThrow(InvalidInputException::new);
             abgang.setArzt(arzt);
             abgang.setRezept(btDetails.getRezept());
+
+            btmRepo.save(btm);
             abgangRepository.save(abgang);
             return new ResponseEntity<>(abgang, HttpStatus.CREATED);
         }else {
@@ -206,9 +213,13 @@ public class BetaeubungsmittelBuchungController {
         }
 
         Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
-
         if(z != null){
+            Betaeubungsmittel btm = z.getBtm();
+            int previousMenge = z.getMenge();
             if(!pruefer){
+                //Wenn eine Buchung aktualisiert wird, muss die vorherige Mengenberechnung
+                //rückgängig gemacht werden
+                btm.setMenge(btm.getMenge()-previousMenge+newBtmBuchung.getMenge());
                 z.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
                 z.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
                 z.setMenge(newBtmBuchung.getMenge());
@@ -216,13 +227,17 @@ public class BetaeubungsmittelBuchungController {
                 z.setLieferant(lieferantRepo.findById(newBtmBuchung.getLieferant()).orElseThrow(InvalidInputException::new));
             }
             z.setPruefdatum(newBtmBuchung.getPruefdatum());
+            btmRepo.save(btm);
             zugangRepository.save(z);
             return new ResponseEntity<>(z, HttpStatus.OK);
         }
 
         Abgang a = abgangRepository.findByIds(btmbuchungId, apothekeId);
         if(a != null){
+            Betaeubungsmittel btm = a.getBtm();
+            int previousMenge = a.getMenge();
             if(!pruefer){
+                btm.setMenge(btm.getMenge()+previousMenge-newBtmBuchung.getMenge());
                 a.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
                 a.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
                 a.setMenge(newBtmBuchung.getMenge());
@@ -231,6 +246,7 @@ public class BetaeubungsmittelBuchungController {
                 a.setArzt(arztRepository.findById(newBtmBuchung.getArzt()).orElseThrow(InvalidInputException::new));
             }
             a.setPruefdatum(newBtmBuchung.getPruefdatum());
+            btmRepo.save(btm);
             abgangRepository.save(a);
             return new ResponseEntity<>(a, HttpStatus.OK);
         }else {

@@ -15,6 +15,7 @@ public class BetaeubungsmittelAPIDetails {
     private Darreichungsform darreichungsform;
     private Einheit einheit;
     private String apotheke; //id
+    private int menge;
 
 
 }
