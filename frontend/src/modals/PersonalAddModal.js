@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 
 function PersonalAddModal(props) {
 
-  const { id } = useParams();
+  const { apoId } = useParams();
 
   const [nutzernameVergeben, setNutzernameVergeben] = useState(false);
 
@@ -32,7 +32,7 @@ function PersonalAddModal(props) {
     }
 
     console.log(body)
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${id}/benutzer`, {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function PersonalAddModal(props) {
       return;
     }
 
-    await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${id}/benutzer/${newUsername}/checkUsername`, {
+    await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer/${newUsername}/checkUsername`, {
       method: 'POST',
     }).then((res) => {
       if (res.status === 200) {

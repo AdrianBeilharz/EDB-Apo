@@ -9,7 +9,7 @@ import DeleteModal from '../../../../modals/DeleteModal';
 import { useSnackbar } from 'notistack';
 
 function PersonalTabelle(props) {
-  const { id } = useParams();
+  const { apoId } = useParams();
   const [personal, setPersonal] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [selectedUser, setSelectedUser] = useState(null);
@@ -19,8 +19,8 @@ function PersonalTabelle(props) {
 
 
 
-  const getPersonalData = async () => {
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${id}/benutzer`, {
+  const getPersonalData = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
@@ -39,16 +39,15 @@ function PersonalTabelle(props) {
     });
   }
 
-  const deleteUser = async () => {
-    console.log("user should get deleted");
-    fetch(`http://${process.env.REACT_APP_BACKEND_HOSTNAME}/apotheke/${id}/benutzer/${selectedUser.id}`, {
+  const deleteUser = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer/${selectedUser.id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
       },
     }).then((res) => {
       if (res && res.status === 200) {
-        props.updateUserList();
+        getPersonalData();
         enqueueSnackbar('Benutzer erfolgreich gelöscht', { variant: 'success', autoHideDuration: 3000 });
       } else {
         //SHOW ERROR
@@ -58,8 +57,6 @@ function PersonalTabelle(props) {
       //SHOW ERROR
       console.log(err);
     });
-
-
   }
 
   const del = user => {
@@ -77,8 +74,8 @@ function PersonalTabelle(props) {
 
   return (
     <Fragment>
-      <PersonalAddModal {...props} show={showPersonalAddModal} onHide={() => setShowPersonalAddModal(false)} />
-      {selectedUser ? <PersonalEditModal {...props} user={selectedUser} show={showPersonalEditModal} onHide={() => setShowPersonalEditModal(false)} /> : null}
+      <PersonalAddModal {...props} show={showPersonalAddModal} onHide={() => setShowPersonalAddModal(false)} updatePersonalData={getPersonalData}/>
+      {selectedUser ? <PersonalEditModal {...props} user={selectedUser} show={showPersonalEditModal} onHide={() => setShowPersonalEditModal(false)} updatePersonalData={getPersonalData}/> : null}
       <DeleteModal {...props} headertext={'Benutzer löschen'}
         maintext={'Möchtest du diesen Benutzer wirklich löschen?'} onSubmit={deleteUser} subtext={'Dieser Vorgang kann nicht rückgängig gemacht werden'}
         show={showDeleteModal} onHide={() => setShowDeleteModal(false)} />

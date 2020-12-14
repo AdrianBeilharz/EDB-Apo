@@ -12,7 +12,7 @@ import PersonalTabelle from './tabellen/PersonalTabelle';
 import './ApothekeEinstellungen.scss'
 
 function ApothekeEinstellungen(props) {
-  const { id } = useParams()
+  const { apoId } = useParams()
 
   const [apotheke, setApotheke] = useState({ anschrift: {} })
   const [activeMenuItem, setActiveMenuItem] = useState('personal');
@@ -20,7 +20,7 @@ function ApothekeEinstellungen(props) {
 
 
   const getCurrentApotheke = async () => {
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${id}`, {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt")
