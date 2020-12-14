@@ -7,9 +7,9 @@ import { useSnackbar } from 'notistack';
 
 function PersonalUpdateModal(props) {
 
-  const { id } = useParams();
+  const { apoId } = useParams();
 
-  let { nutzername, name, vorname, aktiv, rolle } = props.user;
+  let { id, nutzername, name, vorname, aktiv, rolle } = props.user;
   const [nutzernameVergeben, setNutzernameVergeben] = useState(false);
 
   //for password checking
@@ -36,7 +36,7 @@ function PersonalUpdateModal(props) {
     if (neuesPasswort.value) {
       body.newPassword = neuesPasswort.value;
     }
-    const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${id}/benutzer/${props.user.id}`, {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
