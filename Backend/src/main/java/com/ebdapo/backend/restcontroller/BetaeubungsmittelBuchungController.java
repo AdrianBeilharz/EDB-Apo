@@ -138,7 +138,7 @@ public class BetaeubungsmittelBuchungController {
             Zugang zugang = new Zugang();
             zugang.setId(UUID.randomUUID().toString());
             zugang.setMenge(btDetails.getMenge());
-            zugang.setDatum(new Date());
+            zugang.setDatum(btDetails.getDatum());
             zugang.setPruefdatum(btDetails.getPruefdatum());
 
             Betaeubungsmittel btm = btmRepo.findById(btDetails.getBtm()).orElseThrow(InvalidInputException::new);
@@ -163,7 +163,7 @@ public class BetaeubungsmittelBuchungController {
 
             abgang.setId(UUID.randomUUID().toString());
             abgang.setMenge(btDetails.getMenge());
-            abgang.setDatum(new Date());
+            abgang.setDatum(btDetails.getDatum());
             abgang.setPruefdatum(btDetails.getPruefdatum());
 
             Betaeubungsmittel btm = btmRepo.findById(btDetails.getBtm()).orElseThrow(InvalidInputException::new);

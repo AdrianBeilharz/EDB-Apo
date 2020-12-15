@@ -1,131 +1,84 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { useSnackbar } from 'notistack';
 
-class ApothekeEditModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {apotheke: props.apotheke};
-    this.handleChangeName = this.handleChangeName.bind(this);
-    this.handleChangeEmail = this.handleChangeEmail.bind(this);
-    this.handleChangeStrasse = this.handleChangeStrasse.bind(this);
-    this.handleChangeNummer = this.handleChangeNummer.bind(this);
-    this.handleChangePlz = this.handleChangePlz.bind(this);
-    this.handleChangeOrt = this.handleChangeOrt.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+function ApothekeEditModal(props) {
+  const { apoId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
-  handleChangeName(event) {
-    this.setState(prevState => ({
-      apotheke: {
-        ...prevState.apotheke,
-        name: event.target.value
+  const updateApothekeDetails = event => {
+    event.preventDefault();
+    let { name, email, strasse, nummer, plz, ort } = event.target;
+    let body = {
+      name: name.value,
+      email: email.value,
+      anschrift: {
+        strasse: strasse.value,
+        nummer: nummer.value,
+        plz: plz.value,
+        ort: ort.value
       }
-    }))
-  }
-
-  handleChangeEmail(event) {
-    this.setState(prevState => ({
-      apotheke: {
-        ...prevState.apotheke,
-        email: event.target.value
+    };
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt")
+      },
+      body: JSON.stringify(body)
+    }).then((res) => {
+      if (res.status === 200) {
+        props.onHide();
+        props.updateApothekeData();
+        enqueueSnackbar('Apotheke aktualisiert', { variant: 'success', autoHideDuration: 3000 });
+      } else if (res.status === 400) {
+        enqueueSnackbar('Ein Fehler ist aufgetaucht', { variant: 'error', autoHideDuration: 3000 });
       }
-    }))
+    }).catch((err) => {
+      console.log(err)
+    });
   }
 
-  handleChangeStrasse(event) {
-    this.setState(prevState => ({
-      apotheke: {
-        ...prevState.apotheke,
-        anschrift: {
-          ...prevState.apotheke.anschrift,
-          strasse: event.target.value
-        }
-      }
-    }))
-  }
-
-  handleChangeNummer(event) {
-    this.setState(prevState => ({
-      apotheke: {
-        ...prevState.apotheke,
-        anschrift: {
-          ...prevState.apotheke.anschrift,
-          nummer: event.target.value
-        }
-      }
-    }))
-  }
-
-  handleChangePlz(event) {
-    this.setState(prevState => ({
-      apotheke: {
-        ...prevState.apotheke,
-        anschrift: {
-          ...prevState.apotheke.anschrift,
-          plz: event.target.value
-        }
-      }
-    }))
-  }
-
-  handleChangeOrt(event) {
-    this.setState(prevState => ({
-      apotheke: {
-        ...prevState.apotheke,
-        anschrift: {
-          ...prevState.apotheke.anschrift,
-          ort: event.target.value
-        }
-      }
-    }))
-  }
-
-  handleSubmit() {
-    console.log("save changes");
-    //put apotheke.then status = 200 -> refresh data
-    this.props.onHide();
-  }
-  
-  render() {
-    return (
-      <Modal show={this.props.show} onHide={this.props.onHide} centered backdrop="static">
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
+  return (
+    <Modal show={props.show} onHide={props.onHide} centered backdrop="static">
+      <Modal.Header closeButton>
+        <Modal.Title>Apotheke bearbeiten</Modal.Title>
+      </Modal.Header>
+      <Form onSubmit={updateApothekeDetails}>
         <Modal.Body>
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Group>
-              <Form.Control type="text" placeholder="Name der Apotheke" name="name" value={this.state.apotheke.name} onChange={this.handleChangeName}/>
-            </Form.Group>
-            <Form.Group>
-              <Form.Control type="email" placeholder="E-Mail der Apotheke" value={this.state.apotheke.email} onChange={this.handleChangeEmail} />
-            </Form.Group>
-            <Form.Group as={Row}>
-              <Col sm={9}>
-                <Form.Control type="text" placeholder="Straße" value={this.state.apotheke.anschrift.strasse} onChange={this.handleChangeStrasse} />
-              </Col>
-              <Col>
-                <Form.Control type="number" placeholder="Nummer" value={this.state.apotheke.anschrift.nummer} onChange={this.handleChangeNummer} />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row}>
-              <Col>
-                <Form.Control type="text" placeholder="PLZ" value={this.state.apotheke.anschrift.plz} onChange={this.handleChangePlz} />
-              </Col>
-              <Col sm={9}>
-                <Form.Control type="text" placeholder="Ort" value={this.state.apotheke.anschrift.ort} onChange={this.handleChangeOrt} />
-              </Col>
-            </Form.Group>
-          </Form>
+          <Form.Group>
+            <Form.Control type="text" placeholder="Name der Apotheke" name="name" defaultValue={props.apotheke.name} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Control type="email" placeholder="E-Mail der Apotheke" name="email" defaultValue={props.apotheke.email} />
+          </Form.Group>
+          <Form.Group as={Row}>
+            <Col sm={9}>
+              <Form.Control type="text" placeholder="Straße" name="strasse" defaultValue={props.apotheke.anschrift.strasse} />
+            </Col>
+            <Col>
+              <Form.Control type="text" placeholder="Nummer" name="nummer" defaultValue={props.apotheke.anschrift.nummer} />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row}>
+            <Col>
+              <Form.Control type="text" placeholder="PLZ" name="plz" defaultValue={props.apotheke.anschrift.plz} />
+            </Col>
+            <Col sm={9}>
+              <Form.Control type="text" placeholder="Ort" name="ort" defaultValue={props.apotheke.anschrift.ort} />
+            </Col>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={this.props.onHide}>Cancel</Button>
-          <Button variant="primary" type="Submit" onClick={this.handleSubmit}>Ändern</Button>
+          <Button variant="secondary" onClick={props.onHide}>Abbrechen</Button>
+          <Button variant="primary" type="Submit">Bearbeiten</Button>
         </Modal.Footer>
-      </Modal>
-    )
-  }
-  
+      </Form>
+    </Modal >
+  )
+
+
 }
 
 export default ApothekeEditModal;

@@ -41,8 +41,6 @@ function NeuesLieferantenModal(props) {
       console.log(err);
       return;
     });
-
-    
   }
 
   return (
@@ -55,7 +53,7 @@ function NeuesLieferantenModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Benutzer Einstellungen
+          Liefernat hinzufügen
             </Modal.Title>
       </Modal.Header>
       <Form onSubmit={updateDetails}>
