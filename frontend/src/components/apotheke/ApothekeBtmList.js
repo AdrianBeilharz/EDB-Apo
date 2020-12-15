@@ -68,4 +68,3 @@ function ApothekeBtmList(props) {
 
 export default ApothekeBtmList;
 
-/*{btms.map(btm => <BuchungTabelle {...props} btm={btm} /> )}*/

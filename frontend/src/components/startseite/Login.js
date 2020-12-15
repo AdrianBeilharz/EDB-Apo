@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import {Row, Col, Button, Form,} from 'react-bootstrap';
 import { useForm } from "react-hook-form";
+import ApothekeRegisterModal from '../../modals/ApothekeRegisterModal';
 import './Startseite.scss'
 
 
 function Login(props) {
+    const [neuesApoRegisterModal, setNeuesApoRegisterModal] = useState(false);
     const {handleSubmit} = useForm();
     const [user, setUser] = useState({username:'', password:''});
     
@@ -39,8 +41,12 @@ function Login(props) {
                     <Col>
                         <Form.Control onChange={e => setUser({...user, username: e.target.value})} placeholder="Benutzername" />
                         <Form.Control onChange={e => setUser({...user, password: e.target.value})} placeholder="Passwort" />
-                        <Button variant="primary" type="submit">Login</Button>
-                        <Button variant="primary" >Neue Apotheke registrieren</Button>
+                        <Button variant="primary" type="submit">Login</Button>    
+                        <Button variant="primary"  show={neuesApoRegisterModal} onClick={() => setNeuesApoRegisterModal(true)}>Neue Apotheke registrieren</Button>
+                        <ApothekeRegisterModal
+                                show={neuesApoRegisterModal}
+                                {...props}
+                                onHide={() => setNeuesApoRegisterModal(false)} ></ApothekeRegisterModal>
                     </Col>
                 </Form.Row>
             </Form>
