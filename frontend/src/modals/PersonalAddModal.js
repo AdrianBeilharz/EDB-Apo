@@ -90,7 +90,7 @@ function PersonalAddModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Benutzer Einstellungen
+          Personal hinzufügen
             </Modal.Title>
       </Modal.Header>
       <Form onSubmit={createNewUser}>

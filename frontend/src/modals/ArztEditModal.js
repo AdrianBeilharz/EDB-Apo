@@ -60,7 +60,7 @@ function ArztEditModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Benutzer Einstellungen
+          Arzt bearbeiten
             </Modal.Title>
       </Modal.Header>
       <Form onSubmit={updateDetails}>

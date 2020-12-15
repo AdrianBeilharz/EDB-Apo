@@ -4,10 +4,12 @@ import { useParams } from 'react-router-dom';
 
 import Header from '../../headers/Header';
 import StatusHeader from '../../headers/StatusHeader';
+import UserDetails from '../../../user/UserDetails';
 import ArztTabelle from './tabellen/ArztTabelle';
 import BtmTabelle from './tabellen/BtmTabelle';
 import LieferantTabelle from './tabellen/LieferantTabelle';
 import PersonalTabelle from './tabellen/PersonalTabelle';
+import ApothekeEditModal from '../../../modals/ApothekeEditModal';
 
 import './ApothekeEinstellungen.scss'
 
@@ -16,10 +18,13 @@ function ApothekeEinstellungen(props) {
 
   const [apotheke, setApotheke] = useState({ anschrift: {} })
   const [activeMenuItem, setActiveMenuItem] = useState('personal');
-  const [user, setUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [aktiveRolle, setAktiveRolle] = useState('');
+  const [user, setUser] = useState({});
+  const [showApothekeEditModal, setShowApothekeEditModal] = useState(false);
 
 
-  const getCurrentApotheke = async () => {
+  const getCurrentApotheke = () => {
     fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}`, {
       method: 'GET',
       headers: {
@@ -40,7 +45,7 @@ function ApothekeEinstellungen(props) {
       })
   }
 
-  const getUserData = async () => {
+  const getUserData = () => {
     fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
       method: 'GET',
       headers: {
@@ -55,8 +60,11 @@ function ApothekeEinstellungen(props) {
         } else if (res.status === 400) {
           props.history.push('badrequest');
         }
-      }).then(data => setUser(data)
-      ).catch((err) => {
+      }).then((data) => {
+        setUser(data);
+        setAktiveRolle(data.rolle)
+        setLoggedIn(true)
+      }).catch((err) => {
         //SHOW ERROR
         return;
       });
@@ -82,8 +90,14 @@ function ApothekeEinstellungen(props) {
 
   return (
     <Fragment>
-      <StatusHeader aktiveRolle="admin" />
+      <ApothekeEditModal {...props} show={showApothekeEditModal} onHide={() => setShowApothekeEditModal(false)} apotheke={apotheke} updateApothekeData={getCurrentApotheke} />
+      <StatusHeader aktiveRolle={aktiveRolle} />
       <Header />
+      <Row className="details-list">
+        <Col md={{ span: 6, offset: 6 }}>
+          {loggedIn ? <UserDetails {...props} user={user} setUser={setUser} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle} /> : null}
+        </Col>
+      </Row>
       <div className="main-content">
         <Row>
           <Col sm={4}>
@@ -92,7 +106,7 @@ function ApothekeEinstellungen(props) {
               <li>E-Mail: {apotheke.email}</li>
               <li>Anschrift: {apotheke.anschrift.strasse} {apotheke.anschrift.nummer}  ({apotheke.anschrift.plz} {apotheke.anschrift.ort})</li>
             </ul>
-            <Button>Angaben bearbeiten</Button>
+            <Button onClick={() => setShowApothekeEditModal(true)}>Angaben bearbeiten</Button>
           </Col>
         </Row>
         <Row style={{ marginTop: '3em' }}>
