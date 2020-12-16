@@ -86,18 +86,18 @@ INSERT INTO empfaenger (id, name, vorname, anschrift, apotheke) value ('6', 'Ren
 INSERT INTO empfaenger (id, name, vorname, anschrift, apotheke) value ('7', 'Master', 'Rudolf', '8', '3');
 INSERT INTO empfaenger (id, name, vorname, anschrift, apotheke) value ('8', 'Hase', 'Mike', '9', '3');
 
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('1', '2020-11-10', '100',  '2020-10-24 20:21:55', '1', '3');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('2', '2020-10-03', '20',  '2020-02-17 09:32:58', '1', '3');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('3', '2020-09-10', '20',  '2019-12-19 01:46:13', '1', '3');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('4', '2020-09-03', '5',  '2020-05-10 16:02:22', '1', '3');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('5', '2020-11-10', '5',  '2020-11-25 20:38:01', '7', '7');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('6', '2020-10-03', '10',  '2019-12-22 12:06:24', '7', '7');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('7', '2020-10-10', '20',  '2020-08-14 07:26:09', '8', '7');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('8', '2020-10-03', '60',  '2020-02-17 17:27:00', '8', '7');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('9', '2020-11-10', '5',  '2020-05-24 22:21:25', '1', '12');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('10', '2020-09-03', '10',  '2020-03-28 01:14:10', '1', '12');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('11', '2020-09-25', '5',  '2020-02-18 11:53:21', '1', '12');
-INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('12', '2020-09-25', '20',  '2020-08-18 06:43:43', '1', '12');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('1', '2020-11-10', '100',  '2020-10-24', '1', '3');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('2', '2020-10-03', '20',  '2020-02-17', '1', '3');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('3', '2020-09-10', '20',  '2019-12-19', '1', '3');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('4', '2020-09-03', '5',  '2020-05-10', '1', '3');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('5', '2020-11-10', '5',  '2020-11-25', '7', '7');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('6', '2020-10-03', '10',  '2019-12-22', '7', '7');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('7', '2020-10-10', '20',  '2020-08-14', '8', '7');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('8', '2020-10-03', '60',  '2020-02-17', '8', '7');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('9', '2020-11-10', '5',  '2020-05-24', '1', '12');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('10', '2020-09-03', '10',  '2020-03-28', '1', '12');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('11', '2020-09-25', '5',  '2020-02-18', '1', '12');
+INSERT INTO btm_buchung(id, pruefdatum, menge, datum, btm, benutzer) value ('12', '2020-09-25', '20',  '2020-08-18', '1', '12');
 
 INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('1', '63671547', '1');
 INSERT INTO zugang (id, anfordergungsschein, lieferant) value ('2', '65571547', '1');

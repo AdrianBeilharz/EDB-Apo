@@ -54,7 +54,7 @@ function BTMBuch (props) {
               <Col><ApothekenDetails {...props} apothekeRefFunctions={apothekeRefFunctions} apothekeId={apoId}/></Col>
               <Col>{isLoggedIn ? <UserDetails {...props} user={user} setUser={setUser} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle}/> : null }</Col>
           </Row> 
-          <ApothekeBtmList apothekeId={apoId} user={user} apothekeRefFunctions={apothekeRefFunctions} {...props}/>    
+          <ApothekeBtmList apothekeId={apoId} user={user} apothekeRefFunctions={apothekeRefFunctions} {...props} aktiveRolle={aktiveRolle}/>    
       </React.Fragment>
   )
 }

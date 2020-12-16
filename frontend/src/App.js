@@ -7,8 +7,6 @@ import ApothekeEinstellungen from './components/apotheke/einstellungen/ApothekeE
 import { SnackbarProvider } from 'notistack';
 require('dotenv').config()
 
-// library.add(fab, faCheckSquare, faBookMedical)
-
 function App() {
   return (
   <React.Fragment>

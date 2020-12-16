@@ -19,14 +19,14 @@ public class BetaeubungsmittelBuchung {
     private String id;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="pruefdatum", nullable = false)
+    @Column(name="pruefdatum")
     private Date pruefdatum;
 
     @Column(name="menge", nullable = false)
     private int menge;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @Temporal(TemporalType.DATE)
+    // @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     @Column(name="datum", nullable = false)
     private Date datum;
 

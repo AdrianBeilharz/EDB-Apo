@@ -6,9 +6,10 @@ function NeueBuchungModal(props) {
     
     const { enqueueSnackbar } = useSnackbar();
     const [typ, setTyp] = useState('');
-    const [lieferanten, setLieferanten] = useState([]);
-    const [aerzte, setAerzte] = useState([]);
-    const [empfaenger, setEmpfaenger] = useState([]);
+    let {lieferanten, aerzte, empfaenger} = props;
+
+
+    const [maxMenge, setMaxMenge] = useState(props.btm.btm.menge);
 
     const sendNewBuchungAnfrage = async (buchungData) => {
         const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/btmbuchung`, {
@@ -39,7 +40,7 @@ function NeueBuchungModal(props) {
     const createNewBuchung = event => {
         event.preventDefault();
         if (typ.toLowerCase() === 'zugang') {
-            let { anforderungsschein, btmMenge, lieferant, pruefdatum } = event.target;
+            let { anforderungsschein, btmMenge, lieferant, datum} = event.target;
             let buchungData = {
                 benutzer: props.user.id,
                 btm: props.btm.btm.id,
@@ -47,11 +48,12 @@ function NeueBuchungModal(props) {
                 typ: 'ZUGANG',
                 lieferant: lieferant.value,
                 anforderungsschein: anforderungsschein.value,
-                pruefdatum: pruefdatum.value
+                datum: datum.value,
+                pruefdatum: ''
             }
             sendNewBuchungAnfrage(buchungData);
         } else if (typ.toLowerCase() === 'abgang') {
-            let { btmMenge, rezept, empfaenger, arzt, pruefdatum } = event.target;
+            let { btmMenge, rezept, empfaenger, arzt, datum} = event.target;
             let buchungData = {
                 benutzer: props.user.id,
                 btm: props.btm.btm.id,
@@ -60,7 +62,8 @@ function NeueBuchungModal(props) {
                 empfaenger: empfaenger.value,
                 arzt: arzt.value,
                 rezept: rezept.value,
-                pruefdatum: pruefdatum.value
+                pruefdatum: '',
+                datum: datum.value
             }
             sendNewBuchungAnfrage(buchungData);
         }
@@ -71,75 +74,8 @@ function NeueBuchungModal(props) {
         props.onHide();
     }
 
-
-    const loadLieferanten = async () => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/lieferant`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
-            }
-        }).catch((err) => {
-            //SHOW ERROR
-            console.log(err);
-        });
-
-        if (response.status === 200) {
-            setLieferanten(await response.json());
-            console.log(lieferanten);
-        } else if (response.status === 403) {
-            // props.history.push('/forbidden');
-        } else if (response.status === 400) {
-            // props.history.push('/badrequest');
-        }
-    }
-
-    const loadAerzte = async () => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/arzt`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
-            }
-        }).catch((err) => {
-            //SHOW ERROR
-            console.log(err);
-        });
-
-        if (response.status === 200) {
-            setAerzte(await response.json());
-        } else if (response.status === 403) {
-            // props.history.push('/forbidden');
-        } else if (response.status === 400) {
-            // props.history.push('/badrequest');
-        }
-    }
-
-    const loadEmpfaenger = async () => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/empfaenger`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
-            }
-        }).catch((err) => {
-            //SHOW ERROR
-            console.log(err);
-        });
-
-        if (response.status === 200) {
-            setEmpfaenger(await response.json());
-        } else if (response.status === 403) {
-            // props.history.push('/forbidden');
-        } else if (response.status === 400) {
-            // props.history.push('/badrequest');
-        }
-    }
-
     useEffect(() => {
-        loadLieferanten();
-        loadAerzte();
-        loadEmpfaenger();
+        setMaxMenge(props.btm.btm.menge)
     }, []);
 
     const renderZugang = () => {
@@ -147,7 +83,7 @@ function NeueBuchungModal(props) {
             <React.Fragment>
                 <Form.Group as={Row} controlId="anforderungsschein">
                     <Form.Label column sm="2">
-                        Anforderungsschein
+                        Lieferschein
                         </Form.Label>
                     <Col sm="10">
                         <Form.Control name="anforderungsschein" type="text" required />
@@ -223,7 +159,7 @@ function NeueBuchungModal(props) {
                                     label="Zugang"
                                     name="TypRadio"
                                     id="ZugangRadio"
-                                    onClick={() => setTyp('zugang')}
+                                    onClick={() => {setTyp('zugang'); setMaxMenge(9999)}}
                                 />
                                 <Form.Check required
                                     type="radio"
@@ -244,14 +180,14 @@ function NeueBuchungModal(props) {
                             <Form.Control name="btmMenge" type="number" min="1" defaultValue="0" />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="pruefdatum">
+                    <Form.Group as={Row} controlId="datum">
                         <Form.Label column sm="2">
-                            Prüfdatum
+                            Datum
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="pruefdatum" type="date" defaultValue={new Date()} />
+                            <Form.Control name="datum" type="date" defaultValue={new Date()} />
                         </Col>
-                    </Form.Group>
+                    </Form.Group>               
 
                     {typ.toLowerCase() === 'zugang' ? renderZugang() : null}
                     {typ.toLowerCase() === 'abgang' ? renderAbgang() : null}
@@ -267,7 +203,7 @@ function NeueBuchungModal(props) {
 
         </Modal>
     )
-
 }
 
 export default NeueBuchungModal;
+

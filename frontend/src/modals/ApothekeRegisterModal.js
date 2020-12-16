@@ -67,7 +67,7 @@ function ApothekeRegisterModal(props) {
       vorname: values.vorname,
       nutzername: values.nutzername,
       passwort: passwords.password,
-      rolle: "ADMIN",
+      rolle: 'ADMIN',
     };
 
     return fetch(
@@ -122,7 +122,6 @@ function ApothekeRegisterModal(props) {
     if (apoResponse.status === 201) {
       let apoId = await apoResponse.json();
       let adminRespone = await createNewAdmin(apoId.id);
-      console.log("Admin response >>>>", adminRespone);
       if (adminRespone.status === 201) {
         let loginResponse = await login();
         if (loginResponse.status === 200) {
