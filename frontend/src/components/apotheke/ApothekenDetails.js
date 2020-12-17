@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, Link  } from 'react-router-dom';
 import { Button } from "react-bootstrap";
 import NeuesBtmModal from "../btmbuch/NeuesBtmModal";
 import "../../App.scss";
@@ -42,7 +42,7 @@ function ApothekenDetails(props) {
         <li>Name: {apotheke.name}</li>
         <li>E-Mail: {apotheke.email}</li>
       </ul>
-      <Button >Apotheke Einstellungen</Button>
+      <Link to={`${props.match.params.apoId}/einstellungen`} ><Button >Apotheke Einstellungen</Button></Link>
       <Button
         onClick={() => setneuesBtmModalShow(true)}
         style={{ marginLeft: "1em" }}
