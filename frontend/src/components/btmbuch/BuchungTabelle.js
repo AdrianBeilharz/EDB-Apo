@@ -279,7 +279,7 @@ function BuchungTabelle(props) {
                   <td>{buchung.typ === "ZUGANG" ? buchung.menge : ""}</td>
                   <td>{buchung.typ === "ZUGANG" ? "" : buchung.menge}</td>
                   <td>{buchung.typ === "ZUGANG" ? buchung.anforderungsschein : buchung.rezept}</td>
-                  <td>{buchung.pruefdatum}</td>
+                  <td>{buchung.pruefdatum ? <Moment format="DD.MM.YYYY">{buchung.pruefdatum}</Moment> : ""}</td>
                   <td>{buchung.pruefer ? buchung.pruefer.vorname+" "+buchung.pruefer.name : ""}</td>
 
                   {props.aktiveRolle.toLowerCase() === "admin" || props.aktiveRolle.toLowerCase() === "pruefer" ?
