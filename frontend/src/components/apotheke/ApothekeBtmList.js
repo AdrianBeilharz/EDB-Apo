@@ -53,7 +53,6 @@ function ApothekeBtmList(props) {
       {btms
         .filter((val) => {
           if (input === "") {
-            console.log("namen der Liste", val.btm.name);
             return val;
           } else if (val.btm.name.toLowerCase().includes(input.toLowerCase())){
               return val;

@@ -38,5 +38,9 @@ public class BetaeubungsmittelBuchung {
     @JoinColumn(name="benutzer", referencedColumnName = "id")
     private Benutzer benutzer;
 
+    @ManyToOne(targetEntity = Benutzer.class)
+    @JoinColumn(name="pruefer", referencedColumnName = "id")
+    private Benutzer pruefer;
+
 
 }

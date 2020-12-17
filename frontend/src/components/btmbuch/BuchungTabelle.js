@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  faEdit,
-  faTrash,
-  faPlus,
-  faCheck,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Table, Button, Row, Col } from "react-bootstrap";
-import { Collapse } from "@material-ui/core";
+import { Collapse, Checkbox } from "@material-ui/core";
 import Moment from "react-moment";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
@@ -160,64 +155,33 @@ function BuchungTabelle(props) {
   const renderPruefButton = (buchung) => {
     return (
       <Row>
-        <Button onClick={() => { makePruefDatum(buchung) }} style={{ marginLeft: "0.5em" }} > <FontAwesomeIcon icon={faCheck} />{" "}</Button>
+        <Checkbox checked={buchung.pruefdatum} onChange={event => sendUpdateRequest(buchung)} style={{ marginLeft: "0.5em" }} ></Checkbox>
       </Row>
     );
   };
 
   const sendUpdateRequest = async (buchung) => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung/${selectedBuchung.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization:
-            "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
-        },
-        body: JSON.stringify(buchung),
+    let geprueft = buchung.pruefdatum == null;
+    const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung/${buchung.id}?setGeprueft=${geprueft}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
+        body: JSON.stringify(buchung)
       }
-
-    ).catch((err) => {
+    }).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
     if (response && response.status === 200) {
-      // enqueueSnackbar('Buchung erfolgreich aktualisiert', { variant: 'success', autoHideDuration: 3000 });
+      enqueueSnackbar('Buchung erfolgreich aktualisiert', { variant: 'success', autoHideDuration: 3000 });
       props.apothekeRefFunctions.updateBtmList();
     } else {
       //SHOW ERROR
       console.log(response);
     }
   };
-
-  const makePruefDatum = buchung => {
-    setSelectedBuchung(buchung);
-    console.log(selectedBuchung);
-    const current = new Date();
-    const date = `${current.getFullYear()}-${current.getMonth() + 1}-${current.getDate()}`;
-    if (buchung.typ.toLowerCase() === 'zugang') {
-      let buchungData = {
-        ...buchung,
-        benutzer: props.user.id,
-        btm: props.btm.btm.id,
-        lieferant: buchung.lieferant.id,
-        pruefdatum: date
-      }
-      sendUpdateRequest(buchungData);
-    } else if (buchung.typ.toLowerCase() === 'abgang') {
-      let buchungData = {
-        ...buchung,
-        benutzer: props.user.id,
-        btm: props.btm.btm.id,
-        empfaenger: buchung.empfaenger.id,
-        arzt: buchung.arzt.id,
-        pruefdatum: date,
-      }
-      sendUpdateRequest(buchungData);
-    }
-  }
 
   useEffect(() => {
     loadLieferanten();
@@ -264,7 +228,7 @@ function BuchungTabelle(props) {
           <Col sm={3}>
             <p>
               {btm.btm.name} ({btm.btm.menge})
-            </p>
+						</p>
           </Col>
           <Col sm={9}>
             <div style={{ marginLeft: "-9em" }}>
@@ -275,7 +239,7 @@ function BuchungTabelle(props) {
                 }}
               >
                 Neue Buchung
-                <FontAwesomeIcon
+								<FontAwesomeIcon
                   style={{ marginLeft: "0.4em" }}
                   icon={faPlus}
                 />
@@ -295,7 +259,10 @@ function BuchungTabelle(props) {
                 <th>Rezept Nr. / Lieferschein Nr.</th>
                 <th>Prüfdatum</th>
                 <th>Prüfer Kürzel</th>
-                {props.aktiveRolle.toLowerCase() !== "pruefer" ? (
+                {props.aktiveRolle.toLowerCase() === "admin" || props.aktiveRolle.toLowerCase() === "pruefer" ? (
+                  <th>Geprüft</th>
+                ) : null}
+                {props.aktiveRolle.toLowerCase() === "admin" ? (
                   <th></th>
                 ) : null}
               </tr>
@@ -303,41 +270,26 @@ function BuchungTabelle(props) {
             <tbody>
               {btm.buchungen.map((buchung) => (
                 <tr key={buchung.id}>
-                  <td>
-                    <Moment format="DD.MM.YYYY">{buchung.datum}</Moment>
-                  </td>
-                  <td>
-                    {buchung.typ === "ZUGANG"
-                      ? buchung.lieferant.name
-                      : buchung.empfaenger.vorname +
-                      " " +
-                      buchung.empfaenger.name}{" "}
+                  <td> <Moment format="DD.MM.YYYY">{buchung.datum}</Moment> </td>
+                  <td>{buchung.typ === "ZUGANG"
+                    ? buchung.lieferant.name
+                    : buchung.empfaenger.vorname + " " + buchung.empfaenger.name}
                   </td>
                   <td>{buchung.typ === "ABGANG" ? buchung.arzt.name : ""}</td>
                   <td>{buchung.typ === "ZUGANG" ? buchung.menge : ""}</td>
                   <td>{buchung.typ === "ZUGANG" ? "" : buchung.menge}</td>
-                  <td>
-                    {buchung.typ === "ZUGANG"
-                      ? buchung.anforderungsschein
-                      : buchung.rezept}
-                  </td>
-                  <td>
-                    {props.aktiveRolle.toLowerCase() === "admin" || props.aktiveRolle.toLowerCase() === "pruefer" ? (
-                      <td
-                        style={{ textAlign: "center", verticalAlign: "middle" }}
-                      >
-                        {renderPruefButton(buchung)}
-                      </td>
-                    ) : null}
-                  </td>
-                  <td></td>
-                  {props.aktiveRolle.toLowerCase() === "admin" ? (
-                    <td
-                      style={{ textAlign: "center", verticalAlign: "middle" }}
-                    >
+                  <td>{buchung.typ === "ZUGANG" ? buchung.anforderungsschein : buchung.rezept}</td>
+                  <td>{buchung.pruefdatum}</td>
+                  <td>{buchung.pruefer ? buchung.pruefer.vorname+" "+buchung.pruefer.name : ""}</td>
+
+                  {props.aktiveRolle.toLowerCase() === "admin" || props.aktiveRolle.toLowerCase() === "pruefer" ?
+                    <th>{renderPruefButton(buchung)}</th> : null}
+
+                  {props.aktiveRolle.toLowerCase() === "admin" ?
+                    <td style={{ textAlign: "center", verticalAlign: "middle" }} >
                       {renderEditButtons(buchung)}
-                    </td>
-                  ) : null}
+                    </td> : null}
+
                 </tr>
               ))}
             </tbody>

@@ -45,15 +45,17 @@ public class BetaeubungsmittelBuchungController {
         private Date pruefdatum;
         private int menge;
         private String TYP; //ZUGANG ODER ABGANG
+        private Benutzer pruefer;
 
         public BtmBuchung() {}
 
-        public BtmBuchung(String id, Date datum, Date pruefdatum, int menge, String TYP) {
+        public BtmBuchung(String id, Date datum, Date pruefdatum, int menge, String TYP, Benutzer pruefer) {
             this.id = id;
             this.datum = datum;
             this.pruefdatum = pruefdatum;
             this.menge = menge;
             this.TYP = TYP;
+            this.pruefer = pruefer;
         }
     }
 
@@ -62,8 +64,8 @@ public class BetaeubungsmittelBuchungController {
         private String anforderungsschein;
         private Lieferant lieferant;
 
-        public BtmBuchungZugang(String id, Date datum , Date pruefdatum, int menge, String TYP, String anforderungsschein, Lieferant lieferant) {
-            super(id, datum, pruefdatum, menge, TYP);
+        public BtmBuchungZugang(String id, Date datum , Date pruefdatum, int menge, String TYP, String anforderungsschein, Lieferant lieferant, Benutzer pruefer) {
+            super(id, datum, pruefdatum, menge, TYP, pruefer);
             this.anforderungsschein = anforderungsschein;
             this.lieferant = lieferant;
         }
@@ -75,8 +77,8 @@ public class BetaeubungsmittelBuchungController {
         private Arzt arzt;
         private String rezept;
 
-        public BtmBuchungAbgang(String id, Date datum, Date pruefdatum, int menge, String TYP, Empfaenger empfaenger, Arzt arzt, String rezept) {
-            super(id, datum, pruefdatum, menge, TYP);
+        public BtmBuchungAbgang(String id, Date datum, Date pruefdatum, int menge, String TYP, Empfaenger empfaenger, Arzt arzt, String rezept, Benutzer pruefer) {
+            super(id, datum, pruefdatum, menge, TYP, pruefer);
             this.empfaenger = empfaenger;
             this.arzt = arzt;
             this.rezept = rezept;
@@ -103,12 +105,12 @@ public class BetaeubungsmittelBuchungController {
 
             List<BtmBuchungZugang> zugaenge = zugangRepository.getBtmBuchungZugaenge(apothekeId, b.getId())
                     .stream()
-                    .map(e -> new BtmBuchungZugang(e.getId(), e.getDatum(), e.getPruefdatum(), e.getMenge(), "ZUGANG", e.getAnfordergungsschein(), e.getLieferant()))
+                    .map(e -> new BtmBuchungZugang(e.getId(), e.getDatum(), e.getPruefdatum(), e.getMenge(), "ZUGANG", e.getAnfordergungsschein(), e.getLieferant(), e.getPruefer()))
                     .collect(Collectors.toList());
 
             List<BtmBuchungAbgang> abgaenge = abgangRepository.getBtmBuchungAbgaenge(apothekeId, b.getId())
                     .stream()
-                    .map(e -> new BtmBuchungAbgang(e.getId(), e.getDatum(), e.getPruefdatum(), e.getMenge(), "ABGANG", e.getEmpfaenger(), e.getArzt(), e.getRezept()))
+                    .map(e -> new BtmBuchungAbgang(e.getId(), e.getDatum(), e.getPruefdatum(), e.getMenge(), "ABGANG", e.getEmpfaenger(), e.getArzt(), e.getRezept(), e.getPruefer()))
                     .collect(Collectors.toList());
 
             List<BtmBuchung> buchungen = new ArrayList<>();
@@ -201,7 +203,8 @@ public class BetaeubungsmittelBuchungController {
     }
 
     @PutMapping("/apotheke/{apothekeId}/btmbuchung/{btmbuchungId}")
-    public ResponseEntity<?> updateBtmById(@PathVariable String apothekeId, @PathVariable String btmbuchungId, @RequestBody BtmBuchungAPIDetails newBtmBuchung) {
+    public ResponseEntity<?> updateBtmById(@PathVariable String apothekeId, @PathVariable String btmbuchungId, @RequestBody(required = false) BtmBuchungAPIDetails newBtmBuchung,
+                                           @RequestParam(required = false) String setGeprueft) {
         if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -211,6 +214,21 @@ public class BetaeubungsmittelBuchungController {
         if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().contains("ROLE_"+Rolle.PRUEFER.toString())) {
             pruefer = true;
         }
+
+        if((pruefer || authController.isAdmin(authController.getCurrentUsername(), apothekeId)) && setGeprueft != null){
+
+            BetaeubungsmittelBuchung btmb = btmBuchungRepo.findByIds(btmbuchungId, apothekeId);
+            if(setGeprueft.equals("false")){
+                btmb.setPruefdatum(null);
+                btmb.setPruefer(null);
+            }else {
+                btmb.setPruefdatum(new Date());
+                btmb.setPruefer(benutzerRepository.getBenutzerWithApotheke(authController.getCurrentUsername(), apothekeId));
+            }
+            btmBuchungRepo.save(btmb);
+            return new ResponseEntity<>(btmb, HttpStatus.OK);
+        }
+
 
         Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
         if(z != null){
