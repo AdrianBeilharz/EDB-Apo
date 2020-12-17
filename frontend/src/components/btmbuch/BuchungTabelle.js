@@ -6,14 +6,29 @@ import { Collapse, Checkbox } from "@material-ui/core";
 import Moment from "react-moment";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
-
+import TableBody from '@material-ui/core/TableBody';
 import NeueBuchungModal from "./NeueBuchungModal";
 import UpdateBuchungModal from "../../modals/UpdateBuchungModal";
 import DeleteModal from "../../modals/DeleteModal";
+import { makeStyles } from '@material-ui/core/styles';
+import TablePagination from '@material-ui/core/TablePagination';
+
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+  },
+  container: {
+    maxHeight: 440,
+  },
+});
 
 function BuchungTabelle(props) {
   let { btm } = props;
   const { apoId } = useParams();
+
+  const classes = useStyles();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -26,6 +41,15 @@ function BuchungTabelle(props) {
   const [aerzte, setAerzte] = useState([]);
   const [empfaenger, setEmpfaenger] = useState([]);
   const [selectedBuchung, setSelectedBuchung] = useState({});
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   const loadLieferanten = async () => {
     const response = await fetch(
@@ -267,8 +291,8 @@ function BuchungTabelle(props) {
                 ) : null}
               </tr>
             </thead>
-            <tbody>
-              {btm.buchungen.map((buchung) => (
+            <TableBody>
+              {btm.buchungen.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((buchung) => (
                 <tr key={buchung.id}>
                   <td> <Moment format="DD.MM.YYYY">{buchung.datum}</Moment> </td>
                   <td>{buchung.typ === "ZUGANG"
@@ -292,8 +316,17 @@ function BuchungTabelle(props) {
 
                 </tr>
               ))}
-            </tbody>
+            </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 15]}
+            component="div"
+            count={btm.buchungen.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
         </Collapse>
       </div>
     </React.Fragment>
