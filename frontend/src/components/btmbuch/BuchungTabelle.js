@@ -15,14 +15,11 @@ import { useParams } from "react-router-dom";
 import NeueBuchungModal from "./NeueBuchungModal";
 import UpdateBuchungModal from "../../modals/UpdateBuchungModal";
 import DeleteModal from "../../modals/DeleteModal";
-import { ContactSupportOutlined } from "@material-ui/icons";
 
 function BuchungTabelle(props) {
   let { btm } = props;
   const { apoId } = useParams();
-  const [date, setDate] = useState("");
 
-  const [dateClicked, setDateClicked] = useState(false);
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -53,7 +50,6 @@ function BuchungTabelle(props) {
 
     if (response.status === 200) {
       setLieferanten(await response.json());
-      console.log(lieferanten);
     } else if (response.status === 403) {
       // props.history.push('/forbidden');
     } else if (response.status === 400) {
@@ -162,18 +158,16 @@ function BuchungTabelle(props) {
   };
 
   const renderPruefButton = (buchung) => {
-    console.log('buchung>>', buchung);
     return (
       <Row>
-        <Button onClick={() => {setSelectedBuchung(buchung); makePruefDatum(buchung)}} style={{ marginLeft: "0.5em" }} > <FontAwesomeIcon icon={faCheck} />{" "}</Button>
+        <Button onClick={() => { makePruefDatum(buchung) }} style={{ marginLeft: "0.5em" }} > <FontAwesomeIcon icon={faCheck} />{" "}</Button>
       </Row>
     );
   };
 
-  const sendUpdateRequest = async (buchung) => {    
+  const sendUpdateRequest = async (buchung) => {
     const response = await fetch(
-
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung/${buchung.id}`,
+      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung/${selectedBuchung.id}`,
       {
         method: "PUT",
         headers: {
@@ -198,17 +192,32 @@ function BuchungTabelle(props) {
     }
   };
 
-  const makePruefDatum = (buchung) => {
-
+  const makePruefDatum = buchung => {
+    setSelectedBuchung(buchung);
+    console.log(selectedBuchung);
     const current = new Date();
-    const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
-          let buchungData = {
-            ...buchung,
-            pruefdatum: date
-        }
-    console.log(buchungData);
-    sendUpdateRequest(buchungData);
-}
+    const date = `${current.getFullYear()}-${current.getMonth() + 1}-${current.getDate()}`;
+    if (buchung.typ.toLowerCase() === 'zugang') {
+      let buchungData = {
+        ...buchung,
+        benutzer: props.user.id,
+        btm: props.btm.btm.id,
+        lieferant: buchung.lieferant.id,
+        pruefdatum: date
+      }
+      sendUpdateRequest(buchungData);
+    } else if (buchung.typ.toLowerCase() === 'abgang') {
+      let buchungData = {
+        ...buchung,
+        benutzer: props.user.id,
+        btm: props.btm.btm.id,
+        empfaenger: buchung.empfaenger.id,
+        arzt: buchung.arzt.id,
+        pruefdatum: date,
+      }
+      sendUpdateRequest(buchungData);
+    }
+  }
 
   useEffect(() => {
     loadLieferanten();
@@ -301,8 +310,8 @@ function BuchungTabelle(props) {
                     {buchung.typ === "ZUGANG"
                       ? buchung.lieferant.name
                       : buchung.empfaenger.vorname +
-                        " " +
-                        buchung.empfaenger.name}{" "}
+                      " " +
+                      buchung.empfaenger.name}{" "}
                   </td>
                   <td>{buchung.typ === "ABGANG" ? buchung.arzt.name : ""}</td>
                   <td>{buchung.typ === "ZUGANG" ? buchung.menge : ""}</td>
