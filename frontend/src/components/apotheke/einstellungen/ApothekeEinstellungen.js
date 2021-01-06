@@ -9,6 +9,7 @@ import ArztTabelle from './tabellen/ArztTabelle';
 import BtmTabelle from './tabellen/BtmTabelle';
 import LieferantTabelle from './tabellen/LieferantTabelle';
 import PersonalTabelle from './tabellen/PersonalTabelle';
+import EmpfaengerTabelle from './tabellen/EmpfaengerTabelle';
 import ApothekeEditModal from '../../../modals/ApothekeEditModal';
 
 import './ApothekeEinstellungen.scss'
@@ -80,6 +81,8 @@ function ApothekeEinstellungen(props) {
       return <ArztTabelle {...props} />
     } else if (activeMenuItem === 'lieferanten') {
       return <LieferantTabelle {...props} />
+    } else if (activeMenuItem === 'empfaenger') {
+      return <EmpfaengerTabelle {...props} aktiveRolle={aktiveRolle} />
     }
   }
 
@@ -91,7 +94,7 @@ function ApothekeEinstellungen(props) {
   return (
     <Fragment>
       <ApothekeEditModal {...props} show={showApothekeEditModal} onHide={() => setShowApothekeEditModal(false)} apotheke={apotheke} updateApothekeData={getCurrentApotheke} />
-      <StatusHeader aktiveRolle={aktiveRolle} />
+      {aktiveRolle.toLowerCase() !== 'benutzer' ? <StatusHeader aktiveRolle={aktiveRolle} /> : null}
       <Header />
       <Row className="details-list">
         <Col md={{ span: 6, offset: 6 }}>
@@ -116,6 +119,7 @@ function ApothekeEinstellungen(props) {
               <ListGroup.Item as="li" onClick={() => setActiveMenuItem('btm')} active={activeMenuItem === 'btm'}>Betäubungsmittel</ListGroup.Item>
               <ListGroup.Item as="li" onClick={() => setActiveMenuItem('aerzte')} active={activeMenuItem === 'aerzte'}>Ärzte</ListGroup.Item>
               <ListGroup.Item as="li" onClick={() => setActiveMenuItem('lieferanten')} active={activeMenuItem === 'lieferanten'}>Lieferanten</ListGroup.Item>
+              <ListGroup.Item as="li" onClick={() => setActiveMenuItem('empfaenger')} active={activeMenuItem === 'empfaenger'}>Empfänger</ListGroup.Item>
             </ListGroup>
           </Col>
           <Col sm={8}>
