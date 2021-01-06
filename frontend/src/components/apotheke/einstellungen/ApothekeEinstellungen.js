@@ -12,6 +12,7 @@ import PersonalTabelle from './tabellen/PersonalTabelle';
 import EmpfaengerTabelle from './tabellen/EmpfaengerTabelle';
 import ApothekeEditModal from '../../../modals/ApothekeEditModal';
 
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import './ApothekeEinstellungen.scss'
 
 function ApothekeEinstellungen(props) {
@@ -97,7 +98,9 @@ function ApothekeEinstellungen(props) {
       {aktiveRolle.toLowerCase() !== 'benutzer' ? <StatusHeader aktiveRolle={aktiveRolle} /> : null}
       <Header />
       <Row className="details-list">
-        <Col md={{ span: 6, offset: 6 }}>
+        <Col md={{ span: 1, offset: 1 }}><Button onClick={props.history.goBack}><ArrowBackIosIcon /> Zurück</Button></Col>
+
+        <Col md={{ span: 6, offset: 4 }}>
           {loggedIn ? <UserDetails {...props} user={user} setUser={setUser} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle} /> : null}
         </Col>
       </Row>
@@ -127,8 +130,6 @@ function ApothekeEinstellungen(props) {
           </Col>
         </Row>
       </div>
-
-
     </Fragment>
   )
 }
