@@ -74,13 +74,13 @@ function ApothekeEinstellungen(props) {
 
   const renderContent = () => {
     if (activeMenuItem === 'personal') {
-      return <PersonalTabelle {...props} />;
+      return <PersonalTabelle {...props} aktiveRolle={aktiveRolle} />;
     } else if (activeMenuItem === 'btm') {
-      return <BtmTabelle {...props} />;
+      return <BtmTabelle {...props} aktiveRolle={aktiveRolle} />;
     } else if (activeMenuItem === 'aerzte') {
-      return <ArztTabelle {...props} />
+      return <ArztTabelle {...props} aktiveRolle={aktiveRolle} />
     } else if (activeMenuItem === 'lieferanten') {
-      return <LieferantTabelle {...props} />
+      return <LieferantTabelle {...props} aktiveRolle={aktiveRolle} />
     } else if (activeMenuItem === 'empfaenger') {
       return <EmpfaengerTabelle {...props} aktiveRolle={aktiveRolle} />
     }

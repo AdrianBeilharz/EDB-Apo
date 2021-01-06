@@ -98,8 +98,8 @@ function BtmTabelle(props) {
               <td>{btm.einheit}</td>
               <td>{btm.menge}</td>
               <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                <Button onClick={() => edit(btm)}><Edit /></Button>
-                <Button onClick={() => del(btm)}><DeleteForever /></Button>
+                {props.aktiveRolle.toLowerCase() === 'admin' ? <Fragment><Button onClick={() => edit(btm)}><Edit /></Button>
+                  <Button onClick={() => del(btm)}><DeleteForever /></Button></Fragment> : null}
               </td>
             </tr>
           )}

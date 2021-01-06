@@ -96,8 +96,8 @@ function LieferantTabelle(props) {
               <td>{lieferant.anschrift.strasse} {lieferant.anschrift.nummer}</td>
               <td>{lieferant.anschrift.plz} {lieferant.anschrift.ort}</td>
               <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                <Button onClick={() => edit(lieferant)}><Edit /></Button>
-                <Button onClick={() => del(lieferant)}><DeleteForever /></Button>
+                {props.aktiveRolle.toLowerCase() === 'admin' ? <Fragment><Button onClick={() => edit(lieferant)}><Edit /></Button>
+                  <Button onClick={() => del(lieferant)}><DeleteForever /></Button></Fragment> : null}
               </td>
             </tr>
           )}

@@ -74,8 +74,8 @@ function PersonalTabelle(props) {
 
   return (
     <Fragment>
-      <PersonalAddModal {...props} show={showPersonalAddModal} onHide={() => setShowPersonalAddModal(false)} updatePersonalData={getPersonalData}/>
-      {selectedUser ? <PersonalEditModal {...props} user={selectedUser} show={showPersonalEditModal} onHide={() => setShowPersonalEditModal(false)} updatePersonalData={getPersonalData}/> : null}
+      <PersonalAddModal {...props} show={showPersonalAddModal} onHide={() => setShowPersonalAddModal(false)} updatePersonalData={getPersonalData} />
+      {selectedUser ? <PersonalEditModal {...props} user={selectedUser} show={showPersonalEditModal} onHide={() => setShowPersonalEditModal(false)} updatePersonalData={getPersonalData} /> : null}
       <DeleteModal {...props} headertext={'Benutzer löschen'}
         maintext={'Möchtest du diesen Benutzer wirklich löschen?'} onSubmit={deleteUser} subtext={'Dieser Vorgang kann nicht rückgängig gemacht werden'}
         show={showDeleteModal} onHide={() => setShowDeleteModal(false)} />
@@ -87,9 +87,9 @@ function PersonalTabelle(props) {
             <th>Vorname</th>
             <th>Aktiv</th>
             <th>Rolle</th>
-            <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+            {props.aktiveRolle.toLowerCase() === 'admin' ? <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>
               <Button onClick={() => setShowPersonalAddModal(true)} >Hinzufügen <AddBox /></Button>
-            </th>
+            </th> : null}
           </tr>
         </thead>
         <tbody>
@@ -100,10 +100,10 @@ function PersonalTabelle(props) {
               <td>{user.vorname}</td>
               <td>{user.aktiv ? 'ja' : 'nein'}</td>
               <td>{user.rolle}</td>
-              <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+              {props.aktiveRolle.toLowerCase() === 'admin' ? <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
                 <Button onClick={() => edit(user)}><Edit /></Button>
-                <Button onClick={() => del(user)}><DeleteForever /></Button>
-              </td>
+                <Button onClick={() => del(user)}><DeleteForever /></Button> 
+              </td> : null}
             </tr>
           )}
         </tbody>

@@ -96,8 +96,8 @@ function ArztTabelle(props) {
               <td>{arzt.anschrift.strasse} {arzt.anschrift.nummer}</td>
               <td>{arzt.anschrift.plz} {arzt.anschrift.ort}</td>
               <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                <Button onClick={() => edit(arzt)}><Edit /></Button>
-                <Button onClick={() => del(arzt)}><DeleteForever /></Button>
+                {props.aktiveRolle.toLowerCase() === 'admin' ? <Fragment><Button onClick={() => edit(arzt)}><Edit /></Button>
+                  <Button onClick={() => del(arzt)}><DeleteForever /></Button></Fragment> : null}
               </td>
             </tr>
           )}
