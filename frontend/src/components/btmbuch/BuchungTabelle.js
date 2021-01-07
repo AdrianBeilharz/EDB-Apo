@@ -10,12 +10,26 @@ import TableBody from '@material-ui/core/TableBody';
 import NeueBuchungModal from "./NeueBuchungModal";
 import UpdateBuchungModal from "../../modals/UpdateBuchungModal";
 import DeleteModal from "../../modals/DeleteModal";
+import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+
+
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+  },
+  container: {
+    maxHeight: 440,
+  },
+});
 
 function BuchungTabelle(props) {
   let { btm } = props;
   const { apoId } = useParams();
 
+  const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -40,8 +54,9 @@ function BuchungTabelle(props) {
     setPage(0);
   };
 
-  const loadLieferanten = () => {
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/lieferant`,
+  const loadLieferanten = async () => {
+    const response = await fetch(
+      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/lieferant`,
       {
         method: "GET",
         headers: {
@@ -50,24 +65,23 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).then(response => {
-      if (response.status === 200) {
-        setLieferanten(response.json());
-      } else if (response.status === 403) {
-        // props.history.push('/forbidden');
-      } else if (response.status === 400) {
-        // props.history.push('/badrequest');
-      }
-    }).catch((err) => {
+    ).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-
+    if (response.status === 200) {
+      setLieferanten(await response.json());
+    } else if (response.status === 403) {
+      // props.history.push('/forbidden');
+    } else if (response.status === 400) {
+      // props.history.push('/badrequest');
+    }
   };
 
-  const loadAerzte = () => {
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/arzt`,
+  const loadAerzte = async () => {
+    const response = await fetch(
+      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/arzt`,
       {
         method: "GET",
         headers: {
@@ -76,24 +90,23 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).then(response => {
-      if (response.status === 200) {
-        setAerzte(response.json());
-      } else if (response.status === 403) {
-        // props.history.push('/forbidden');
-      } else if (response.status === 400) {
-        // props.history.push('/badrequest');
-      }
-    }).catch((err) => {
+    ).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-
+    if (response.status === 200) {
+      setAerzte(await response.json());
+    } else if (response.status === 403) {
+      // props.history.push('/forbidden');
+    } else if (response.status === 400) {
+      // props.history.push('/badrequest');
+    }
   };
 
-  const loadEmpfaenger = () => {
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/empfaenger`,
+  const loadEmpfaenger = async () => {
+    const response = await fetch(
+      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/empfaenger`,
       {
         method: "GET",
         headers: {
@@ -102,20 +115,18 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).then(response => {
-      if (response.status === 200) {
-        setEmpfaenger(response.json());
-      } else if (response.status === 403) {
-        // props.history.push('/forbidden');
-      } else if (response.status === 400) {
-        // props.history.push('/badrequest');
-      }
-    }).catch((err) => {
+    ).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-
+    if (response.status === 200) {
+      setEmpfaenger(await response.json());
+    } else if (response.status === 403) {
+      // props.history.push('/forbidden');
+    } else if (response.status === 400) {
+      // props.history.push('/badrequest');
+    }
   };
 
   const deleteBtm = async () => {
@@ -199,9 +210,51 @@ function BuchungTabelle(props) {
     }
   };
 
-  useEffect(loadLieferanten, [apoId, props.history])
-  useEffect(loadAerzte, [apoId, props.history])
-  useEffect(loadEmpfaenger, [apoId, props.history])
+  const exportPdf = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(10);
+    console.log('print btm liste', btm.name);
+
+    const title = [props.btm.btm.name];
+    const headers = [["Datum", "Lieferant/Patient","Arztpraxis", "Zugang", "Abgang", "Rp.Nr./L.Nr.", "Prüfdatum", "Prüfer Kürzel"]];
+
+    const moment = require('moment');
+ 
+    const data = btm.buchungen.map(buchung => [moment(buchung.datum).format("DD.MM.YYYY"),
+    buchung.typ === "ZUGANG" ? buchung.lieferant.name : buchung.empfaenger.vorname + " " + buchung.empfaenger.name,
+    buchung.typ === "ABGANG" ? buchung.arzt.name : "",
+    buchung.typ === "ZUGANG" ? buchung.menge : "",
+    buchung.typ === "ZUGANG" ? "" : buchung.menge,
+    buchung.typ === "ZUGANG" ? buchung.anforderungsschein : buchung.rezept,
+    buchung.pruefdatum ? moment(buchung.pruefdatum).format("DD.MM.YYYY") : "",
+    buchung.pruefer ? buchung.pruefer.vorname+" "+buchung.pruefer.name : "",
+   ]);
+ 
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+  
+
+ 
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("BtmListe.pdf")
+
+  }
+
+  useEffect(() => {
+    loadLieferanten();
+    loadAerzte();
+    loadEmpfaenger();
+  }, []);
 
   return (
     <React.Fragment>
@@ -246,6 +299,9 @@ function BuchungTabelle(props) {
           </Col>
           <Col sm={9}>
             <div style={{ marginLeft: "-9em" }}>
+            <Button style={{ marginRight: "1em" }} onClick={exportPdf}>
+                PDF
+              </Button>
               <Button
                 onClick={(event) => {
                   event.stopPropagation();
@@ -262,7 +318,7 @@ function BuchungTabelle(props) {
           </Col>
         </Row>
         <Collapse in={open}>
-          <Table striped bordered hover>
+          <Table striped bordered hover id="btm-table">
             <thead>
               <tr>
                 <th>Datum</th>
@@ -294,7 +350,7 @@ function BuchungTabelle(props) {
                   <td>{buchung.typ === "ZUGANG" ? "" : buchung.menge}</td>
                   <td>{buchung.typ === "ZUGANG" ? buchung.anforderungsschein : buchung.rezept}</td>
                   <td>{buchung.pruefdatum ? <Moment format="DD.MM.YYYY">{buchung.pruefdatum}</Moment> : ""}</td>
-                  <td>{buchung.pruefer ? buchung.pruefer.vorname + " " + buchung.pruefer.name : ""}</td>
+                  <td>{buchung.pruefer ? buchung.pruefer.vorname+" "+buchung.pruefer.name : ""}</td>
 
                   {props.aktiveRolle.toLowerCase() === "admin" || props.aktiveRolle.toLowerCase() === "pruefer" ?
                     <th>{renderPruefButton(buchung)}</th> : null}
