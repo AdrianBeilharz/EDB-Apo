@@ -68,9 +68,7 @@ function PersonalTabelle(props) {
     setShowPersonalEditModal(true);
   }
 
-  useEffect(() => {
-    getPersonalData()
-  }, [])
+  useEffect(getPersonalData, [apoId, props.history])
 
   return (
     <Fragment>

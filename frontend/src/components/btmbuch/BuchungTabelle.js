@@ -40,9 +40,8 @@ function BuchungTabelle(props) {
     setPage(0);
   };
 
-  const loadLieferanten = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/lieferant`,
+  const loadLieferanten = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/lieferant`,
       {
         method: "GET",
         headers: {
@@ -51,23 +50,24 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).catch((err) => {
+    ).then(response => {
+      if (response.status === 200) {
+        setLieferanten(response.json());
+      } else if (response.status === 403) {
+        // props.history.push('/forbidden');
+      } else if (response.status === 400) {
+        // props.history.push('/badrequest');
+      }
+    }).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-    if (response.status === 200) {
-      setLieferanten(await response.json());
-    } else if (response.status === 403) {
-      // props.history.push('/forbidden');
-    } else if (response.status === 400) {
-      // props.history.push('/badrequest');
-    }
+
   };
 
-  const loadAerzte = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/arzt`,
+  const loadAerzte = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/arzt`,
       {
         method: "GET",
         headers: {
@@ -76,23 +76,24 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).catch((err) => {
+    ).then(response => {
+      if (response.status === 200) {
+        setAerzte(response.json());
+      } else if (response.status === 403) {
+        // props.history.push('/forbidden');
+      } else if (response.status === 400) {
+        // props.history.push('/badrequest');
+      }
+    }).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-    if (response.status === 200) {
-      setAerzte(await response.json());
-    } else if (response.status === 403) {
-      // props.history.push('/forbidden');
-    } else if (response.status === 400) {
-      // props.history.push('/badrequest');
-    }
+
   };
 
-  const loadEmpfaenger = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/empfaenger`,
+  const loadEmpfaenger = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/empfaenger`,
       {
         method: "GET",
         headers: {
@@ -101,18 +102,20 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).catch((err) => {
+    ).then(response => {
+      if (response.status === 200) {
+        setEmpfaenger(response.json());
+      } else if (response.status === 403) {
+        // props.history.push('/forbidden');
+      } else if (response.status === 400) {
+        // props.history.push('/badrequest');
+      }
+    }).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-    if (response.status === 200) {
-      setEmpfaenger(await response.json());
-    } else if (response.status === 403) {
-      // props.history.push('/forbidden');
-    } else if (response.status === 400) {
-      // props.history.push('/badrequest');
-    }
+
   };
 
   const deleteBtm = async () => {
@@ -196,11 +199,9 @@ function BuchungTabelle(props) {
     }
   };
 
-  useEffect(() => {
-    loadLieferanten();
-    loadAerzte();
-    loadEmpfaenger();
-  }, []);
+  useEffect(loadLieferanten, [apoId, props.history])
+  useEffect(loadAerzte, [apoId, props.history])
+  useEffect(loadEmpfaenger, [apoId, props.history])
 
   return (
     <React.Fragment>
@@ -293,7 +294,7 @@ function BuchungTabelle(props) {
                   <td>{buchung.typ === "ZUGANG" ? "" : buchung.menge}</td>
                   <td>{buchung.typ === "ZUGANG" ? buchung.anforderungsschein : buchung.rezept}</td>
                   <td>{buchung.pruefdatum ? <Moment format="DD.MM.YYYY">{buchung.pruefdatum}</Moment> : ""}</td>
-                  <td>{buchung.pruefer ? buchung.pruefer.vorname+" "+buchung.pruefer.name : ""}</td>
+                  <td>{buchung.pruefer ? buchung.pruefer.vorname + " " + buchung.pruefer.name : ""}</td>
 
                   {props.aktiveRolle.toLowerCase() === "admin" || props.aktiveRolle.toLowerCase() === "pruefer" ?
                     <th>{renderPruefButton(buchung)}</th> : null}

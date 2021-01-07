@@ -87,10 +87,8 @@ function ApothekeEinstellungen(props) {
     }
   }
 
-  useEffect(() => {
-    getUserData();
-    getCurrentApotheke();
-  }, []);
+  useEffect(getUserData, [apoId, props.history])
+  useEffect(getCurrentApotheke, [apoId, props.history])
 
   return (
     <Fragment>

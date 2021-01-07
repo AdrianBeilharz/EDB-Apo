@@ -67,9 +67,7 @@ function ArztTabelle(props) {
     setShowDeleteModal(true);
   }
 
-  useEffect(() => {
-    getArztData();
-  }, [])
+  useEffect(getArztData, [apoId, props.history])
 
   return (
     <Fragment>

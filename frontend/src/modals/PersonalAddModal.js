@@ -129,7 +129,7 @@ function PersonalAddModal(props) {
           <Form.Row>
             <Form.Group as={Col} sm={4} controlId="rolle">
               <Form.Label>Rolle</Form.Label>
-              <Form.Control required name="rolle" required as="select" >
+              <Form.Control required name="rolle" as="select" >
                 {roles.map(r => <option key={r} value={r}>{r}</option>)}
               </Form.Control>
             </Form.Group>

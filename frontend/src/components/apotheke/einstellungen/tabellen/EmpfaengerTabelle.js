@@ -67,9 +67,7 @@ function EmpfaengerTabelle(props) {
     setShowDeleteModal(true);
   }
 
-  useEffect(() => {
-    getEmpfaengerData()
-  }, [])
+  useEffect(getEmpfaengerData, [apoId, props.history])
 
   return (
     <Fragment>

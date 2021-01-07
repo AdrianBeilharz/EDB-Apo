@@ -67,9 +67,7 @@ function BtmTabelle(props) {
     setShowDeleteModal(true);
   }
 
-  useEffect(() => {
-    getBtmData()
-  }, [])
+  useEffect(getBtmData, [apoId, props.history])
 
   return (
     <Fragment>

@@ -67,9 +67,7 @@ function LieferantTabelle(props) {
     setShowDeleteModal(true);
   }
 
-  useEffect(() => {
-    getLieferantData()
-  }, [])
+  useEffect(getLieferantData, [apoId, props.history])
 
   return (
     <Fragment>

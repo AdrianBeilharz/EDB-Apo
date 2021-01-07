@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Link  } from 'react-router-dom';
+import { Link, useParams  } from 'react-router-dom';
 import { Button } from "react-bootstrap";
 import NeuesBtmModal from "../btmbuch/NeuesBtmModal";
 import "../../App.scss";
 
 function ApothekenDetails(props) {
+  const { apoId } = useParams();
   const [apotheke, setApotheke] = useState({ anschrift: {} });
   const [neuesBtmModalShow, setneuesBtmModalShow] = useState(false);
 
-  const getApothekeData = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.match.params.apoId}`,
+  const getApothekeData = () => {
+    fetch(
+      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}`,
       {
         method: "GET",
         headers: {
@@ -18,23 +19,23 @@ function ApothekenDetails(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).catch((err) => {
+    ).then(response => {
+      if (response.status === 200) {
+        setApotheke(response.json());
+      } else if (response.status === 403) {
+        props.history.push("/forbidden");
+      } else if (response.status === 400) {
+        props.history.push("/badrequest");
+      }
+    }).catch((err) => {
       //SHOW ERROR
       return;
     });
 
-    if (response.status === 200) {
-      setApotheke(await response.json());
-    } else if (response.status === 403) {
-      props.history.push("/forbidden");
-    } else if (response.status === 400) {
-      props.history.push("/badrequest");
-    }
+    
   };
 
-  useEffect(() => {
-    getApothekeData();
-  }, []);
+  useEffect(getApothekeData, [apoId, props.history]);
 
   return (
     <div className="apo-details">

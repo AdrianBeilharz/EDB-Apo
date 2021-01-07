@@ -8,9 +8,8 @@ function ApothekeBtmList(props) {
   const [btms, setBtms] = useState([]);
   const [input, setInput] = useState("");
 
-  const getBtms = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung`,
+  const getBtms = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung`,
       {
         method: "GET",
         headers: {
@@ -18,26 +17,26 @@ function ApothekeBtmList(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).catch((err) => {
+    ).then(response => {
+      if (response.status === 200) {
+        setBtms(response.json());
+      } else if (response.status === 403) {
+        props.history.push("/forbidden");
+      } else if (response.status === 400) {
+        props.history.push("/badrequest");
+      }
+    }).catch((err) => {
       //SHOW ERROR
       return;
     });
 
-    if (response.status === 200) {
-      setBtms(await response.json());
-    } else if (response.status === 403) {
-      props.history.push("/forbidden");
-    } else if (response.status === 400) {
-      props.history.push("/badrequest");
-    }
+
   };
 
   //wird aufgerufen von NeuesBtmModal wenn ein neues BTM hinzugefügt wurde
   props.apothekeRefFunctions.updateBtmList = getBtms;
 
-  useEffect(() => {
-    getBtms();
-  }, []);
+  useEffect(getBtms, [apoId, props.history]);
 
   return (
     <div className="btm-buchung-wrapper">
@@ -54,8 +53,8 @@ function ApothekeBtmList(props) {
         .filter((val) => {
           if (input === "") {
             return val;
-          } else if (val.btm.name.toLowerCase().includes(input.toLowerCase())){
-              return val;
+          } else if (val.btm.name.toLowerCase().includes(input.toLowerCase())) {
+            return val;
           }
           return null;
         })

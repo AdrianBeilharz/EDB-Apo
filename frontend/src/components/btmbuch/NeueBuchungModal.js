@@ -76,7 +76,7 @@ function NeueBuchungModal(props) {
 
     useEffect(() => {
         setMaxMenge(props.btm.btm.menge)
-    }, []);
+    }, [props.btm.btm.menge]);
 
     const renderZugang = () => {
         return (
