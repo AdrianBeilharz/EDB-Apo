@@ -15,33 +15,33 @@ function BTMBuch (props) {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [aktiveRolle, setAktiveRolle] = useState('');
 
-  const getUserDetails = event => {
-      fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
+  const getUserDetails = async event => {
+      const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
           method: 'GET',
           headers: {
               'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
           }
-      }).then(response => {
-        if(response.status === 200) {
-            let u = response.json();
-            console.log(JSON.stringify(u))
-            setUser(u);
-            setAktiveRolle(u.rolle);
-            setLoggedIn(true);
-        }else if(response.status === 403) {
-            props.history.push('/forbidden');
-        }else if(response.status === 400){
-            props.history.push('/badrequest');
-        }
       }).catch((err) => {
           //SHOW ERROR
           return;
       });
 
-      
+      if(response.status === 200) {
+          let u = await response.json();
+          console.log(JSON.stringify(u))
+          setUser(u);
+          setAktiveRolle(u.rolle);
+          setLoggedIn(true);
+      }else if(response.status === 403) {
+          props.history.push('/forbidden');
+      }else if(response.status === 400){
+          props.history.push('/badrequest');
+      }
   }
 
-  useEffect(getUserDetails, [apoId, props.history])
+  useEffect(() => {
+      getUserDetails();
+  }, [])
 
   //this obj is passed to each child, each child can add functions to this object and call functions from this object
   let apothekeRefFunctions = {}
