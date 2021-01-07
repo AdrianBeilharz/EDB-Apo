@@ -57,8 +57,9 @@ function ApothekeBtmList(props) {
           } else if (val.btm.name.toLowerCase().includes(input.toLowerCase())){
               return val;
           }
+          return null;
         })
-        .map((btm, key) => (
+        .map((btm) => (
           <BuchungTabelle {...props} btm={btm} />
         ))}
     </div>

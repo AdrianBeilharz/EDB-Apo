@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.scss';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Startseite from './components/startseite/Startseite';
 import BTMBuch from './components/btmbuch/BTMBuch';
 import ApothekeEinstellungen from './components/apotheke/einstellungen/ApothekeEinstellungen';

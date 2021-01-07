@@ -5,7 +5,7 @@ import UserDetailsUpdateModal from '../modals/UserDetailsUpdateModal';
 
 function UserDetails(props) {
     //eslint disable-next-line
-   const {rolle, vorname, name, nutzername, aktiv} = props.user;
+   const {rolle, nutzername } = props.user;
    const [showUserSettings, setShowUserSettings] = useState(false);
 
    var allRoles = {

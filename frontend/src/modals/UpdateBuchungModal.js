@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { useSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';

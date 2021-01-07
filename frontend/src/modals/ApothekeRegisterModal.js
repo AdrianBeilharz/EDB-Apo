@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { Modal, Button, Form, Col } from "react-bootstrap";
 import { useForm } from "./useForm";
 import MobileStepper from "@material-ui/core/MobileStepper";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
@@ -297,8 +296,8 @@ function ApothekeRegisterModal(props) {
           nextButton={
             <Button
               size="small"
-              type={activeStep == 1 ? "submit" : "button"}
-              onClick={activeStep == 0 ? handleNext : null}
+              type={activeStep === 1 ? "submit" : "button"}
+              onClick={activeStep === 0 ? handleNext : null}
               disabled={activeStep === 2}
             >
               {activeStep === 1 ? 'Registrien' : 'Weiter'}
@@ -308,7 +307,7 @@ function ApothekeRegisterModal(props) {
           backButton={
             <Button
               size="small"
-              type={activeStep == 1 ? "submit" : "button"}
+              type={activeStep === 1 ? "submit" : "button"}
               onClick={handleBack}
               disabled={activeStep === 0}
             >
