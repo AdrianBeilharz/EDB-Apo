@@ -54,6 +54,7 @@ function LieferantUpdateModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       onExiting={props.onHide}
+      backdrop="static"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">

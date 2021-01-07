@@ -72,6 +72,7 @@ export default function NeuesBtmModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       onExiting={hideModal}
+      backdrop="static"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">

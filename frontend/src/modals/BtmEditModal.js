@@ -88,6 +88,7 @@ function BtmEditModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       onExiting={hide}
+      backdrop="static"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">

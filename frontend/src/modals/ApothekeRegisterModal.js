@@ -279,8 +279,9 @@ function ApothekeRegisterModal(props) {
       onHide={props.onHide}
       centered
       aria-labelledby="contained-modal-title-vcenter"
+      backdrop="static"
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title>Neue Apotheke registrieren</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
