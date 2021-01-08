@@ -195,13 +195,10 @@ function NeueBuchungModal(props) {
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={hideModal}>Close</Button>
+                    <Button variant="danger" onClick={hideModal}>Abbrechen</Button>
                     <Button variant="primary" type="submit">Bestätigen</Button>
                 </Modal.Footer>
             </Form>
-
-
-
         </Modal>
     )
 }

@@ -20,6 +20,7 @@ function BuchungTabelle(props) {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const[vorname, setVorname]=React.useState('');
 
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -209,36 +210,30 @@ function BuchungTabelle(props) {
     const marginLeft = 40;
     const doc = new jsPDF(orientation, unit, size);
 
-    doc.setFontSize(10);
-    console.log('print btm liste', btm.name);
-
     const title = [props.btm.btm.name];
     const headers = [["Datum", "Lieferant/Patient","Arztpraxis", "Zugang", "Abgang", "Rp.Nr./L.Nr.", "Prüfdatum", "Prüfer Kürzel"]];
 
     const moment = require('moment');
  
     const data = btm.buchungen.map(buchung => [moment(buchung.datum).format("DD.MM.YYYY"),
-    buchung.typ === "ZUGANG" ? buchung.lieferant.name : buchung.empfaenger.vorname + " " + buchung.empfaenger.name,
-    buchung.typ === "ABGANG" ? buchung.arzt.name : "",
+    buchung.typ === "ZUGANG" ? buchung.lieferant.name + "\n" + buchung.lieferant.anschrift.strasse + " " + buchung.lieferant.anschrift.nummer + ",\n"+ buchung.lieferant.anschrift.ort +" " + buchung.lieferant.anschrift.plz : buchung.empfaenger.vorname + " " + buchung.empfaenger.name + "\n" + buchung.empfaenger.anschrift.strasse +" "+ buchung.empfaenger.anschrift.nummer + ",\n" + buchung.empfaenger.anschrift.ort + ",\n" + buchung.empfaenger.anschrift.plz ,
+    buchung.typ === "ABGANG" ? buchung.arzt.name + "\n" + buchung.arzt.anschrift.strasse + " " + buchung.arzt.anschrift.nummer + ",\n" + buchung.arzt.anschrift.ort + ",\n" + buchung.arzt.anschrift.plz : "",
     buchung.typ === "ZUGANG" ? buchung.menge : "",
     buchung.typ === "ZUGANG" ? "" : buchung.menge,
     buchung.typ === "ZUGANG" ? buchung.anforderungsschein : buchung.rezept,
     buchung.pruefdatum ? moment(buchung.pruefdatum).format("DD.MM.YYYY") : "",
-    buchung.pruefer ? buchung.pruefer.vorname+" "+buchung.pruefer.name : "",
+    buchung.pruefer ? buchung.pruefer.vorname.charAt(0) +" "+buchung.pruefer.name.charAt(0) : "",
    ]);
- 
+
     let content = {
       startY: 50,
       head: headers,
       body: data
     };
-  
-
- 
+   
     doc.text(title, marginLeft, 40);
     doc.autoTable(content);
     doc.save("BtmListe.pdf")
-
   }
 
   useEffect(loadLieferanten, [apoId]);
@@ -339,7 +334,7 @@ function BuchungTabelle(props) {
                   <td>{buchung.typ === "ZUGANG" ? "" : buchung.menge}</td>
                   <td>{buchung.typ === "ZUGANG" ? buchung.anforderungsschein : buchung.rezept}</td>
                   <td>{buchung.pruefdatum ? <Moment format="DD.MM.YYYY">{buchung.pruefdatum}</Moment> : ""}</td>
-                  <td>{buchung.pruefer ? buchung.pruefer.vorname+" "+buchung.pruefer.name : ""}</td>
+                  <td >{buchung.pruefer ? buchung.pruefer.vorname +" "+buchung.pruefer.name : "" }</td>
 
                   {props.aktiveRolle.toLowerCase() === "admin" || props.aktiveRolle.toLowerCase() === "pruefer" ?
                     <th>{renderPruefButton(buchung)}</th> : null}

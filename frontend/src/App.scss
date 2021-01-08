@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,300&display=swap');
 
-$base-green: rgb(0, 255, 136);
+$base-green: rgb(34, 139, 34);
 $base-blue: rgb(0, 212, 255);
 
 $theme-colors: (
@@ -24,7 +24,7 @@ $theme-colors: (
 .header{
   color: white;
   background-color: $base-green; 
-  background: linear-gradient(90deg,  $base-green 0%, $base-blue 100%);
+  background: $base-green;
   padding: 1em;
   padding-left: 7em;
 }
