@@ -132,10 +132,6 @@ function ApothekeRegisterModal(props) {
     }
   };
 
-  const cancel = () => {
-    setShowContinueModal(false);
-  };
-
   const renderSchritt1 = () => {
     return (
       <React.Fragment>

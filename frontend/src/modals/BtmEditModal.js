@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Modal, Col, Button, Form, Alert, Row } from 'react-bootstrap';
+import { Modal, Col, Button, Form, Row } from 'react-bootstrap';
 import { useSnackbar } from 'notistack';
 import { responsiveFontSizes } from '@material-ui/core';
 
@@ -22,13 +22,8 @@ function BtmEditModal(props) {
 
   let { id, darreichungsform, einheit, name, menge } = props.btm;
   // console.log(props.btm)
-
-  const [activeDarreichungsform, setActiveDarreichungsform] = useState(darreichungsform);
-  const [activeEinheit, setActiveEinheit] = useState(einheit);
   const [einheiten, setEinheiten] = useState(darreichungsformen[darreichungsform].einheiten);
 
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const { enqueueSnackbar } = useSnackbar();
 
 
@@ -63,20 +58,12 @@ function BtmEditModal(props) {
       console.log(err);
       return;
     });
-
-    
   }
 
-  useEffect(() => {
-    setActiveDarreichungsform(props.btm.darreichungsform);
-    setActiveEinheit(props.btm.einheit);
-    setEinheiten(darreichungsformen[props.btm.darreichungsform].einheiten)
-    console.log(activeDarreichungsform, activeEinheit, einheiten)
-  }, [props.btm])
+  //eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setEinheiten(darreichungsformen[props.btm.darreichungsform].einheiten), [props.btm])
 
   const hide = () => {
-    setActiveDarreichungsform(props.btm.darreichungsform);
-    setActiveEinheit(props.btm.einheit);
     setEinheiten(darreichungsformen[props.btm.darreichungsform].einheiten)
     props.onHide();
   }
@@ -96,7 +83,6 @@ function BtmEditModal(props) {
                  </Modal.Title>
       </Modal.Header>
       <Form onSubmit={updateDetails}>
-        {showError ? <Alert variant="danger">{errorMessage}</Alert> : null}
         <Modal.Body>
           <Form.Group as={Row} controlId="name">
             <Form.Label column sm="2">
@@ -123,7 +109,6 @@ function BtmEditModal(props) {
                         </Form.Label>
             <Col sm="10">
               <Form.Control defaultValue={darreichungsform} onChange={event => {
-                setActiveDarreichungsform(event.target.value)
                 setEinheiten(darreichungsformen[event.target.value].einheiten)
               }} name="darreichungsform" required as="select">
                 {

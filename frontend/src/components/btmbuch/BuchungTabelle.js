@@ -10,26 +10,14 @@ import TableBody from '@material-ui/core/TableBody';
 import NeueBuchungModal from "./NeueBuchungModal";
 import UpdateBuchungModal from "../../modals/UpdateBuchungModal";
 import DeleteModal from "../../modals/DeleteModal";
-import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
-
-
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-  },
-  container: {
-    maxHeight: 440,
-  },
-});
 
 function BuchungTabelle(props) {
   let { btm } = props;
   const { apoId } = useParams();
 
-  const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -54,9 +42,8 @@ function BuchungTabelle(props) {
     setPage(0);
   };
 
-  const loadLieferanten = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/lieferant`,
+  const loadLieferanten = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/lieferant`,
       {
         method: "GET",
         headers: {
@@ -65,23 +52,24 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).catch((err) => {
+    ).then(response => {
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 403) {
+        // props.history.push('/forbidden');
+      } else if (response.status === 400) {
+        // props.history.push('/badrequest');
+      }
+    }).then(data => setLieferanten(data)).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-    if (response.status === 200) {
-      setLieferanten(await response.json());
-    } else if (response.status === 403) {
-      // props.history.push('/forbidden');
-    } else if (response.status === 400) {
-      // props.history.push('/badrequest');
-    }
+    
   };
 
-  const loadAerzte = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/arzt`,
+  const loadAerzte = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/arzt`,
       {
         method: "GET",
         headers: {
@@ -90,23 +78,24 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).catch((err) => {
+    ).then(response => {
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 403) {
+        // props.history.push('/forbidden');
+      } else if (response.status === 400) {
+        // props.history.push('/badrequest');
+      }
+    }).then(data => setAerzte(data)).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-    if (response.status === 200) {
-      setAerzte(await response.json());
-    } else if (response.status === 403) {
-      // props.history.push('/forbidden');
-    } else if (response.status === 400) {
-      // props.history.push('/badrequest');
-    }
+    
   };
 
-  const loadEmpfaenger = async () => {
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${props.apothekeId}/empfaenger`,
+  const loadEmpfaenger = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/empfaenger`,
       {
         method: "GET",
         headers: {
@@ -115,18 +104,20 @@ function BuchungTabelle(props) {
             "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
         },
       }
-    ).catch((err) => {
+    ).then(response => {
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 403) {
+        // props.history.push('/forbidden');
+      } else if (response.status === 400) {
+        // props.history.push('/badrequest');
+      }
+    }).then(data => setEmpfaenger(data)).catch((err) => {
       //SHOW ERROR
       console.log(err);
     });
 
-    if (response.status === 200) {
-      setEmpfaenger(await response.json());
-    } else if (response.status === 403) {
-      // props.history.push('/forbidden');
-    } else if (response.status === 400) {
-      // props.history.push('/badrequest');
-    }
+    
   };
 
   const deleteBtm = async () => {
@@ -250,11 +241,9 @@ function BuchungTabelle(props) {
 
   }
 
-  useEffect(() => {
-    loadLieferanten();
-    loadAerzte();
-    loadEmpfaenger();
-  }, []);
+  useEffect(loadLieferanten, [apoId]);
+  useEffect(loadAerzte, [apoId]);
+  useEffect(loadEmpfaenger, [apoId]);
 
   return (
     <React.Fragment>

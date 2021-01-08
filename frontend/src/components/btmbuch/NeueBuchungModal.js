@@ -26,7 +26,7 @@ function NeueBuchungModal(props) {
 
 
         if (response && response.status === 201) {
-            const data = await response.json();
+            //const data = await response.json();
             // console.log(data);
             hideModal();
             enqueueSnackbar('Buchung erfolgreich angelegt', { variant:'success', autoHideDuration: 3000} );
@@ -167,7 +167,7 @@ function NeueBuchungModal(props) {
                                     label="Abgang"
                                     name="TypRadio"
                                     id="AbgangRadio"
-                                    onClick={() => setTyp('abgang')}
+                                    onClick={() => {setTyp('abgang'); setMaxMenge(props.btm.btm.menge)}}
                                 />
                             </Row>
                         </Col>
@@ -178,7 +178,7 @@ function NeueBuchungModal(props) {
                             Menge
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="btmMenge" type="number" min="1" defaultValue="0" />
+                            <Form.Control name="btmMenge" type="number" min="1" max={maxMenge} defaultValue="0" />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="datum">

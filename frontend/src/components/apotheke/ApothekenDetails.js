@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams  } from 'react-router-dom';
 import { Button } from "react-bootstrap";
-import NeuesBtmModal from "../btmbuch/NeuesBtmModal";
+import BtmAddModal from '../../modals/BtmAddModal';
 import "../../App.scss";
 
 function ApothekenDetails(props) {
@@ -50,7 +50,7 @@ function ApothekenDetails(props) {
       >
         Neues Betäubungsmittel anlegen
       </Button>
-      <NeuesBtmModal
+      <BtmAddModal
         show={neuesBtmModalShow}
         {...props}
         onHide={() => setneuesBtmModalShow(false)}
