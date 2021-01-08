@@ -140,7 +140,7 @@ export default function NeuesBtmModal(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.onHide}>
-            Close
+            Abbrechen
           </Button>
           <Button variant="primary" type="submit">
             Bestätigen

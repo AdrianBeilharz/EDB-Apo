@@ -71,7 +71,7 @@ function ApothekeEditModal(props) {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={props.onHide}>Abbrechen</Button>
+          <Button variant="danger"  onClick={props.onHide}>Abbrechen</Button>
           <Button variant="primary" type="Submit">Bearbeiten</Button>
         </Modal.Footer>
       </Form>

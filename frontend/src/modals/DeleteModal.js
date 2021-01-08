@@ -30,7 +30,7 @@ function DeleteModal(props) {
         </Row>
       </Modal.Body>
       <Modal.Footer>
-        <Button autoFocus variant="" onClick={props.onHide}>Abbrechen</Button>
+        <Button autoFocus variant="secondary"  onClick={props.onHide}>Abbrechen</Button>
         <Button variant="danger" onClick={() => { props.onHide(); props.onSubmit() }}>Bestätigen</Button>
       </Modal.Footer>
     </Modal>
