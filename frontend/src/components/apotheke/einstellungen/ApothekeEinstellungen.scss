@@ -6,9 +6,13 @@
         cursor: pointer;
     }
 
+    li.active {
+        background-color: $base-green;
+        border: none;
+    }
 
     li:not(.active):hover{
-        background-color: $base-blue;
+        background-color: $base-green-2;
     }
 }
 
