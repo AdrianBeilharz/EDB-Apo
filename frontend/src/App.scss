@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,300&display=swap');
 
-$base-green: rgb(34, 139, 34);
+$base-green: rgb(14, 134, 78);
 $base-blue: rgb(0, 212, 255);
+$base-green-2: rgb(7, 170, 94);
 
 $theme-colors: (
-  "primary": $base-green,
+  'primary': $base-green-2
 );
 
 .main-container {
@@ -54,3 +55,10 @@ $theme-colors: (
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently*/
 }
+
+
+.btn-primary {
+  background-color:  $base-green-2 !important;
+  border: $base-green-2 !important;
+}
+

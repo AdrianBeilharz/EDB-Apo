@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {Col, Button, Form,} from 'react-bootstrap';
 import ApothekeRegisterModal from '../../modals/ApothekeRegisterModal';
 import { useSnackbar } from 'notistack';
+import '../../App.scss';
 import './Startseite.scss'
 
 
