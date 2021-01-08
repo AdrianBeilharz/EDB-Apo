@@ -20,7 +20,6 @@ function BuchungTabelle(props) {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const[vorname, setVorname]=React.useState('');
 
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
