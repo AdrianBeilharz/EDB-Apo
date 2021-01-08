@@ -21,13 +21,13 @@ function ApothekenDetails(props) {
       }
     ).then(response => {
       if (response.status === 200) {
-        setApotheke(response.json());
+        return response.json();
       } else if (response.status === 403) {
         props.history.push("/forbidden");
       } else if (response.status === 400) {
         props.history.push("/badrequest");
       }
-    }).catch((err) => {
+    }).then(data => setApotheke(data)).catch((err) => {
       //SHOW ERROR
       return;
     });
