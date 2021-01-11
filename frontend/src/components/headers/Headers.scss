@@ -16,3 +16,29 @@ $primary-yellow: rgb(255, 152, 0);
 .white-font {
     color: white;
 }
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid white;
+    margin-left: .7em;
+}
+
+.login-form {
+    position: absolute;
+    background-color: white;
+    margin-left: -10em;
+    z-index: 999;
+    align-content: center;
+    margin-top: 20px;
+    color: black;
+    padding: 1em;
+    border-radius: 25px;
+    border-color: transparent;
+    -webkit-box-shadow: 0px 18px 23px -3px rgba(0,0,0,0.8);
+    -moz-box-shadow: 0px 18px 23px -3px rgba(0,0,0,0.8);
+    box-shadow: 0px 18px 23px -3px rgba(0,0,0,0.8);
+}

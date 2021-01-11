@@ -28,6 +28,7 @@ $theme-colors: (
   background: $base-green;
   padding: 1em;
   padding-left: 7em;
+  z-index: 999;
 }
 
 .noselect {

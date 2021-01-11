@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {Col, Button, Form,} from 'react-bootstrap';
-import ApothekeRegisterModal from '../../modals/ApothekeRegisterModal';
 import { useSnackbar } from 'notistack';
 import '../../App.scss';
 import './Startseite.scss'
 
 
 function Login(props) {
-    const [neuesApoRegisterModal, setNeuesApoRegisterModal] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
+
+    const myRef = useRef();
+
+    const handleClickOutside = e => {
+        if (!myRef.current.contains(e.target)) {
+            props.hideLoginForm(false);
+        }
+    };
+
+    const handleClickInside = () => props.hideLoginForm(true);
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    });
+
     
     const login = async event => {
         event.preventDefault();
@@ -36,19 +50,14 @@ function Login(props) {
     }
 
     return (
-        <div className="login">
-            <b style={{fontSize:'20pt'}}>Login:</b>
+        <div ref={myRef} onClick={handleClickInside} className="login">
+            <b style={{fontSize:'20pt'}}>Login</b>
             <Form onSubmit={login} >
                 <Form.Row>
                     <Col>
-                        <Form.Control name="username" placeholder="Benutzername" required />
+                        <Form.Control autoFocus name="username" placeholder="Benutzername" required />
                         <Form.Control name="password" placeholder="Passwort" type="password" required />
                         <Button variant="primary" type="submit">Login</Button>    
-                        <Button variant="primary"  show={neuesApoRegisterModal} onClick={() => setNeuesApoRegisterModal(true)}>Neue Apotheke registrieren</Button>
-                        <ApothekeRegisterModal
-                                show={neuesApoRegisterModal}
-                                {...props}
-                                onHide={() => setNeuesApoRegisterModal(false)} ></ApothekeRegisterModal>
                     </Col>
                 </Form.Row>
             </Form>
