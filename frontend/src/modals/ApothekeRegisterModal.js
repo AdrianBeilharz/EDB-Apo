@@ -1,54 +1,58 @@
-import React, { useState } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import React, { useState, useEffect, useCallback} from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 import { useForm } from "./useForm";
-import MobileStepper from "@material-ui/core/MobileStepper";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-  },
-});
 
 function ApothekeRegisterModal(props) {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [activeStep, setActiveStep] = useState(0);
+  const [disabled, setDisabled] = useState(true);
+  const [disabledRegBt, setDisabledRegBt] = useState(true);
+  const [fields, setFields] = useState({name: "", email: "", strasse: "",nummer: "", plz: "", ort: "" });
+  const [passwords, setPasswords] = useState({password: "", passwordCheck: ""});
   const [showContinueModal, setShowContinueModal] = useState(false);
-  const [values, handleChange] = useForm({
-    name: "",
-    email: "",
-    strasse: "",
-    nummer: "",
-    plz: "",
-    ort: "",
+  const [passwordsAreValid, setPasswordsAreValid] = useState('');
+ 
+  const [values, handleChangeCustom] = useForm({
     vorname: "",
     nachname: "",
     nutzername: "",
     rolle: "Admin",
   });
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setShowContinueModal(true);
-  };
+  const handleChange = (e) =>  {
+    setFields({
+      ...fields,
+      [e.target.name]: e.target.value,
+    });
+    checkPlzOrt();
+  }
+
+  const checkPlzOrt = () => {
+    if(fields.plz.match('[0-9]{5}') && fields.plz.length === 5 && fields.ort.length >= 2) {
+      setDisabled(false);
+    }
+    else{
+      setDisabled(true);
+    }
+  }
+
+  const validation = () => {
+    checkPlzOrt();
+    checkPasswords();
+  }
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
     setShowContinueModal(false);
   };
 
   const createNewApo = () => {
     let body = {
-      name: values.name,
-      email: values.email,
+      name: fields.name,
+      email: fields.email,
       anschrift: {
-        strasse: values.strasse,
-        nummer: values.nummer,
-        plz: values.plz,
-        ort: values.ort,
+        strasse: fields.strasse,
+        nummer: fields.nummer,
+        plz: fields.plz,
+        ort: fields.ort,
       },
     };
     return fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke`, {
@@ -100,17 +104,29 @@ function ApothekeRegisterModal(props) {
     });
   };
 
-  const [passwords, setPasswords] = React.useState({
-    password: "",
-    passwordCheck: "",
-  });
+  const handleChangePassword = async (e) => {
+    const { name, value } = e.target;
 
-  function handleChangePassword(e) {
     setPasswords({
       ...passwords,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    checkPasswords();
   }
+
+
+  const  checkPasswords = () => {
+    if (passwords.password.toString() !== '' && passwords.password.toString() === passwords.passwordCheck.toString()) {
+      setPasswordsAreValid(true);
+      setDisabledRegBt(false);
+    }
+   else {
+      setDisabledRegBt(true);
+      setPasswordsAreValid(false);
+    }
+  }
+
+
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -132,81 +148,101 @@ function ApothekeRegisterModal(props) {
     }
   };
 
+  useEffect(() => {
+    document.title =  `${passwords.password} , ${passwords.passwordCheck} , ${disabledRegBt}, ${fields}, ${passwordsAreValid} `;
+    validation();
+  })
+
+
   const renderSchritt1 = () => {
     return (
-      <React.Fragment>
+        <React.Fragment >
         <Form.Label>1. Schritt Apotheke erstellen</Form.Label>
         <Form.Row>
           <Form.Group as={Col} controlId="name">
+            <Form.Label>Name</Form.Label>
             <Form.Control
-              required
+              required="required"
               type="text"
               placeholder="Name der Apotheke"
               name="name"
-              value={values.name}
-              onChange={handleChange}
+              value={fields.name}
+              onChange={(e) => handleChange(e)}
+              isValid={fields.name.match("[A-Za-z]{1,32}")}
             />
           </Form.Group>
         </Form.Row>
 
         <Form.Row>
           <Form.Group as={Col} controlId="email">
+             <Form.Label>E-Mail</Form.Label>
             <Form.Control
-              required
+              required="required"
               type="email"
               placeholder="E-Mail der Apotheke"
               name="email"
-              value={values.email}
-              onChange={handleChange}
+              value={fields.email}
+              onChange={(e) => handleChange(e)}
+              isValid={fields.email.match("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")}
             />
           </Form.Group>
+
         </Form.Row>
 
         <Form.Row>
           <Form.Group as={Col} sm={9} controlId="strasse">
+            <Form.Label>Straße</Form.Label>
             <Form.Control
-              required
+              required="required"
               type="text"
               placeholder="Straße"
               name="strasse"
-              value={values.strasse}
-              onChange={handleChange}
+              value={fields.strasse}
+              onChange={(e) => handleChange(e)}
+              isValid={fields.strasse.length >= 3}
             />
           </Form.Group>
           <Form.Group as={Col} sm={3} controlId="nummer">
+            <Form.Label>Nummer</Form.Label>
             <Form.Control
-              required
+              required="required"
               type="number"
-              placeholder="Nummer"
+              placeholder="0"
               name="nummer"
-              value={values.nummer}
-              onChange={handleChange}
+              min="0"
+              value={fields.nummer}
+              onChange={(e) => handleChange(e)}
+              isValid={fields.nummer > 0}
             />
           </Form.Group>
         </Form.Row>
         <Form.Row>
-          <Form.Group as={Col} sm={3} controlId="plz">
+          <Form.Group as={Col} sm={3} controlId="plz" >
+          <Form.Label>PLZ</Form.Label>
             <Form.Control
-              required
+              required="required"
               type="text"
               placeholder="PLZ"
               name="plz"
-              value={values.plz}
-              onChange={handleChange}
+              value={fields.plz}
+              onChange={(e) => handleChange(e)}
+              isValid={fields.plz.length === 5}
             />
           </Form.Group>
           <Form.Group as={Col} sm={9} controlId="ort">
+          <Form.Label>Ort</Form.Label>
             <Form.Control
-              required
+             required="required"
               type="text"
               placeholder="Ort"
               name="ort"
-              value={values.ort}
-              onChange={handleChange}
+              value={fields.ort}
+              onChange={(e) => handleChange(e)} 
+              isValid={fields.ort.length > 3}
             />
           </Form.Group>
-        </Form.Row>
-      </React.Fragment>
+          </Form.Row>
+        </React.Fragment>
     );
   };
 
@@ -214,59 +250,81 @@ function ApothekeRegisterModal(props) {
     return (
       <React.Fragment>
         <Form.Label>2. Schritt Admin Nutzer erstellen</Form.Label>
-        <Form.Group controllId="vorname">
+        <Form.Group controlId="vorname">
+       
           <Form.Control
             required="required"
             type="text"
             placeholder="Vorname"
             name="vorname"
             value={values.vorname}
-            onChange={handleChange}
+            onChange={handleChangeCustom}
+            isValid={values.vorname.match("[A-Za-z]{1,32}")}
           />
         </Form.Group>
-        <Form.Group controllId="nachname">
+        <Form.Group controlId="nachname">
+        <Form.Label>Nachname</Form.Label>
           <Form.Control
             required="required"
             type="text"
             placeholder="Nachname"
             name="nachname"
             value={values.nachname}
-            onChange={handleChange}
+            onChange={handleChangeCustom}
+            isValid={values.nachname.match("[A-Za-z]{1,32}")}
           />
         </Form.Group>
-        <Form.Group controllId="nutzername">
+        <Form.Group controlId="nutzername">
+        <Form.Label>Nutzername</Form.Label>
           <Form.Control
             required="required"
             type="text"
             placeholder="Nutzername"
             name="nutzername"
             value={values.nutzername}
-            onChange={handleChange}
+            onChange={handleChangeCustom}
+            isValid={values.nutzername.match("[A-Za-z]{1,32}")}
           />
         </Form.Group>
-        <Form.Group controllId="password">
+        <Form.Group controlId="password">
+        <Form.Label>Passwort</Form.Label>
           <Form.Control
             required="required"
             type="password"
             placeholder="Passwort erstellen"
             name="password"
             value={passwords.password}
-            onChange={handleChangePassword}
+            onChange={(e) => handleChangePassword(e)}
+            isValid={passwordsAreValid}
           />
         </Form.Group>
         <Form.Group>
+        <Form.Label>Passwort bestätigen</Form.Label>
           <Form.Control
             required="required"
             type="password"
             name="passwordCheck"
             placeholder="Passwort wiederholen"
             value={passwords.passwordCheck}
-            onChange={handleChangePassword}
+            onChange={(e) => {handleChangePassword(e); checkPasswords()}}
+            isValid={passwordsAreValid}
           />
         </Form.Group>
       </React.Fragment>
     );
   };
+
+  const renderWeiterBt = () => {
+    return (
+      <Button disabled={disabled} onClick={() => setShowContinueModal(true)}>Weiter</Button>
+    )
+  }
+
+  const renderRegistrierenBt = () => {
+    return(
+      <Button disabled={disabledRegBt ? true : false} type="submit" >Registrieren</Button>
+    )
+  }
 
   return (
     <Modal
@@ -277,46 +335,18 @@ function ApothekeRegisterModal(props) {
       backdrop="static"
     >
       <Modal.Header closeButton>
-        <Modal.Title>Neue Apotheke registrieren</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Neue Apotheke registrieren</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
           {showContinueModal ? renderSchritt2() : renderSchritt1()}
         </Modal.Body>
-        <MobileStepper
-          variant="dots"
-          steps={2}
-          position="static"
-          activeStep={activeStep}
-          className={classes.root}
-          nextButton={
-            <Button
-              size="small"
-              type={activeStep === 1 ? "submit" : "button"}
-              onClick={activeStep === 0 ? handleNext : null}
-              disabled={activeStep === 2}
-            >
-              {activeStep === 1 ? 'Registrien' : 'Weiter'}
-              {theme.direction === "rtl" ? (<KeyboardArrowLeft />) : (<KeyboardArrowRight />)}
-            </Button>
-          }
-          backButton={
-            <Button
-              size="small"
-              type={activeStep === 1 ? "submit" : "button"}
-              onClick={handleBack}
-              disabled={activeStep === 0}
-            >
-              {theme.direction === "rtl" ? (
-                <KeyboardArrowRight />
-              ) : (
-                <KeyboardArrowLeft />
-              )}
-              Zurück
-            </Button>
-          }
-        />
-      </Form>
+     
+      <Modal.Footer>
+        <Button variant="danger" onClick={showContinueModal ? handleBack : props.onHide}>{showContinueModal ? 'Zurück' : 'Abbrechen'}</Button>
+        {showContinueModal ? renderRegistrierenBt() : renderWeiterBt()}
+      </Modal.Footer>
+       </Form>
     </Modal>
   );
 }

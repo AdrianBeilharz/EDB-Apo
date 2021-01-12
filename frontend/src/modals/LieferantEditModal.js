@@ -93,7 +93,7 @@ function LieferantUpdateModal(props) {
           </Form.Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button autofocus variant="" onClick={props.onHide}>Abbrechen</Button>
+          <Button autofocus variant="danger" onClick={props.onHide}>Abbrechen</Button>
           <Button variant="primary" type="submit" >Bestätigen</Button>
         </Modal.Footer>
       </Form>
