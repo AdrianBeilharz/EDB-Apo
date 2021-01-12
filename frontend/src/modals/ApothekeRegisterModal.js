@@ -251,7 +251,7 @@ function ApothekeRegisterModal(props) {
       <React.Fragment>
         <Form.Label>2. Schritt Admin Nutzer erstellen</Form.Label>
         <Form.Group controlId="vorname">
-       
+          <Form.Label>Vorname</Form.Label>
           <Form.Control
             required="required"
             type="text"
