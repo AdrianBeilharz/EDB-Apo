@@ -179,8 +179,8 @@ public class BenutzerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/apotheke/{apothekeId}/benutzer/{username}/checkUsername")
-    public ResponseEntity<?> checkIfUsernameTagenUsername(@PathVariable String apothekeId, @PathVariable String username) {
+    @PostMapping("/benutzer/{username}/checkUsername")
+    public ResponseEntity<?> checkIfUsernameTagenUsername(@PathVariable String username) {
 
         if (username.length() >= 4 && benutzerRepo.getBenutzerByUsername(username) == null) {
             return new ResponseEntity<>(HttpStatus.OK);
