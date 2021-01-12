@@ -29,8 +29,11 @@ function BtmAddModal(props) {
       })
     }).then((res) => {
       if (res.status === 201) {
+        console.log(props);
+        let {updateBtmList} = props.apothekeRefFunctions;
+        updateBtmList();
         props.onHide();
-        props.updateBtmData();
+        setShowError(false);
         enqueueSnackbar('Betäubungsmittel erfolgreich angelegt', { variant: 'success', autoHideDuration: 3000 });
       } else if (res.status === 400) {
         setErrorMessage('Betäubungsmittel existiert bereits oder Daten ungültig');
