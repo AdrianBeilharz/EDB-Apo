@@ -15,7 +15,7 @@ function Startseite(props) {
                 showLoginForm={showLoginForm} setShowLoginForm={setShowLoginForm}
                 showLoginButton={true} />
             <div className="banner">
-                <img className="bg-image" src="/images/background/bg1.svg" alt="" />
+                <img className="bg-image unselectable" src="/images/background/bg1.svg" alt="" />
 
                 <div style={{position:'absolute', margin:'0 10%', top:'0'}}>
                     <Row>
@@ -28,7 +28,7 @@ function Startseite(props) {
                             </Row>
                         </Col>
                         <Col>
-                            <img className="img" style={{marginTop:'5%'}} className="float-right" src="/images/pharma1.png" />
+                            <img className="img unselectable float-right" style={{marginTop:'5%'}} src="/images/pharma1.png" />
                         </Col>
                     </Row>
                     <Row style={{marginTop:'13em'}}>
@@ -53,15 +53,15 @@ function Startseite(props) {
                             </ul>
                         </Col>
                         <Col>
-                        <img className="img" style={{marginTop:'-5em'}} className="float-right" src="/images/pharma2.png" />
+                        <img className="img unselectable" style={{marginTop:'-5em'}} src="/images/pharma2.png" />
                         </Col>
                     </Row>
                 </div>
-                <img className="bg-image" style={{marginTop:'20em'}} src="/images/background/bg2.svg" alt="" />
+                <img className="bg-image unselectable" style={{marginTop:'20em'}} src="/images/background/bg2.svg" alt="" />
                 <div style={{backgroundColor:'#0e864e', paddingBottom:'4em'}}>
                     <Row>
                         <Col>
-                            <img className="img" style={{margin:'-11em 0 0 5em'}} className="float-left" src="/images/akteure.png" />
+                            <img className="img unselectable float-left" style={{margin:'-11em 0 0 5em'}} src="/images/akteure.png" />
                         </Col>
                         <Col style={{color:'white'}}>
                             <h3>
