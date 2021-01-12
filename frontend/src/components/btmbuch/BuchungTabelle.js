@@ -7,7 +7,7 @@ import Moment from "react-moment";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 import TableBody from '@material-ui/core/TableBody';
-import NeueBuchungModal from "./NeueBuchungModal";
+import NeueBuchungModal from "../../modals/NeueBuchungModal";
 import UpdateBuchungModal from "../../modals/UpdateBuchungModal";
 import DeleteModal from "../../modals/DeleteModal";
 import PrintPdfModal from "../../modals/PrintPdfModal"
