@@ -10,6 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import NeueBuchungModal from "./NeueBuchungModal";
 import UpdateBuchungModal from "../../modals/UpdateBuchungModal";
 import DeleteModal from "../../modals/DeleteModal";
+import PrintPdfModal from "../../modals/PrintPdfModal"
 import TablePagination from '@material-ui/core/TablePagination';
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -18,8 +19,10 @@ function BuchungTabelle(props) {
   let { btm } = props;
   const { apoId } = useParams();
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -27,6 +30,7 @@ function BuchungTabelle(props) {
   const [showNewBuchungModal, setShowNewBuchungModal] = useState(false);
   const [showUpdateBuchungModal, setShowUpdateBuchungModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPrintPdfModal, setShowPrintPdfModal] = useState(false)
 
   const [lieferanten, setLieferanten] = useState([]);
   const [aerzte, setAerzte] = useState([]);
@@ -201,7 +205,7 @@ function BuchungTabelle(props) {
     }
   };
 
-  const exportPdf = () => {
+  const exportPdf = (startDate, endDate) => {
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -213,8 +217,10 @@ function BuchungTabelle(props) {
     const headers = [["Datum", "Lieferant/Patient","Arztpraxis", "Zugang", "Abgang", "Rp.Nr./L.Nr.", "Prüfdatum", "Prüfer Kürzel"]];
 
     const moment = require('moment');
+
+    const filteredData = btm.buchungen.filter((d) => d.datum === "2020-10-24");
  
-    const data = btm.buchungen.map(buchung => [moment(buchung.datum).format("DD.MM.YYYY"),
+    const data = filteredData.map(buchung => [moment(buchung.datum).format("DD.MM.YYYY"),
     buchung.typ === "ZUGANG" ? buchung.lieferant.name + "\n" + buchung.lieferant.anschrift.strasse + " " + buchung.lieferant.anschrift.nummer + ",\n"+ buchung.lieferant.anschrift.ort +" " + buchung.lieferant.anschrift.plz : buchung.empfaenger.vorname + " " + buchung.empfaenger.name + "\n" + buchung.empfaenger.anschrift.strasse +" "+ buchung.empfaenger.anschrift.nummer + ",\n" + buchung.empfaenger.anschrift.ort + ",\n" + buchung.empfaenger.anschrift.plz ,
     buchung.typ === "ABGANG" ? buchung.arzt.name + "\n" + buchung.arzt.anschrift.strasse + " " + buchung.arzt.anschrift.nummer + ",\n" + buchung.arzt.anschrift.ort + ",\n" + buchung.arzt.anschrift.plz : "",
     buchung.typ === "ZUGANG" ? buchung.menge : "",
@@ -259,7 +265,6 @@ function BuchungTabelle(props) {
         show={showUpdateBuchungModal}
         onHide={() => setShowUpdateBuchungModal(false)}
       />
-
       <DeleteModal
         {...props}
         headertext={"Betäubungsmittel-Buchung löschen"}
@@ -268,6 +273,12 @@ function BuchungTabelle(props) {
         subtext={"Dieser Vorgang kann nicht rückgängig gemacht werden"}
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
+      />
+      <PrintPdfModal
+        {...props}
+        show={showPrintPdfModal}
+        onHide = {() => setShowPrintPdfModal(false)}
+
       />
 
       <div style={{ marginBottom: "2em" }}>
@@ -282,7 +293,7 @@ function BuchungTabelle(props) {
           </Col>
           <Col sm={9}>
             <div style={{ marginLeft: "-9em" }}>
-            <Button style={{ marginRight: "1em" }} onClick={exportPdf}>
+            < Button style={{ marginRight: "1em" }} onClick={(event) => {event.stopPropagation(); setShowPrintPdfModal(true)}}>
                 PDF
               </Button>
               <Button
