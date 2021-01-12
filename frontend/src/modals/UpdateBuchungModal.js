@@ -82,6 +82,7 @@ function UpdateBuchungModal(props) {
 
     const hideModal = () => {
         props.onHide();
+        setBuchung(props.buchung);
     }
 
     useEffect(() => {
@@ -179,7 +180,7 @@ function UpdateBuchungModal(props) {
                             Datum
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="datum" type="date" value={moment(buchung.datum).format("YYYY-MM-DD")} onChange={e => {buchung.datum=moment(e.target.value).format("YYYY-MM-DD"); setBuchung(buchung)}} />
+                            <Form.Control name="datum" type="date" value={moment(buchung.datum).format("YYYY-MM-DD")} onChange={e => {setBuchung({...buchung, datum:e.target.value})}} />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="btmMenge">
@@ -195,7 +196,7 @@ function UpdateBuchungModal(props) {
                             Prüfdatum
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="pruefdatum" isInvalid={!checkPruefdatum()} type="date" value={moment(buchung.pruefdatum).format("YYYY-MM-DD")} onChange={e => {buchung.pruefdatum = moment(e.target.value).format("YYYY-MM-DD"); setBuchung(buchung)}} />
+                            <Form.Control name="pruefdatum" isInvalid={!checkPruefdatum()} type="date" value={moment(buchung.pruefdatum).format("YYYY-MM-DD")} onChange={e => {setBuchung({...buchung, pruefdatum:e.target.value})}} />
                         </Col>
                     </Form.Group>
                     <Zugang />
