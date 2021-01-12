@@ -7,17 +7,15 @@ import { useParams } from 'react-router-dom';
 function UpdateBuchungModal(props) {
 
     const moment = require('moment');
-    
-    const [date, setDate] = useState(moment(props.buchung.datum).format("YYYY-MM-DD"));
-    const [pruefDatum, setPruefDatum] = useState(props.buchung.pruefdatum ? moment(props.buchung.pruefdatum).format("YYYY-MM-DD") : null);
-    // let apothekeId = sessionStorage.getItem('apothekeId');
+    const [buchung, setBuchung] = useState(props.buchung);
+
     const { apoId } = useParams();
     // eslint-disable-next-line
     let {lieferanten, aerzte, empfaenger} = props;
     const { enqueueSnackbar } = useSnackbar();
 
     const sendUpdateRequest = async (buchungData) => {
-        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung/${props.buchung.id}`, {
+        const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung/${buchung.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,7 +42,7 @@ function UpdateBuchungModal(props) {
     const updateBuchung = event => {
         event.preventDefault();
 
-        if (props.buchung.typ.toLowerCase() === 'zugang') {
+        if (buchung.typ.toLowerCase() === 'zugang') {
             let { anforderungsschein, btmMenge, lieferant, pruefdatum, datum } = event.target;
             let buchungData = {
                 benutzer: props.user.id,
@@ -57,7 +55,7 @@ function UpdateBuchungModal(props) {
                 datum: datum.value
             }
             sendUpdateRequest(buchungData);
-        } else if (props.buchung.typ.toLowerCase() === 'abgang') {
+        } else if (buchung.typ.toLowerCase() === 'abgang') {
             let { btmMenge, rezept, empfaenger, arzt, pruefdatum, datum} = event.target;
             let buchungData = {
                 benutzer: props.user.id,
@@ -75,26 +73,23 @@ function UpdateBuchungModal(props) {
     }
 
     const checkPruefdatum = () => {
-        if(pruefDatum) {
-            return pruefDatum >= date;
+        if(buchung.pruefdatum) {
+            return buchung.pruefdatum >= buchung.datum;
         }else {
             return true;
         }
     }
 
     const hideModal = () => {
-        setDate(moment(props.buchung.datum).format("YYYY-MM-DD"));
-        setPruefDatum(props.buchung.pruefdatum ? moment(props.buchung.pruefdatum).format("YYYY-MM-DD") : null);
         props.onHide();
     }
 
     useEffect(() => {
-        setDate(moment(props.buchung.datum).format("YYYY-MM-DD"));
-        setPruefDatum(props.buchung.pruefdatum ? moment(props.buchung.pruefdatum).format("YYYY-MM-DD") : null);
-    }, [props.buchung.datum, props.buchung.pruefdatum]);
+        setBuchung(props.buchung);
+    }, [props.buchung]);
 
 
-    function Zugang({ buchung }) {
+    function Zugang() {
         if (buchung.typ) {
             if (buchung.typ.toLowerCase() === 'zugang') {
                 return (
@@ -123,7 +118,7 @@ function UpdateBuchungModal(props) {
         return null;
     }
 
-    function Abgang({ buchung }) {
+    function Abgang() {
         if (buchung.typ) {
             if (buchung.typ.toLowerCase() === 'abgang') {
                 return (
@@ -184,7 +179,7 @@ function UpdateBuchungModal(props) {
                             Datum
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="datum" type="date" value={date} onChange={e => setDate(moment(e.target.value).format("YYYY-MM-DD"))} />
+                            <Form.Control name="datum" type="date" value={moment(buchung.datum).format("YYYY-MM-DD")} onChange={e => {buchung.datum=moment(e.target.value).format("YYYY-MM-DD"); setBuchung(buchung)}} />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="btmMenge">
@@ -192,7 +187,7 @@ function UpdateBuchungModal(props) {
                             Menge
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="btmMenge" type="number" min="1" defaultValue={props.buchung.menge} />
+                            <Form.Control name="btmMenge" type="number" min="1" defaultValue={buchung.menge} />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="pruefdatum">
@@ -200,11 +195,11 @@ function UpdateBuchungModal(props) {
                             Prüfdatum
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="pruefdatum" isInvalid={!checkPruefdatum()} type="date" value={pruefDatum} onChange={e => setPruefDatum(moment(e.target.value).format("YYYY-MM-DD"))} />
+                            <Form.Control name="pruefdatum" isInvalid={!checkPruefdatum()} type="date" value={moment(buchung.pruefdatum).format("YYYY-MM-DD")} onChange={e => {buchung.pruefdatum = moment(e.target.value).format("YYYY-MM-DD"); setBuchung(buchung)}} />
                         </Col>
                     </Form.Group>
-                    <Zugang buchung={props.buchung} />
-                    <Abgang buchung={props.buchung} />
+                    <Zugang />
+                    <Abgang />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={props.onHide}>Abbrechen</Button>
