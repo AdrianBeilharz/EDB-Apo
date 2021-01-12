@@ -104,7 +104,7 @@ function UpdateBuchungModal(props) {
                                 Anforderungsschein
                     </Form.Label>
                             <Col sm="10">
-                                <Form.Control isValid={buchung.anforderungsschein} name="anforderungsschein" type="text" required defaultValue={buchung.anforderungsschein} />
+                                <Form.Control name="anforderungsschein" type="text" required defaultValue={buchung.anforderungsschein} />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="lieferant">
@@ -112,7 +112,7 @@ function UpdateBuchungModal(props) {
                                 Lieferant
                     </Form.Label>
                             <Col sm="10">
-                                <Form.Control isValid={buchung.lieferant.name} name="lieferant" defaultValue={buchung.lieferant.name} required as="select">
+                                <Form.Control name="lieferant" defaultValue={buchung.lieferant.name} required as="select">
                                     {lieferanten.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
                                 </Form.Control>
                             </Col>
@@ -133,7 +133,7 @@ function UpdateBuchungModal(props) {
                                 Empfaenger
                     </Form.Label>
                             <Col sm="10">
-                                <Form.Control isValid={buchung.empfaenger.name} name="empfaenger" defaultValue={buchung.empfaenger.name} required as="select">
+                                <Form.Control name="empfaenger" defaultValue={buchung.empfaenger.name} required as="select">
                                     {empfaenger.map(e => <option key={e.id} value={e.id}>{e.vorname} {e.name}</option>)}
                                 </Form.Control>
                             </Col>
@@ -143,7 +143,7 @@ function UpdateBuchungModal(props) {
                                 Arzt
                     </Form.Label>
                             <Col sm="10">
-                                <Form.Control isValid={buchung.arzt.name} name="arzt" defaultValue={buchung.arzt.name} required as="select">
+                                <Form.Control name="arzt" defaultValue={buchung.arzt.name} required as="select">
                                     {aerzte.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
                                 </Form.Control>
                             </Col>
@@ -153,7 +153,7 @@ function UpdateBuchungModal(props) {
                                 Rezept
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control isValid={buchung.rezept} defaultValue={buchung.rezept} name="rezept" type="text" required />
+                                <Form.Control defaultValue={buchung.rezept} name="rezept" type="text" required />
                             </Col>
                         </Form.Group>
                     </React.Fragment>)
@@ -184,7 +184,7 @@ function UpdateBuchungModal(props) {
                             Datum
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="datum" type="date" isValid={date} value={date} onChange={e => setDate(moment(e.target.value).format("YYYY-MM-DD"))} />
+                            <Form.Control name="datum" type="date" value={date} onChange={e => setDate(moment(e.target.value).format("YYYY-MM-DD"))} />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="btmMenge">
@@ -192,7 +192,7 @@ function UpdateBuchungModal(props) {
                             Menge
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="btmMenge" type="number" min="1" isValid={props.buchung.menge >= 0}  defaultValue={props.buchung.menge} />
+                            <Form.Control name="btmMenge" type="number" min="1" defaultValue={props.buchung.menge} />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="pruefdatum">
@@ -200,15 +200,15 @@ function UpdateBuchungModal(props) {
                             Prüfdatum
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control name="pruefdatum" isValid={checkPruefdatum()} type="date" value={pruefDatum} onChange={e => setPruefDatum(moment(e.target.value).format("YYYY-MM-DD"))} />
+                            <Form.Control name="pruefdatum" isInvalid={!checkPruefdatum()} type="date" value={pruefDatum} onChange={e => setPruefDatum(moment(e.target.value).format("YYYY-MM-DD"))} />
                         </Col>
                     </Form.Group>
                     <Zugang buchung={props.buchung} />
                     <Abgang buchung={props.buchung} />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger"  onClick={props.onHide}>Abbrechen</Button>
-                    <Button variant="primary" type="submit">Bestätigen</Button>
+                    <Button variant="danger" onClick={props.onHide}>Abbrechen</Button>
+                    <Button variant="primary" disabled={!checkPruefdatum()} type="submit">Bestätigen</Button>
                 </Modal.Footer>
             </Form>
         </Modal>
