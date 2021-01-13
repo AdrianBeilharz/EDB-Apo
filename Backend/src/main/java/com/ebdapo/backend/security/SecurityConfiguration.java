@@ -34,6 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/benutzer/*/checkUsername").permitAll()
                 .antMatchers(HttpMethod.GET, "/apotheke/**").hasAnyRole("BENUTZER", "ADMIN", "PRUEFER")
                 .antMatchers(HttpMethod.DELETE, "/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "​/apotheke​/*​/btmbuchung​/*").hasAnyRole("PRUEFER","ADMIN")

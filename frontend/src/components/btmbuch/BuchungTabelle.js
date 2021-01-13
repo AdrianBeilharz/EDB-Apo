@@ -7,7 +7,7 @@ import Moment from "react-moment";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 import TableBody from '@material-ui/core/TableBody';
-import NeueBuchungModal from "./NeueBuchungModal";
+import NeueBuchungModal from "../../modals/NeueBuchungModal";
 import UpdateBuchungModal from "../../modals/UpdateBuchungModal";
 import DeleteModal from "../../modals/DeleteModal";
 import PrintPdfModal from "../../modals/PrintPdfModal"
@@ -206,9 +206,6 @@ function BuchungTabelle(props) {
     }
   };
 
-  const testeStartDate = () => {
-    console.log("start Date" , startDate, " ", endDate)
-  }
 
   const exportPdf = () => {
     const unit = "pt";
@@ -223,7 +220,7 @@ function BuchungTabelle(props) {
 
     const moment = require('moment');
    
-    const filteredData = btm.buchungen.filter((d) => d.datum >= moment(startDate).format("YYYY-MM-DD") &&  d.datum <= moment(endDate).format("YYYY-MM-DD")); //<= moment(endDate).format("YYYY-MM-DD"));
+    const filteredData = btm.buchungen.filter((d) => d.datum >= moment(startDate).format("YYYY-MM-DD") &&  d.datum <= moment(endDate).format("YYYY-MM-DD"));
  
     const data = filteredData.map(buchung => [moment(buchung.datum).format("DD.MM.YYYY"),
     buchung.typ === "ZUGANG" ? buchung.lieferant.name + "\n" + buchung.lieferant.anschrift.strasse + " " + buchung.lieferant.anschrift.nummer + ",\n"+ buchung.lieferant.anschrift.ort +" " + buchung.lieferant.anschrift.plz : buchung.empfaenger.vorname + " " + buchung.empfaenger.name + "\n" + buchung.empfaenger.anschrift.strasse +" "+ buchung.empfaenger.anschrift.nummer + ",\n" + buchung.empfaenger.anschrift.ort + ",\n" + buchung.empfaenger.anschrift.plz ,

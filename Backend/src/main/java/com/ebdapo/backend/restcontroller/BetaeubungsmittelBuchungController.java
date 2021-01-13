@@ -238,6 +238,7 @@ public class BetaeubungsmittelBuchungController {
                 //Wenn eine Buchung aktualisiert wird, muss die vorherige Mengenberechnung
                 //rückgängig gemacht werden
                 btm.setMenge(btm.getMenge()-previousMenge+newBtmBuchung.getMenge());
+                z.setDatum(newBtmBuchung.getDatum());
                 z.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
                 z.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
                 z.setMenge(newBtmBuchung.getMenge());
@@ -256,6 +257,7 @@ public class BetaeubungsmittelBuchungController {
             int previousMenge = a.getMenge();
             if(!pruefer){
                 btm.setMenge(btm.getMenge()+previousMenge-newBtmBuchung.getMenge());
+                a.setDatum(newBtmBuchung.getDatum());
                 a.setBenutzer(benutzerRepository.findById(newBtmBuchung.getBenutzer()).orElseThrow(InvalidInputException::new));
                 a.setBtm(btmRepo.findById(newBtmBuchung.getBtm()).orElseThrow(InvalidInputException::new));
                 a.setMenge(newBtmBuchung.getMenge());

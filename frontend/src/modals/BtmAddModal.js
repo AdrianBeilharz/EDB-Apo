@@ -41,12 +41,26 @@ function BtmAddModal(props) {
           );
           setShowError(true);
         }
-      })
-      .catch((err) => {
-        //SHOW ERROR
-        console.log(err);
-      });
-  };
+    }).then((res) => {
+      if (res.status === 201) {
+        console.log(props);
+        let {updateBtmList} = props.apothekeRefFunctions;
+        updateBtmList();
+        props.onHide();
+        setShowError(false);
+        enqueueSnackbar('Betäubungsmittel erfolgreich angelegt', { variant: 'success', autoHideDuration: 3000 });
+      } else if (res.status === 400) {
+        setErrorMessage('Betäubungsmittel existiert bereits oder Daten ungültig');
+        setShowError(true);
+      }
+    }).catch((err) => {
+      //SHOW ERROR
+      console.log(err);
+    });
+
+    
+
+  }
 
   // let einheiten = ['g','mg','ml', 'Stueck']
   let darreichungsformen = {

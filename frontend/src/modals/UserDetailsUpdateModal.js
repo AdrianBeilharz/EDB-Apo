@@ -95,7 +95,7 @@ function UserDetailsUpdateModal(props) {
         }
 
         if (newUsername !== nutzername && newUsername) {
-            const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer/${newUsername}/checkUsername`, {
+            const response = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/${newUsername}/checkUsername`, {
                 method: 'POST',
             }).catch((err) => {
                 console.log(err);

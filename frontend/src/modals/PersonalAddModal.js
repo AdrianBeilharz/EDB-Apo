@@ -61,7 +61,7 @@ function PersonalAddModal(props) {
       return;
     }
 
-    await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer/${newUsername}/checkUsername`, {
+    await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/${newUsername}/checkUsername`, {
       method: 'POST',
     }).then((res) => {
       if (res.status === 200) {

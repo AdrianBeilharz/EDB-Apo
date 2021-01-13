@@ -4,12 +4,12 @@ import { useForm } from "./useForm";
 
 
 function ApothekeRegisterModal(props) {
-  const [disabled, setDisabled] = useState(true);
-  const [disabledRegBt, setDisabledRegBt] = useState(true);
+  const [step1WeiterButtonDisabled, setStep1WeiterButtonDisabled] = useState(true);
   const [fields, setFields] = useState({name: "", email: "", strasse: "",nummer: "", plz: "", ort: "" });
   const [passwords, setPasswords] = useState({password: "", passwordCheck: ""});
   const [showContinueModal, setShowContinueModal] = useState(false);
-  const [passwordsAreValid, setPasswordsAreValid] = useState('');
+  const [passwordsAreValid, setPasswordsAreValid] = useState(false);
+  const [usernameTaken, setUsernameTaken] = useState(true);
  
   const [values, handleChangeCustom] = useForm({
     vorname: "",
@@ -28,16 +28,17 @@ function ApothekeRegisterModal(props) {
 
   const checkPlzOrt = () => {
     if(fields.plz.match('[0-9]{5}') && fields.plz.length === 5 && fields.ort.length >= 2) {
-      setDisabled(false);
+      setStep1WeiterButtonDisabled(false);
     }
     else{
-      setDisabled(true);
+      setStep1WeiterButtonDisabled(true);
     }
   }
 
   const validation = () => {
     checkPlzOrt();
     checkPasswords();
+    checkUsernameTaken();
   }
 
   const handleBack = () => {
@@ -115,13 +116,12 @@ function ApothekeRegisterModal(props) {
   }
 
 
-  const  checkPasswords = () => {
-    if (passwords.password.toString() !== '' && passwords.password.toString() === passwords.passwordCheck.toString()) {
+  const checkPasswords = () => {
+    let pw = passwords.password;
+    let check = passwords.passwordCheck;
+    if (pw !== '' && pw.length >= 5 && pw === check) {
       setPasswordsAreValid(true);
-      setDisabledRegBt(false);
-    }
-   else {
-      setDisabledRegBt(true);
+    }else {
       setPasswordsAreValid(false);
     }
   }
@@ -148,8 +148,24 @@ function ApothekeRegisterModal(props) {
     }
   };
 
+  const checkUsernameTaken = async () => {
+    if(values.nutzername){
+      await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/${values.nutzername}/checkUsername`, {
+        method: 'POST',
+      }).then((res) => {
+        if (res.status === 200) {
+          setUsernameTaken(false);
+        } else if (res.status === 400) {
+          setUsernameTaken(true);
+        }
+      }).catch((err) => {
+        console.log(err);
+        setUsernameTaken(true);
+      });
+    }
+  }
+
   useEffect(() => {
-    document.title =  `${passwords.password} , ${passwords.passwordCheck} , ${disabledRegBt}, ${fields}, ${passwordsAreValid} `;
     validation();
   })
 
@@ -283,7 +299,7 @@ function ApothekeRegisterModal(props) {
             name="nutzername"
             value={values.nutzername}
             onChange={handleChangeCustom}
-            isValid={values.nutzername.match("[A-Za-z]{1,32}")}
+            isValid={values.nutzername.match("[A-Za-z]{1,32}") && !usernameTaken}
           />
         </Form.Group>
         <Form.Group controlId="password">
@@ -316,13 +332,13 @@ function ApothekeRegisterModal(props) {
 
   const renderWeiterBt = () => {
     return (
-      <Button disabled={disabled} onClick={() => setShowContinueModal(true)}>Weiter</Button>
+      <Button disabled={step1WeiterButtonDisabled} onClick={() => setShowContinueModal(true)}>Weiter</Button>
     )
   }
 
   const renderRegistrierenBt = () => {
     return(
-      <Button disabled={disabledRegBt ? true : false} type="submit" >Registrieren</Button>
+      <Button disabled={!(!usernameTaken && passwordsAreValid)} type="submit" >Registrieren</Button>
     )
   }
 
