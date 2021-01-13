@@ -1,16 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Col,
-  Button,
-  Form,
-  Row,
-} from "react-bootstrap";
+import React from "react";
+import { Modal, Col, Button, Form, Row } from "react-bootstrap";
 
 function PrintPdfModal(props) {
-  const saveDateForFilter = () => {
-    console.log(test);
-  };
 
   return (
     <Modal
@@ -26,7 +17,7 @@ function PrintPdfModal(props) {
           Zeitraum für Buchungen wählen
         </Modal.Title>
       </Modal.Header>
-      <Form onSubmit={saveDateForFilter}>
+      <Form>
         <Modal.Body>
           <Form.Group as={Row} controlId="datum">
             <Form.Label column sm="2">
@@ -37,6 +28,7 @@ function PrintPdfModal(props) {
                 name="startDate"
                 type="date"
                 defaultValue={new Date()}
+                onChange={(event) => props.start(event.target.value)}
               />
             </Col>
           </Form.Group>
@@ -49,6 +41,7 @@ function PrintPdfModal(props) {
                 name="endDate"
                 type="date"
                 defaultValue={new Date()}
+                onChange={(event) => props.ende(event.target.value)}
               />
             </Col>
           </Form.Group>
@@ -57,7 +50,7 @@ function PrintPdfModal(props) {
           <Button variant="danger" onClick={props.onHide}>
             Abbrechen
           </Button>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" onClick={() => { props.onHide(); props.onSubmit()}}>
             Speichern
           </Button>
         </Modal.Footer>

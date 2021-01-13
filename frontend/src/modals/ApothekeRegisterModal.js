@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback} from "react";
+import React, { useState, useEffect} from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 import { useForm } from "./useForm";
 
@@ -183,7 +183,7 @@ function ApothekeRegisterModal(props) {
               name="email"
               value={fields.email}
               onChange={(e) => handleChange(e)}
-              isValid={fields.email.match("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")}
+              isValid={fields.email.match("[a-z0-9._%+-]+@[a-z0-9.-]+[a-z]{2,4}$")}
             />
           </Form.Group>
 

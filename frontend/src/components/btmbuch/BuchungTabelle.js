@@ -14,6 +14,7 @@ import PrintPdfModal from "../../modals/PrintPdfModal"
 import TablePagination from '@material-ui/core/TablePagination';
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
+import { ContactSupportOutlined } from "@material-ui/icons";
 
 function BuchungTabelle(props) {
   let { btm } = props;
@@ -205,7 +206,11 @@ function BuchungTabelle(props) {
     }
   };
 
-  const exportPdf = (startDate, endDate) => {
+  const testeStartDate = () => {
+    console.log("start Date" , startDate, " ", endDate)
+  }
+
+  const exportPdf = () => {
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -217,8 +222,8 @@ function BuchungTabelle(props) {
     const headers = [["Datum", "Lieferant/Patient","Arztpraxis", "Zugang", "Abgang", "Rp.Nr./L.Nr.", "Prüfdatum", "Prüfer Kürzel"]];
 
     const moment = require('moment');
-
-    const filteredData = btm.buchungen.filter((d) => d.datum === "2020-10-24");
+   
+    const filteredData = btm.buchungen.filter((d) => d.datum >= moment(startDate).format("YYYY-MM-DD") &&  d.datum <= moment(endDate).format("YYYY-MM-DD")); //<= moment(endDate).format("YYYY-MM-DD"));
  
     const data = filteredData.map(buchung => [moment(buchung.datum).format("DD.MM.YYYY"),
     buchung.typ === "ZUGANG" ? buchung.lieferant.name + "\n" + buchung.lieferant.anschrift.strasse + " " + buchung.lieferant.anschrift.nummer + ",\n"+ buchung.lieferant.anschrift.ort +" " + buchung.lieferant.anschrift.plz : buchung.empfaenger.vorname + " " + buchung.empfaenger.name + "\n" + buchung.empfaenger.anschrift.strasse +" "+ buchung.empfaenger.anschrift.nummer + ",\n" + buchung.empfaenger.anschrift.ort + ",\n" + buchung.empfaenger.anschrift.plz ,
@@ -244,6 +249,7 @@ function BuchungTabelle(props) {
   useEffect(loadLieferanten, [apoId]);
   useEffect(loadAerzte, [apoId]);
   useEffect(loadEmpfaenger, [apoId]);
+
 
   return (
     <React.Fragment>
@@ -278,7 +284,9 @@ function BuchungTabelle(props) {
         {...props}
         show={showPrintPdfModal}
         onHide = {() => setShowPrintPdfModal(false)}
-
+        start={(value) => setStartDate(value)}
+        ende={(value) => setEndDate(value)}
+        onSubmit={exportPdf}
       />
 
       <div style={{ marginBottom: "2em" }}>
