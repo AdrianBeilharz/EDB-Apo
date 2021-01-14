@@ -1,17 +1,50 @@
-import React from 'react'
+import React, { useState,useEffect } from "react";
+import { Link, useParams  } from 'react-router-dom';
+import { Row, Col, Button } from "react-bootstrap";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
-function Impressum() {
-	return (
-		<div class="row">
-			<p> 
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam efficitur lectus nisi, sed condimentum neque sollicitudin sed. Praesent egestas quam at ante scelerisque, non posuere elit malesuada. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse accumsan velit sit amet tortor condimentum dignissim. Nunc mattis ex vitae nisl posuere, vel lacinia massa laoreet. Aenean efficitur elementum lectus ut auctor. Phasellus eu rutrum arcu.
+function Impressum(props) {
 
-Quisque commodo sem urna, non egestas mauris ullamcorper vitae. Fusce varius nisl at laoreet ullamcorper. Phasellus vestibulum nibh eget mauris rhoncus iaculis. Aenean semper ligula dictum, volutpat mi a, tincidunt sem. Phasellus risus diam, condimentum id tellus efficitur, iaculis eleifend nulla. Sed feugiat maximus libero non porttitor. Fusce eget arcu quis felis auctor convallis at in lorem.
-
-Duis at justo nibh. Nam suscipit urna quis venenatis pharetra. Cras sit amet purus vitae ante vulputate condimentum. Maecenas ut maximus lectus. Maecenas nisl odio, scelerisque eget nunc a, sodales aliquet urna. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vivamus bibendum ornare est, id sodales felis ultricies sit amet. Curabitur interdum tortor nec mattis hendrerit. Nulla sollicitudin rutrum felis. Integer quam elit, tempus in dignissim vitae, sodales vitae velit. Donec et egestas ipsum, a tincidunt justo. Vivamus lacinia, justo at iaculis blandit, libero justo placerat risus, eget maximus lacus diam quis nunc. Nam luctus cursus dui. Curabitur ut congue dui, non porttitor nibh.
-			</p>
+  return (
+    <React.Fragment>
+		     <div className="header">
+            <Row>
+                <Col>
+                    <h1><b>EDB</b>-Apo</h1>
+                </Col>
+                <Col>
+                    <div className="float-right" style={{marginRight:'25%'}}>
+                    </div>
+                </Col>
+            </Row>
+        </div>
+      <div style={{ position: "absolute", margin: "0 10%", top: "0" }}>
+        <Row style={{ marginTop: "10em" }}>
+          <Col>
+            <h3>
+              <b>Impressum</b>
+            </h3>
+            <ul>
+              <li>Autoren:</li>
+              <li>Adrian Ch. Beilharz</li>
+              <li>Lars Maronde</li>
+              <li>Miriam Lang</li>
+            </ul>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "2em" }}>
+          <p>
+            Diese Anwendung enstand als Projektarbeit im E-Health Kurs des MKI-Studiengangs der Hochschule Reutlingen.<br/>
+			Hochschule Reutlingen, Alteburgstraße 150, 72762 Reutlingen 
+          </p>
+        </Row>
+		
 		</div>
-	)
+
+
+
+    </React.Fragment>
+  );
 }
 
 export default Impressum;

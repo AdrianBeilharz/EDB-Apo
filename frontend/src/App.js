@@ -18,7 +18,7 @@ function App() {
           <Route path="/login" exact component={Startseite} />
           <Route path="/apotheke/:apoId" exact component={BTMBuch} />
           <Route path="/apotheke/:apoId/einstellungen" exact component={ApothekeEinstellungen} />
-          <Route path="/apotheke/impressum" exact component={Impressum} />
+          <Route path="/impressum" exact component={Impressum} />
         </Switch>
       </Router>
     </SnackbarProvider>
