@@ -14,6 +14,7 @@ import PrintPdfModal from "../../modals/PrintPdfModal";
 import TablePagination from "@material-ui/core/TablePagination";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import '../../App.scss';
 
 
 
@@ -341,6 +342,7 @@ function BuchungTabelle(props) {
         <Row
           onClick={() => setOpen(!open)}
           className="noselect btm-table-header-name"
+          style={{backgroundColor: open ? '#0e864e': '', color: open ? '#FFFFFF': ''}}
         >
           <Col sm={3}>
             <p>

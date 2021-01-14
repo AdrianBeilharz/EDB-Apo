@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import BuchungTabelle from "../btmbuch/BuchungTabelle";
+import './ApothekeBtmList.scss';
 
 function ApothekeBtmList(props) {
 
@@ -49,6 +50,7 @@ function ApothekeBtmList(props) {
           setInput(event.target.value);
         }}
         value={input}
+        className="searchField"
       />
       {btms
         .filter((val) => {

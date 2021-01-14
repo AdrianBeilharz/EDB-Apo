@@ -1,5 +1,8 @@
 
+
 $grey: rgb(211, 211, 211);
+$base-green-2: rgb(7, 170, 94);
+$base-green: rgb(14, 134, 78);
 
 .btm-buchung-wrapper {
     width: 90%;
@@ -25,6 +28,10 @@ $grey: rgb(211, 211, 211);
     cursor: pointer;
 }
 
+.btm-table-header-name:hover {
+    background-color: #c1c1c1;
+}
+
 .details-list {
     margin: 1em 0 1em 7em;
     ul {
@@ -46,4 +53,12 @@ $grey: rgb(211, 211, 211);
     font-size: 20px;
     line-height: 1.42857;
     font-weight: bold;
+}
+
+.btm-table-header-name {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    border-radius: 7px 7px 0px 0px;
+    align-items: center; 
+    vertical-align: text-bottom;  
 }
