@@ -5,6 +5,7 @@ import Startseite from './components/startseite/Startseite';
 import BTMBuch from './components/btmbuch/BTMBuch';
 import ApothekeEinstellungen from './components/apotheke/einstellungen/ApothekeEinstellungen';
 import Impressum from "./static/Impressum";
+import Kontakt from "./static/Kontakt";
 import { SnackbarProvider } from 'notistack';
 require('dotenv').config()
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/apotheke/:apoId" exact component={BTMBuch} />
           <Route path="/apotheke/:apoId/einstellungen" exact component={ApothekeEinstellungen} />
           <Route path="/impressum" exact component={Impressum} />
+          <Route path="/kontakt" exact component={Kontakt} />
         </Switch>
       </Router>
     </SnackbarProvider>
