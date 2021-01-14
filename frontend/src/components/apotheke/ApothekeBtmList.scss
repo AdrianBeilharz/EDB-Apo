@@ -1,0 +1,16 @@
+
+$base-green: rgb(14, 134, 78);
+
+.searchField {
+    border-color: 'green';
+    border-radius: 7px;
+    height: 40px; 
+    padding: 1rem;
+    border: 1px solid $base-green;
+    border-radius: 7px;
+}
+
+.searchField:hover {
+    outline: none;
+    box-shadow: 0 0 3px $base-green;
+}
