@@ -73,8 +73,9 @@ function PrintPdfModal(props) {
             </Col>
           </Form.Group>
           <Form.Group as={Row} controlId="aktiv" style={{ display: "inline" }}>
-            <Form.Label column sm="8">
-              Gesamte Liste {props.checked.value}
+            <Row>
+            <Form.Label column sm="9">
+              Gesamte Buchungsliste  {props.checked.value}
             </Form.Label>
             <Col sm="2">
               <Checkbox
@@ -87,6 +88,7 @@ function PrintPdfModal(props) {
                 }}
               />
             </Col>
+            </Row>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
