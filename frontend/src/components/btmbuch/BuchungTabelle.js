@@ -429,7 +429,7 @@ function BuchungTabelle(props) {
                     </td>
                     <td>
                       {buchung.pruefer
-                        ? buchung.pruefer.vorname + " " + buchung.pruefer.name
+                        ? buchung.pruefer.vorname.charAt(0) + " " + buchung.pruefer.name.charAt(0)
                         : ""}
                     </td>
 
