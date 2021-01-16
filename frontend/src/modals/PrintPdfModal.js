@@ -7,7 +7,6 @@ function PrintPdfModal(props) {
   const [startDate, setStartDate] = useState(false);
   const [endDate, setEndDate] = useState(false);
 
-
   const handleFilter = () => {
     if ((startDate && endDate) || props.checked) {
       setDisabled(false);
@@ -74,20 +73,20 @@ function PrintPdfModal(props) {
           </Form.Group>
           <Form.Group as={Row} controlId="aktiv" style={{ display: "inline" }}>
             <Row>
-            <Form.Label column sm="9">
-              Gesamte Buchungsliste  {props.checked.value}
-            </Form.Label>
-            <Col sm="2">
-              <Checkbox
-                type="checkbox"
-                checked={props.checked}
-                name="aktiv"
-                onChange={(event) => {
-                props.unFilter(event.target.checked);
-                toggle();
-                }}
-              />
-            </Col>
+              <Form.Label column sm="9">
+                Gesamte Buchungsliste {props.checked.value}
+              </Form.Label>
+              <Col sm="2">
+                <Checkbox
+                  type="checkbox"
+                  checked={props.checked}
+                  name="aktiv"
+                  onChange={(event) => {
+                    props.unFilter(event.target.checked);
+                    toggle();
+                  }}
+                />
+              </Col>
             </Row>
           </Form.Group>
         </Modal.Body>

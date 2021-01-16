@@ -291,13 +291,13 @@ function BuchungTabelle(props) {
     doc.text(title, marginLeft, 40);
     doc.autoTable(content);
     doc.save("BtmListe.pdf");
-  
+    enqueueSnackbar('PDF gespeichert', { variant: 'success', autoHideDuration: 3000 });
   };
 
   useEffect(loadLieferanten, [apoId]);
   useEffect(loadAerzte, [apoId]);
   useEffect(loadEmpfaenger, [apoId]);
- // useEffect(setUnfilteredListe(listeUnfiltered), [listeUnfiltered])
+ 
   return (
     <React.Fragment>
       <NeueBuchungModal
@@ -349,7 +349,7 @@ function BuchungTabelle(props) {
               {btm.btm.name} ({btm.btm.menge})
             </p>
           </Col>
-          <Col sm={3}>
+          <Col setEmpfaenger={{span: 2, offset: 7}}>
             <div style={{ display: "inline" }}>
               <Button
                 style={{ marginRight: "1em" }}

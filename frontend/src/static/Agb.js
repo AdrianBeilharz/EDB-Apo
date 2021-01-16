@@ -27,9 +27,6 @@ function Agb(props) {
             <h3>
               <b>AGB</b>
             </h3>
-            <ul>
-              <li>AGBs folgen ...</li>
-            </ul>
           </Col>
         </Row>
         <Row style={{ marginTop: "2em" }}>
