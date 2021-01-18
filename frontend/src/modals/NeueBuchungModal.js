@@ -245,7 +245,6 @@ function NeueBuchungModal(props) {
                 value={date}
                 default={date}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setDate(moment(e.target.value).format("YYYY-MM-DD"));
                   handleDiasabledSubBt();
                 }}
