@@ -244,7 +244,7 @@ function BuchungTabelle(props) {
         "Abgang",
         "Rp.Nr./L.Nr.",
         "Prüfdatum",
-        "Prüfer Kürzel",
+        "Prüferkürzel",
       ],
     ];
 

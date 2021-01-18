@@ -134,7 +134,7 @@ function PersonalUpdateModal(props) {
             </Form.Group>
             <Form.Group as={Col} controlId="neuesPasswortConfirm">
               <Form.Label>Neues Passwort bestätigen</Form.Label>
-              <Form.Control minlength={5} onChange={event => setPasswordConfirmVal(event.target.value)} isInvalid={passwordConfirmInvalid} name="neuesPasswortConfirm" type="password" />
+              <Form.Control minlength={5} onChange={event => setPasswordConfirmVal(event.target.value)} c={passwordConfirmInvalid} name="neuesPasswortConfirm" type="password" />
             </Form.Group>
           </Form.Row>
           <Form.Group style={{ marginLeft: '1em' }} controlId="aktiv">

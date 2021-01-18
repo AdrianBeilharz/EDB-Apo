@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Row, Col, Button } from "react-bootstrap";
-import './Static.scss';
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Row, Col } from "react-bootstrap";
+import "./Static.scss";
 
 function Impressum(props) {
   return (

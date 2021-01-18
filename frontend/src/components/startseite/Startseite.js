@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Login from './Login'
 import Header from '../headers/Header'
 import { Row, Col, Button} from 'react-bootstrap';
 import ApothekeRegisterModal from '../../modals/ApothekeRegisterModal';

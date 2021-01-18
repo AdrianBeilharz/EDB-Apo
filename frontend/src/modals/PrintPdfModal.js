@@ -4,24 +4,32 @@ import { Checkbox } from "@material-ui/core";
 
 function PrintPdfModal(props) {
   const [disabled, setDisabled] = useState(true);
-  const [startDate, setStartDate] = useState(false);
-  const [endDate, setEndDate] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const isStartEndInValid = () => {
+    console.log("eingabe", startDate);
+    if ((startDate !== "" && endDate !== "")) {
+      setDisabled(true);
+      return true;
+    } else {
+      setDisabled(false);
+      return false;
+    }
+  };
 
   const handleFilter = () => {
-    if ((startDate && endDate) || props.checked) {
+    if (props.checked || isStartEndInValid()) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
   };
 
-  const toggle = () => {
-    setDisabled(false);
-  };
-
-  useEffect(() => {
-    handleFilter();
-  }, [props.checked, startDate, endDate, disabled]);
+  useEffect(() => {handleFilter()});
+  useEffect(() => {setDisabled(disabled)}, [disabled]);
+  useEffect(() => {setEndDate(endDate)}, [endDate]);
+  useEffect(() => {setStartDate(startDate)}, [startDate]);
 
   return (
     <Modal
@@ -50,7 +58,7 @@ function PrintPdfModal(props) {
                 defaultValue={new Date()}
                 onChange={(event) => {
                   props.start(event.target.value);
-                  setStartDate(true);
+                  setStartDate(event.target.value);
                 }}
               />
             </Col>
@@ -66,7 +74,7 @@ function PrintPdfModal(props) {
                 defaultValue={new Date()}
                 onChange={(event) => {
                   props.ende(event.target.value);
-                  setEndDate(true);
+                  setEndDate(event.target.value);
                 }}
               />
             </Col>
@@ -83,7 +91,6 @@ function PrintPdfModal(props) {
                   name="aktiv"
                   onChange={(event) => {
                     props.unFilter(event.target.checked);
-                    toggle();
                   }}
                 />
               </Col>
