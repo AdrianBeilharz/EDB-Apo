@@ -1,35 +1,56 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Col, Button, Form, Row } from "react-bootstrap";
+import {
+  Modal,
+  Col,
+  Button,
+  Form,
+  Row,
+  Tooltip,
+  OverlayTrigger,
+} from "react-bootstrap";
 import { Checkbox } from "@material-ui/core";
 
 function PrintPdfModal(props) {
+  const moment = require("moment");
   const [disabled, setDisabled] = useState(true);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  const isStartEndInValid = () => {
-    console.log("eingabe", startDate);
-    if ((startDate !== "" && endDate !== "")) {
-      setDisabled(true);
-      return true;
-    } else {
-      setDisabled(false);
-      return false;
-    }
+  const isStartEndValid = () => {
+    if (startDate === "" || endDate === "") return false;
+    return (startDate <= moment(new Date()).format("YYYY-MM-DD") && endDate <= moment(new Date()).format("YYYY-MM-DD"));
   };
+
+  const isStartValid = () => {
+    if (startDate === "") return false;
+    return startDate <= moment(new Date()).format("YYYY-MM-DD");
+  }
+
+  const isEndValid = () => {
+    if (endDate === ""  || startDate > endDate) return false;
+    return endDate <= moment(new Date()).format("YYYY-MM-DD");
+  }
 
   const handleFilter = () => {
-    if (props.checked || isStartEndInValid()) {
+    if (props.checked || isStartEndValid()) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
   };
 
-  useEffect(() => {handleFilter()});
-  useEffect(() => {setDisabled(disabled)}, [disabled]);
-  useEffect(() => {setEndDate(endDate)}, [endDate]);
-  useEffect(() => {setStartDate(startDate)}, [startDate]);
+  useEffect(() => {
+    handleFilter();
+  });
+  useEffect(() => {
+    setDisabled(disabled);
+  }, [disabled]);
+  useEffect(() => {
+    setEndDate(endDate);
+  }, [endDate]);
+  useEffect(() => {
+    setStartDate(startDate);
+  }, [startDate]);
 
   return (
     <Modal
@@ -60,6 +81,7 @@ function PrintPdfModal(props) {
                   props.start(event.target.value);
                   setStartDate(event.target.value);
                 }}
+                  isInvalid={props.checked ? "" : !isStartValid()}
               />
             </Col>
           </Form.Group>
@@ -68,15 +90,18 @@ function PrintPdfModal(props) {
               Bis:
             </Form.Label>
             <Col sm="10">
-              <Form.Control
-                name="endDate"
-                type="date"
-                defaultValue={new Date()}
-                onChange={(event) => {
-                  props.ende(event.target.value);
-                  setEndDate(event.target.value);
-                }}
-              />
+             
+                <Form.Control
+                  name="endDate"
+                  type="date"
+                  defaultValue={new Date()}
+                  onChange={(event) => {
+                    props.ende(event.target.value);
+                    setEndDate(event.target.value);
+                  }}
+                  isInvalid={props.checked ? "": !isEndValid()}
+                />
+             
             </Col>
           </Form.Group>
           <Form.Group as={Row} controlId="aktiv" style={{ display: "inline" }}>
@@ -92,6 +117,7 @@ function PrintPdfModal(props) {
                   onChange={(event) => {
                     props.unFilter(event.target.checked);
                   }}
+                  isInvalid={isStartEndValid()}
                 />
               </Col>
             </Row>
