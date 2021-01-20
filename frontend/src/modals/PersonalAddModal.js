@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Col, Button, Form } from 'react-bootstrap';
+import { Modal, Col, Button, Form, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
@@ -99,8 +99,15 @@ function PersonalAddModal(props) {
           <Form.Row>
             <Form.Group as={Col} controlId="username">
               <Form.Label>Benutzername</Form.Label>
+              <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                show={nutzernameVergeben}
+                overlay={props => <Tooltip id="button-tooltip" {...props}>Nutzername bereits vergeben oder zu kurz</Tooltip>}
+              >
               <Form.Control name="username" required onChange={checkIfUserNameIsTaken}
                 isInvalid={nutzernameVergeben} type="text" />
+              </OverlayTrigger>
             </Form.Group>
           </Form.Row>
 
