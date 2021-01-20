@@ -18,18 +18,21 @@ function PrintPdfModal(props) {
 
   const isStartEndValid = () => {
     if (startDate === "" || endDate === "") return false;
-    return (startDate <= moment(new Date()).format("YYYY-MM-DD") && endDate <= moment(new Date()).format("YYYY-MM-DD"));
+    return (
+      startDate <= moment(new Date()).format("YYYY-MM-DD") &&
+      endDate <= moment(new Date()).format("YYYY-MM-DD")
+    );
   };
 
   const isStartValid = () => {
     if (startDate === "") return false;
     return startDate <= moment(new Date()).format("YYYY-MM-DD");
-  }
+  };
 
   const isEndValid = () => {
-    if (endDate === ""  || startDate > endDate) return false;
+    if (endDate === "" || startDate > endDate) return false;
     return endDate <= moment(new Date()).format("YYYY-MM-DD");
-  }
+  };
 
   const handleFilter = () => {
     if (props.checked || isStartEndValid()) {
@@ -41,7 +44,7 @@ function PrintPdfModal(props) {
 
   useEffect(() => {
     handleFilter();
-  });
+  }, [props.checked]);
   useEffect(() => {
     setDisabled(disabled);
   }, [disabled]);
@@ -73,16 +76,26 @@ function PrintPdfModal(props) {
               Von:
             </Form.Label>
             <Col sm="10">
-              <Form.Control
-                name="startDate"
-                type="date"
-                defaultValue={new Date()}
-                onChange={(event) => {
-                  props.start(event.target.value);
-                  setStartDate(event.target.value);
-                }}
+              <OverlayTrigger
+                placement="right"
+                show={startDate > moment(new Date()).format("YYYY-MM-DD")}
+                overlay={
+                  <Tooltip id="button-tooltip-1">
+                    Das Datum darf nicht in der Zukunft liegen
+                  </Tooltip>
+                }
+              >
+                <Form.Control
+                  name="startDate"
+                  type="date"
+                  defaultValue={new Date()}
+                  onChange={(event) => {
+                    props.start(event.target.value);
+                    setStartDate(event.target.value);
+                  }}
                   isInvalid={props.checked ? "" : !isStartValid()}
-              />
+                />
+              </OverlayTrigger>
             </Col>
           </Form.Group>
           <Form.Group as={Row} controlId="datum">
@@ -90,7 +103,15 @@ function PrintPdfModal(props) {
               Bis:
             </Form.Label>
             <Col sm="10">
-             
+              <OverlayTrigger
+                placement="right"
+                show={endDate > moment(new Date()).format("YYYY-MM-DD")}
+                overlay={
+                  <Tooltip id="button-tooltip-1">
+                    Das Datum darf nicht in der Zukunft liegen
+                  </Tooltip>
+                }
+              >
                 <Form.Control
                   name="endDate"
                   type="date"
@@ -99,9 +120,9 @@ function PrintPdfModal(props) {
                     props.ende(event.target.value);
                     setEndDate(event.target.value);
                   }}
-                  isInvalid={props.checked ? "": !isEndValid()}
+                  isInvalid={props.checked ? "" : !isEndValid()}
                 />
-             
+              </OverlayTrigger>
             </Col>
           </Form.Group>
           <Form.Group as={Row} controlId="aktiv" style={{ display: "inline" }}>
@@ -117,7 +138,6 @@ function PrintPdfModal(props) {
                   onChange={(event) => {
                     props.unFilter(event.target.checked);
                   }}
-                  isInvalid={isStartEndValid()}
                 />
               </Col>
             </Row>
