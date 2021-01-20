@@ -21,7 +21,7 @@ function ApothekeEinstellungen(props) {
   const [apotheke, setApotheke] = useState({ anschrift: {} })
   const [activeMenuItem, setActiveMenuItem] = useState('personal');
   const [loggedIn, setLoggedIn] = useState(false);
-  const [aktiveRolle, setAktiveRolle] = useState('');
+  const [aktiveRolle, setAktiveRolle] = useState(window.sessionStorage.getItem("aktive-rolle"));
   const [user, setUser] = useState({});
   const [showApothekeEditModal, setShowApothekeEditModal] = useState(false);
 
@@ -64,7 +64,6 @@ function ApothekeEinstellungen(props) {
         }
       }).then((data) => {
         setUser(data);
-        setAktiveRolle(data.rolle)
         setLoggedIn(true)
       }).catch((err) => {
         //SHOW ERROR
@@ -87,6 +86,11 @@ function ApothekeEinstellungen(props) {
     }
   }
 
+  const updateAktiveRolle = data => {
+    setAktiveRolle(data);
+    window.sessionStorage.setItem("aktive-rolle", data);
+  }
+
   useEffect(getUserData, [apoId, props.history])
   useEffect(getCurrentApotheke, [apoId, props.history])
 
@@ -99,7 +103,7 @@ function ApothekeEinstellungen(props) {
         <Col md={{ span: 1, offset: 1 }}><Button onClick={props.history.goBack}><ArrowBackIosIcon /> Zurück</Button></Col>
 
         <Col md={{ span: 6, offset: 4 }}>
-          {loggedIn ? <UserDetails {...props} user={user} setUser={setUser} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle} /> : null}
+          {loggedIn ? <UserDetails {...props} user={user} setUser={setUser} aktiveRolle={aktiveRolle} setAktiveRolle={updateAktiveRolle} /> : null}
         </Col>
       </Row>
       <div className="main-content">

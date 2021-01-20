@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Header from '../headers/Header'
 import { Row, Col, Button} from 'react-bootstrap';
 import ApothekeRegisterModal from '../../modals/ApothekeRegisterModal';
@@ -7,6 +7,10 @@ function Startseite(props) {
 
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [neuesApoRegisterModal, setNeuesApoRegisterModal] = useState(false);
+
+    useEffect(() => {
+        window.sessionStorage.removeItem("aktive-rolle")
+    }, []);
 
     return(
         <React.Fragment>

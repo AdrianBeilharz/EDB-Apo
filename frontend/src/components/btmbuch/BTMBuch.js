@@ -13,7 +13,7 @@ function BTMBuch(props) {
 
   const [user, setUser] = useState({});
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [aktiveRolle, setAktiveRolle] = useState('');
+  const [aktiveRolle, setAktiveRolle] = useState(window.sessionStorage.getItem("aktive-rolle"));
 
   const getUserDetails = event => {
     fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
@@ -31,28 +31,38 @@ function BTMBuch(props) {
       }
     }).then(data => {
       setUser(data);
-      setAktiveRolle(data.rolle);
+      console.log(aktiveRolle)
+      if(!aktiveRolle) {
+        setAktiveRolle(data.rolle);
+        window.sessionStorage.setItem("aktive-rolle", data.rolle);
+      }
       setLoggedIn(true);
     }).catch((err) => {
       //SHOW ERROR
       return;
     });
-
-
   }
 
-  useEffect(getUserDetails, [apoId, props.history])
+  const updateAktiveRolle = data => {
+    setAktiveRolle(data);
+    window.sessionStorage.setItem("aktive-rolle", data);
+  }
+
+  useEffect(() => {
+    getUserDetails();
+    setAktiveRolle(window.sessionStorage.getItem("aktive-rolle"));
+  }, [apoId, props.history])
 
   //this obj is passed to each child, each child can add functions to this object and call functions from this object
   let apothekeRefFunctions = {}
 
   return (
     <React.Fragment>
-      {aktiveRolle.toLowerCase() !== 'benutzer' ? <StatusHeader aktiveRolle={aktiveRolle} /> : null}
+      {aktiveRolle && aktiveRolle.toLowerCase() !== 'benutzer' ? <StatusHeader aktiveRolle={aktiveRolle} /> : null}
       <Header />
       <Row className="details-list">
         <Col><ApothekenDetails {...props} apothekeRefFunctions={apothekeRefFunctions} apothekeId={apoId} /></Col>
-        <Col>{isLoggedIn ? <UserDetails {...props} user={user} setUser={setUser} aktiveRolle={aktiveRolle} setAktiveRolle={setAktiveRolle} /> : null}</Col>
+        <Col>{isLoggedIn ? <UserDetails {...props} user={user} setUser={setUser} aktiveRolle={aktiveRolle} setAktiveRolle={updateAktiveRolle} /> : null}</Col>
       </Row>
       <ApothekeBtmList apothekeId={apoId} user={user} apothekeRefFunctions={apothekeRefFunctions} {...props} aktiveRolle={aktiveRolle} />
     </React.Fragment>
