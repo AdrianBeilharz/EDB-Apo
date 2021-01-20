@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, OverlayTrigger, Tooltip} from "react-bootstrap";
 import { useSnackbar } from "notistack";
 
 function NeueBuchungModal(props) {
@@ -238,6 +238,11 @@ function NeueBuchungModal(props) {
               Datum
             </Form.Label>
             <Col sm="10">
+            <OverlayTrigger
+								placement="right"
+								show={disabled}
+								overlay={<Tooltip id="button-tooltip-1">Das Datum darf nicht in der Zukunft liegen</Tooltip>}
+							>
               <Form.Control
                 name="datum"
                 type="date"
@@ -250,6 +255,7 @@ function NeueBuchungModal(props) {
                 }}
                 isInvalid={disabled}
               />
+              </OverlayTrigger>
             </Col>
           </Form.Group>
 
