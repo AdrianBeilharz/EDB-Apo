@@ -245,7 +245,13 @@ public class BetaeubungsmittelBuchungController {
                 z.setAnfordergungsschein(newBtmBuchung.getAnforderungsschein());
                 z.setLieferant(lieferantRepo.findById(newBtmBuchung.getLieferant()).orElseThrow(InvalidInputException::new));
             }
-            z.setPruefdatum(newBtmBuchung.getPruefdatum());
+            if(newBtmBuchung.getPruefer() != null && !newBtmBuchung.getPruefer().isEmpty()) {
+                z.setPruefer(benutzerRepository.findById(newBtmBuchung.getPruefer()).orElseThrow(InvalidInputException::new));
+                z.setPruefdatum(newBtmBuchung.getPruefdatum());
+            } else {
+                z.setPruefer(null);
+                z.setPruefdatum(null);
+            }
             btmRepo.save(btm);
             zugangRepository.save(z);
             return new ResponseEntity<>(z, HttpStatus.OK);
@@ -265,7 +271,13 @@ public class BetaeubungsmittelBuchungController {
                 a.setRezept(newBtmBuchung.getRezept());
                 a.setArzt(arztRepository.findById(newBtmBuchung.getArzt()).orElseThrow(InvalidInputException::new));
             }
-            a.setPruefdatum(newBtmBuchung.getPruefdatum());
+            if(newBtmBuchung.getPruefer() != null && !newBtmBuchung.getPruefer().isEmpty()) {
+                a.setPruefer(benutzerRepository.findById(newBtmBuchung.getPruefer()).orElseThrow(InvalidInputException::new));
+                a.setPruefdatum(newBtmBuchung.getPruefdatum());
+            }else {
+                a.setPruefer(null);
+                a.setPruefdatum(null);
+            }
             btmRepo.save(btm);
             abgangRepository.save(a);
             return new ResponseEntity<>(a, HttpStatus.OK);

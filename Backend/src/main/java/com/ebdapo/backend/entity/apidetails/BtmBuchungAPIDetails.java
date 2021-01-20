@@ -20,6 +20,7 @@ public class BtmBuchungAPIDetails {
     private String arzt;        //id
     private String empfaenger;  //id
     private String rezept;    //id
+    private String pruefer; //id
 
 
 
