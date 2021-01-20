@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 
@@ -12,6 +12,8 @@ function UpdateBuchungModal(props) {
 	let { lieferanten, aerzte, empfaenger } = props;
 	const { enqueueSnackbar } = useSnackbar();
 	const moment = require("moment");
+
+	const [tooltips, setTooltips] = useState({});
 
 	const getPersonalData = () => {
 		fetch(
@@ -42,31 +44,31 @@ function UpdateBuchungModal(props) {
 
 	const sendUpdateRequest = async (buchungData) => {
 		const response = await fetch(
-		  `http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung/${buchung.id}`,
-		  {
-		    method: "PUT",
-		    headers: {
-		      "Content-Type": "application/json",
-		      Authorization:
-		        "Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
-		    },
-		    body: JSON.stringify(buchungData),
-		  }
+			`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btmbuchung/${buchung.id}`,
+			{
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization:
+						"Bearer " + window.sessionStorage.getItem("edbapo-jwt"),
+				},
+				body: JSON.stringify(buchungData),
+			}
 		).catch((err) => {
-		  //SHOW ERROR
-		  console.log(err);
+			//SHOW ERROR
+			console.log(err);
 		});
 
 		if (response && response.status === 200) {
-		  props.onHide();
-		  enqueueSnackbar("Buchung erfolgreich aktualisiert", {
-		    variant: "success",
-		    autoHideDuration: 3000,
-		  });
-		  props.apothekeRefFunctions.updateBtmList();
+			props.onHide();
+			enqueueSnackbar("Buchung erfolgreich aktualisiert", {
+				variant: "success",
+				autoHideDuration: 3000,
+			});
+			props.apothekeRefFunctions.updateBtmList();
 		} else {
-		  //SHOW ERROR
-		  console.log(response);
+			//SHOW ERROR
+			console.log(response);
 		}
 	};
 
@@ -105,17 +107,29 @@ function UpdateBuchungModal(props) {
 	};
 
 	const checkPruefdatum = () => {
-		if(buchung.pruefdatum){
+		if (buchung.pruefdatum) {
 			return buchung.pruefdatum >= buchung.datum;
 		}
 		return true;
 	};
 
 	const checkPruefer = () => {
-		if(!buchung.pruefer && !buchung.pruefdatum) {
-			return true;
+		return (buchung.pruefer && buchung.pruefdatum) || (!buchung.pruefer && !buchung.pruefdatum)
+	}
+
+	const updateTooltipTexts = data => {
+		if (data) {
+			console.log(data)
+			if (data.pruefdatum < data.datum) {
+				setTooltips({ ...tooltips, pruefdatum: 'Prüfdatum darf nicht vor dem Einstelldatum liegen' });
+			}
+
+			if (data.pruefdatum && !data.pruefer) {
+				setTooltips({ ...tooltips, pruefer: 'Prüfer darf nicht leer sein wenn ein Prüfdatum ausgewählt ist' });
+			} else if (!data.pruefdatum && data.pruefer) {
+				setTooltips({ ...tooltips, pruefer: 'Prüfdatum muss ausgewählt werden wenn ein Prüfer ausgewählt ist' });
+			}
 		}
-		return buchung.pruefer && buchung.pruefdatum;
 	}
 
 	const hideModal = () => {
@@ -126,6 +140,7 @@ function UpdateBuchungModal(props) {
 	useEffect(() => {
 		setBuchung(props.buchung);
 		getPersonalData();
+		updateTooltipTexts(props.buchung);
 	}, [props.buchung]);
 
 	function Zugang() {
@@ -136,7 +151,7 @@ function UpdateBuchungModal(props) {
 						<Form.Group as={Row} controlId="anforderungsschein">
 							<Form.Label column sm="3">
 								Anforderungsschein
-              </Form.Label>
+              				</Form.Label>
 							<Col sm="9">
 								<Form.Control
 									name="anforderungsschein"
@@ -149,7 +164,7 @@ function UpdateBuchungModal(props) {
 						<Form.Group as={Row} controlId="lieferant">
 							<Form.Label column sm="3">
 								Lieferant
-              </Form.Label>
+              				</Form.Label>
 							<Col sm="9">
 								<Form.Control
 									name="lieferant"
@@ -180,7 +195,7 @@ function UpdateBuchungModal(props) {
 						<Form.Group as={Row} controlId="empfaenger">
 							<Form.Label column sm="3">
 								Empfaenger
-              </Form.Label>
+              				</Form.Label>
 							<Col sm="9">
 								<Form.Control
 									name="empfaenger"
@@ -199,7 +214,7 @@ function UpdateBuchungModal(props) {
 						<Form.Group as={Row} controlId="arzt">
 							<Form.Label column sm="3">
 								Arzt
-              </Form.Label>
+              				</Form.Label>
 							<Col sm="9">
 								<Form.Control
 									name="arzt"
@@ -218,7 +233,7 @@ function UpdateBuchungModal(props) {
 						<Form.Group as={Row} controlId="rezept">
 							<Form.Label column sm="3">
 								Rezept
-              </Form.Label>
+              				</Form.Label>
 							<Col sm="9">
 								<Form.Control
 									defaultValue={buchung.rezept}
@@ -254,7 +269,7 @@ function UpdateBuchungModal(props) {
 					<Form.Group as={Row} controlId="datum">
 						<Form.Label column sm="3">
 							Datum
-            </Form.Label>
+            		</Form.Label>
 						<Col sm="9">
 							<Form.Control
 								name="datum"
@@ -267,7 +282,7 @@ function UpdateBuchungModal(props) {
 					<Form.Group as={Row} controlId="btmMenge">
 						<Form.Label column sm="3">
 							Menge
-            </Form.Label>
+            		</Form.Label>
 						<Col sm="9">
 							<Form.Control
 								name="btmMenge"
@@ -281,42 +296,59 @@ function UpdateBuchungModal(props) {
 					<Form.Group as={Row} controlId="pruefdatum">
 						<Form.Label column sm="3">
 							Prüfdatum
-            </Form.Label>
+            		</Form.Label>
 						<Col sm="9">
-							<Form.Control
-								name="pruefdatum"
-								isInvalid={!checkPruefdatum()}
-								type="date"
-								value={moment(buchung.pruefdatum).format("YYYY-MM-DD")}
-								onChange={(e) => {
-									setBuchung({ ...buchung, pruefdatum: e.target.value });
-									checkPruefer();
-								}}
-							/>
+							<OverlayTrigger
+								placement="right"
+								show={!checkPruefdatum()}
+								overlay={<Tooltip id="button-tooltip-1">{tooltips.pruefdatum}</Tooltip>}
+							>
+								<Form.Control
+									name="pruefdatum"
+									isInvalid={!checkPruefdatum()}
+									type="date"
+									value={moment(buchung.pruefdatum).format("YYYY-MM-DD")}
+									onChange={(e) => {
+										setBuchung({ ...buchung, pruefdatum: e.target.value });
+										checkPruefer();
+										checkPruefdatum();
+										updateTooltipTexts({ ...buchung, pruefdatum: e.target.value });
+									}}
+								/>
+
+							</OverlayTrigger>
 						</Col>
 					</Form.Group>
 					<Form.Group as={Row} controlId="pruefer">
 						<Form.Label column sm="3">
 							Pruefer
-            </Form.Label>
+            		</Form.Label>
 						<Col sm="9">
-							<Form.Control
-								name="pruefer"
-								isInvalid={!checkPruefer()}
-								value={buchung.pruefer == null ? '' : buchung.pruefer.id}
-								as="select"
-								onChange={e => {
-									setBuchung({...buchung, pruefer: e.target.value});
-									checkPruefer();
-								}}
+							<OverlayTrigger
+								placement="right"
+								show={!checkPruefer()}
+								overlay={<Tooltip id="button-tooltip-2">{tooltips.pruefer}</Tooltip>}
 							>
-								<option value=''></option>
-								{personal
-									.filter((p) => p.rolle === "ADMIN" || p.rolle === "PRUEFER")
-									.map((p) => (
-										<option key={p.id} value={p.id}> {p.vorname} {p.name} </option>
-									))}
-							</Form.Control>
+								<Form.Control
+									name="pruefer"
+									isInvalid={!checkPruefer()}
+									value={buchung.pruefer == null ? '' : buchung.pruefer.id}
+									as="select"
+									onChange={e => {
+										setBuchung({ ...buchung, pruefer: e.target.value });
+										checkPruefer();
+										checkPruefdatum();
+										updateTooltipTexts({ ...buchung, pruefer: e.target.value });
+									}}
+								>
+									<option value=''></option>
+									{personal
+										.filter((p) => p.rolle === "ADMIN" || p.rolle === "PRUEFER")
+										.map((p) => (
+											<option key={p.id} value={p.id}> {p.vorname} {p.name} </option>
+										))}
+								</Form.Control>
+							</OverlayTrigger>
 						</Col>
 					</Form.Group>
 					<Zugang />
@@ -325,10 +357,10 @@ function UpdateBuchungModal(props) {
 				<Modal.Footer>
 					<Button variant="danger" onClick={(props.onHide)}>
 						Abbrechen
-          </Button>
+          			</Button>
 					<Button variant="primary" disabled={!checkPruefdatum() || !checkPruefer()} type="submit">
 						Bestätigen
-          </Button>
+          			</Button>
 				</Modal.Footer>
 			</Form>
 		</Modal>
