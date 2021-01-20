@@ -42,7 +42,7 @@ function PersonalAddModal(props) {
     }).then((res) => {
       if (res.status === 201) {
         props.onHide();
-        props.updateUserList();
+        props.updatePersonalData();
         enqueueSnackbar('Benutzer erstellt', { variant: 'success', autoHideDuration: 3000 });
       } else if (res.status === 400) {
         enqueueSnackbar('Ein Fehler ist aufgetaucht', { variant: 'error', autoHideDuration: 3000 });

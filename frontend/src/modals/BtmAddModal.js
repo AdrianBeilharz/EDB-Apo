@@ -26,26 +26,14 @@ function BtmAddModal(props) {
         darreichungsform: btmDarreichungsform.value,
         einheit: btmEinheit.value,
       }),
-    })
-      .then((res) => {
-        if (res.status === 201) {
-          props.onHide();
-          props.updateBtmData();
-          enqueueSnackbar("Betäubungsmittel erfolgreich angelegt", {
-            variant: "success",
-            autoHideDuration: 3000,
-          });
-        } else if (res.status === 400) {
-          setErrorMessage(
-            "Betäubungsmittel existiert bereits oder Daten ungültig"
-          );
-          setShowError(true);
-        }
     }).then((res) => {
       if (res.status === 201) {
-        console.log(props);
-        let {updateBtmList} = props.apothekeRefFunctions;
-        updateBtmList();
+        if(props.apothekeRefFunctions) {
+          let {updateBtmList} = props.apothekeRefFunctions;
+          updateBtmList();
+        }else {
+          props.updateBtmData();
+        }
         props.onHide();
         setShowError(false);
         enqueueSnackbar('Betäubungsmittel erfolgreich angelegt', { variant: 'success', autoHideDuration: 3000 });

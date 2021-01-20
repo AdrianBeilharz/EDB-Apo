@@ -97,7 +97,7 @@ function ApothekeEinstellungen(props) {
   return (
     <Fragment>
       <ApothekeEditModal {...props} show={showApothekeEditModal} onHide={() => setShowApothekeEditModal(false)} apotheke={apotheke} updateApothekeData={getCurrentApotheke} />
-      {aktiveRolle.toLowerCase() !== 'benutzer' ? <StatusHeader aktiveRolle={aktiveRolle} /> : null}
+      {aktiveRolle && aktiveRolle.toLowerCase() !== 'benutzer' ? <StatusHeader aktiveRolle={aktiveRolle} /> : null}
       <Header />
       <Row className="details-list">
         <Col md={{ span: 1, offset: 1 }}><Button onClick={props.history.goBack}><ArrowBackIosIcon /> Zurück</Button></Col>
@@ -114,7 +114,7 @@ function ApothekeEinstellungen(props) {
               <li>E-Mail: {apotheke.email}</li>
               <li>Anschrift: {apotheke.anschrift.strasse} {apotheke.anschrift.nummer}  ({apotheke.anschrift.plz} {apotheke.anschrift.ort})</li>
             </ul>
-            <Button onClick={() => setShowApothekeEditModal(true)}>Angaben bearbeiten</Button>
+            {aktiveRolle && aktiveRolle.toLowerCase() === 'admin' ? <Button onClick={() => setShowApothekeEditModal(true)}>Angaben bearbeiten</Button> : null}
           </Col>
         </Row>
         <Row style={{ marginTop: '3em' }}>

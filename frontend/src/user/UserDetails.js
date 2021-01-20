@@ -5,7 +5,7 @@ import UserDetailsUpdateModal from '../modals/UserDetailsUpdateModal';
 
 function UserDetails(props) {
     //eslint disable-next-line
-   const {rolle, nutzername } = props.user;
+   const {rolle, nutzername, vorname, name } = props.user;
    const [showUserSettings, setShowUserSettings] = useState(false);
 
    var allRoles = {
@@ -36,7 +36,10 @@ function UserDetails(props) {
        <Row>
            <UserDetailsUpdateModal {...props} loggedInUser={props.user} show={showUserSettings} onHide={() => setShowUserSettings(false)}/>
 
-           <Col><b>Nutzername:</b> {nutzername}</Col>
+           <Col>
+                <Row><b>Eingeloggt als:</b></Row>
+                <Row>{vorname} {name} ({nutzername})</Row> 
+            </Col>
            <Col>
                <Form.Control 
                     as="select" 

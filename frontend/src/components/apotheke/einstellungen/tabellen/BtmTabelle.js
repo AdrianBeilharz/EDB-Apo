@@ -45,7 +45,7 @@ function BtmTabelle(props) {
       },
     }).then((res) => {
       if (res.status === 200) {
-        getBtmData()
+        getBtmData();
         enqueueSnackbar('Btm erfolgreich gelöscht', { variant: 'success', autoHideDuration: 3000 });
       } else {
         //SHOW ERROR
