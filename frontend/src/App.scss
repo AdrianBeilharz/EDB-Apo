@@ -3,6 +3,7 @@
 $base-green: rgb(14, 134, 78);
 $base-blue: rgb(0, 212, 255);
 $base-green-2: rgb(7, 170, 94);
+$light-green: rgb(24, 242, 141);
 
 $theme-colors: (
   'primary': $base-green-2
@@ -74,4 +75,11 @@ $theme-colors: (
 
   -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
   user-drag: none;
+}
+
+::selection {
+  background: $light-green; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: $light-green; /* Gecko Browsers */
 }
