@@ -108,9 +108,17 @@ function UpdateBuchungModal(props) {
 
 	const checkPruefdatum = () => {
 		if (buchung.pruefdatum) {
-			return buchung.pruefdatum >= buchung.datum;
+			return buchung.pruefdatum >= buchung.datum && buchung.pruefdatum <= moment(new Date()).format("YYYY-MM-DD");
 		}
 		return true;
+	};
+
+	const checkDatum = () => {
+		if(buchung.datum){
+			return buchung.datum <= moment(new Date()).format("YYYY-MM-DD");
+		  } else {
+			return true;
+		  }
 	};
 
 	const checkPruefer = () => {
@@ -123,7 +131,6 @@ function UpdateBuchungModal(props) {
 			if (data.pruefdatum < data.datum) {
 				setTooltips({ ...tooltips, pruefdatum: 'Prüfdatum darf nicht vor dem Einstelldatum liegen' });
 			}
-
 			if (data.pruefdatum && !data.pruefer) {
 				setTooltips({ ...tooltips, pruefer: 'Prüfer darf nicht leer sein wenn ein Prüfdatum ausgewählt ist' });
 			} else if (!data.pruefdatum && data.pruefer) {
@@ -271,12 +278,16 @@ function UpdateBuchungModal(props) {
 							Datum
             		</Form.Label>
 						<Col sm="9">
+
 							<Form.Control
 								name="datum"
 								type="date"
+								isInvalid={!checkDatum()}
 								value={moment(buchung.datum).format("YYYY-MM-DD")}
-								onChange={e => setBuchung({ ...buchung, datum: e.target.value })}
+								onChange={e => {setBuchung({ ...buchung, datum: e.target.value });
+								}}
 							/>
+
 						</Col>
 					</Form.Group>
 					<Form.Group as={Row} controlId="btmMenge">
@@ -315,7 +326,6 @@ function UpdateBuchungModal(props) {
 										updateTooltipTexts({ ...buchung, pruefdatum: e.target.value });
 									}}
 								/>
-
 							</OverlayTrigger>
 						</Col>
 					</Form.Group>
