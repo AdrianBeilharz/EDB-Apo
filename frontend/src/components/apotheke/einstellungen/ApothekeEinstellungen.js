@@ -1,5 +1,5 @@
 import React, { useState, Fragment, useEffect } from 'react';
-import { ListGroup, Button, Row, Col } from 'react-bootstrap';
+import { ListGroup, Button, Row, Col, FormControl} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
 import Header from '../../headers/Header';
@@ -25,6 +25,13 @@ function ApothekeEinstellungen(props) {
   const [user, setUser] = useState({});
   const [showApothekeEditModal, setShowApothekeEditModal] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const [personal, setPersonal] = useState([]);
+  const [btms, setBtms] = useState([]);
+  const [aerzte, setAerzte] = useState([]);
+  const [lieferanten, setLieferanten] = useState([]);
+  const [empfaenger, setEmpfaenger] = useState([]);
 
   const getCurrentApotheke = () => {
     fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}`, {
@@ -47,42 +54,210 @@ function ApothekeEinstellungen(props) {
       })
   }
 
-  const getUserData = () => {
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
+  // FETCHING DATA
+  const getUserData = async () => {
+    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
       }
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json()
-        } else if (res.status === 403) {
-          props.history.push('forbidden');
-        } else if (res.status === 400) {
-          props.history.push('badrequest');
-        }
-      }).then((data) => {
-        setUser(data);
-        setLoggedIn(true)
-      }).catch((err) => {
-        //SHOW ERROR
-        return;
-      });
+    }).catch(err => console.log(err));
+
+    if (res.status === 200) {
+      let data = await res.json()
+      setUser(data);
+      setLoggedIn(true)
+    } else if (res.status === 403) {
+      props.history.push('forbidden');
+    } else if (res.status === 400) {
+      props.history.push('badrequest');
+    }
   }
 
+  const getPersonalData = async () => {
+    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer`, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
+      }
+    }).catch(err => console.log(err));
+    
+    if (res.status === 200) {
+      let data = await res.json()
+      setPersonal(data);
+    } else if (res.status === 403) {
+      props.history.push('forbidden');
+    } else if (res.status === 400) {
+      props.history.push('badrequest');
+    }
+
+  }
+
+  const getBtmsData = async () => {
+    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btm`, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
+      }
+    }).catch(err => console.log(err));
+
+    if (res.status === 200) {
+      let data = await res.json()
+      setBtms(data);
+    } else if (res.status === 403) {
+      props.history.push('forbidden');
+    } else if (res.status === 400) {
+      props.history.push('badrequest');
+    }
+  }
+
+  const getAerzteData = async () => {
+    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/arzt`, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
+      }
+    }).catch(err => console.log(err));
+
+    if (res.status === 200) {
+      let data = await res.json()
+      setAerzte(data);
+    } else if (res.status === 403) {
+      props.history.push('forbidden');
+    } else if (res.status === 400) {
+      props.history.push('badrequest');
+    }
+  }
+
+  const getLieferantenData = async () => {
+    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/lieferant`, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
+      }
+    }).catch(err => console.log(err));
+
+    if (res.status === 200) {
+      let data = await res.json()
+      setLieferanten(data);
+    } else if (res.status === 403) {
+      props.history.push('forbidden');
+    } else if (res.status === 400) {
+      props.history.push('badrequest');
+    }
+  }
+  
+  const getEmpfaengerData = async () => {
+    let res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/empfaenger`, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
+      }
+    }).catch(err => console.log(err));
+
+    if (res.status === 200) {
+      let data = await res.json()
+      setEmpfaenger(data);
+    } else if (res.status === 403) {
+      props.history.push('forbidden');
+    } else if (res.status === 400) {
+      props.history.push('badrequest');
+    }
+  }
+
+  //FILTERING THE DATA
+  const filterPeronal = () => {
+    let st = searchTerm.toLowerCase().replace(" ", "");
+    return personal.filter(val => {
+        let uname = val.nutzername.toLowerCase().replace(" ", "");
+        let name = val.name.toLowerCase();
+        let vorname = val.name.toLowerCase();
+        let rolle = val.rolle.toLowerCase();
+        if(searchTerm === ''){
+            return val;
+        } else if (uname.includes(st) || name.includes(st) || vorname.includes(st) || rolle.includes(st)){
+            return val;
+        }
+    });
+}
+
+const filterBtms = () => {
+    let st = searchTerm.toLowerCase().replace(" ", "");
+    return btms.filter(val => {
+        let name = val.name.toLowerCase();
+        if(searchTerm === ''){
+            return val;
+        } else if (name.includes(st)){
+            return val;
+        }
+    });
+}
+
+const filterAerzte = () => {
+    let st = searchTerm.toLowerCase().replace(" ", "");
+    return aerzte.filter(val => {
+        let name = val.name.toLowerCase();
+        let plz = val.anschrift.plz.toString();
+        let ort = val.anschrift.ort.toLowerCase();
+        let strasse = val.anschrift.strasse.toLowerCase();
+        let nummer = val.anschrift.nummer.toString();
+        if(searchTerm === ''){
+            return val;
+        } else if (name.includes(st) || plz.includes(st)  || ort.includes(st)  || strasse.includes(st)  || nummer.includes(st) ){
+            return val;
+        }
+    });
+}
+
+const filterLieferanten = () => {
+    let st = searchTerm.toLowerCase().replace(" ", "");
+    return lieferanten.filter(val => {
+        let name = val.name.toLowerCase();
+        let plz = val.anschrift.plz.toString();
+        let ort = val.anschrift.ort.toLowerCase();
+        let strasse = val.anschrift.strasse.toLowerCase();
+        let nummer = val.anschrift.nummer.toString();
+        if(searchTerm === ''){
+            return val;
+        } else if (name.includes(st) || plz.includes(st)  || ort.includes(st)  || strasse.includes(st)  || nummer.includes(st) ){
+            return val;
+        }
+    });
+}
+
+const filterEmpfaenger = () => {
+  let st = searchTerm.toLowerCase().replace(" ", "");
+  return empfaenger.filter(val => {
+      let vorname = val.vorname.toLowerCase();
+      let name = val.name.toLowerCase();
+      let plz = val.anschrift.plz.toString();
+      let ort = val.anschrift.ort.toLowerCase();
+      let strasse = val.anschrift.strasse.toLowerCase();
+      let nummer = val.anschrift.nummer.toString();
+      if(searchTerm === ''){
+          return val;
+      } else if (name.includes(st) || vorname.includes(st) || plz.includes(st)  || ort.includes(st)  || strasse.includes(st)  || nummer.includes(st) ){
+          return val;
+      }
+  });
+}
 
   const renderContent = () => {
     if (activeMenuItem === 'personal') {
-      return <PersonalTabelle {...props} aktiveRolle={aktiveRolle} />;
+      let filtered = filterPeronal();
+      return <PersonalTabelle {...props} updateUserList={getPersonalData} aktiveRolle={aktiveRolle} personal={filtered}/>;
     } else if (activeMenuItem === 'btm') {
-      return <BtmTabelle {...props} aktiveRolle={aktiveRolle} />;
+      let filtered = filterBtms();
+      return <BtmTabelle {...props} updateBtmList={getBtmsData} aktiveRolle={aktiveRolle} btms={filtered}/>;
     } else if (activeMenuItem === 'aerzte') {
-      return <ArztTabelle {...props} aktiveRolle={aktiveRolle} />
+      let filtered = filterAerzte();
+      return <ArztTabelle {...props} updateAerzteList={getAerzteData} aktiveRolle={aktiveRolle} aerzte={filtered}/>
     } else if (activeMenuItem === 'lieferanten') {
-      return <LieferantTabelle {...props} aktiveRolle={aktiveRolle} />
+      let filtered = filterLieferanten();
+      return <LieferantTabelle {...props} updateLieferantenList={getLieferantenData} aktiveRolle={aktiveRolle} lieferanten={filtered}/>
     } else if (activeMenuItem === 'empfaenger') {
-      return <EmpfaengerTabelle {...props} aktiveRolle={aktiveRolle} />
+      let filtered = filterEmpfaenger();
+      return <EmpfaengerTabelle {...props} updateEmpfaengerList={getEmpfaengerData} aktiveRolle={aktiveRolle} empfaenger={filtered}/>
     }
   }
 
@@ -91,8 +266,15 @@ function ApothekeEinstellungen(props) {
     window.sessionStorage.setItem("aktive-rolle", data);
   }
 
-  useEffect(getUserData, [apoId, props.history])
-  useEffect(getCurrentApotheke, [apoId, props.history])
+  useEffect(() => {
+    getCurrentApotheke();
+    getUserData();
+    getPersonalData();
+    getBtmsData();
+    getAerzteData();
+    getLieferantenData();
+    getEmpfaengerData();
+  }, [apoId, props.history]);
 
   return (
     <Fragment>
@@ -128,6 +310,7 @@ function ApothekeEinstellungen(props) {
             </ListGroup>
           </Col>
           <Col sm={8}>
+          <FormControl id="searchField" style={{marginBottom:'1em', width:'80%'}} type="text" onChange={event => setSearchTerm(event.target.value) } placeholder="Suchen..."/>
             {user ? renderContent() : null}
           </Col>
         </Row>

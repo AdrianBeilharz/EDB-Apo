@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AddBox, Edit, DeleteForever } from '@material-ui/icons';
 import { Table, Button } from 'react-bootstrap';
@@ -10,32 +10,11 @@ import DeleteModal from '../../../../modals/DeleteModal';
 
 function LieferantTabelle(props) {
   const { apoId } = useParams();
-  const [lieferanten, setLieferanten] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [selectedLieferant, setSelectedLieferant] = useState(null);
   const [showLieferantAddModal, setShowLieferantAddModal] = useState(false);
   const [showLieferantEditModal, setShowLieferantEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const getLieferantData = () => {
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/lieferant`, {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
-      }
-    }).then((res) => {
-      if (res.status === 200) {
-        return res.json()
-      } else if (res.status === 403) {
-        props.history.push('forbidden');
-      } else if (res.status === 400) {
-        props.history.push('badrequest');
-      }
-    }).then((data) => setLieferanten(data)).catch((err) => {
-      //SHOW ERROR
-      return;
-    });
-  }
 
   const deleteLieferant = () => {
     fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/lieferant/${selectedLieferant.id}`, {
@@ -45,7 +24,7 @@ function LieferantTabelle(props) {
       },
     }).then((res) => {
       if (res.status === 200) {
-        getLieferantData()
+        props.updateLieferantenList();
         enqueueSnackbar('Lieferant erfolgreich gelöscht', { variant: 'success', autoHideDuration: 3000 });
       } else {
         //SHOW ERROR
@@ -67,12 +46,10 @@ function LieferantTabelle(props) {
     setShowDeleteModal(true);
   }
 
-  useEffect(getLieferantData, [apoId, props.history])
-
   return (
     <Fragment>
-      <LieferantAddModal {...props} show={showLieferantAddModal} onHide={() => setShowLieferantAddModal(false)} updateLieferantData={getLieferantData} />
-      {selectedLieferant ? <LieferantEditModal {...props} lieferant={selectedLieferant} show={showLieferantEditModal} onHide={() => setShowLieferantEditModal(false)} updateLieferantData={getLieferantData} /> : null}
+      <LieferantAddModal {...props} show={showLieferantAddModal} onHide={() => setShowLieferantAddModal(false)} updateLieferantData={props.updateLieferantenList} />
+      {selectedLieferant ? <LieferantEditModal {...props} lieferant={selectedLieferant} show={showLieferantEditModal} onHide={() => setShowLieferantEditModal(false)} updateLieferantData={props.updateLieferantenList} /> : null}
       <DeleteModal {...props} headertext={'Lieferant löschen'}
         maintext={'Möchtest du diesen Lieferant wirklich löschen?'} onSubmit={deleteLieferant} subtext={'Dieser Vorgang kann nicht rückgängig gemacht werden'}
         show={showDeleteModal} onHide={() => setShowDeleteModal(false)} />
@@ -88,7 +65,7 @@ function LieferantTabelle(props) {
           </tr>
         </thead>
         <tbody>
-          {lieferanten.map(lieferant =>
+          {props.lieferanten.map(lieferant =>
             <tr key={lieferant.id}>
               <td>{lieferant.name}</td>
               <td>{lieferant.anschrift.strasse} {lieferant.anschrift.nummer}</td>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AddBox, Edit, DeleteForever } from '@material-ui/icons';
 import { Table, Button } from 'react-bootstrap';
@@ -10,32 +10,11 @@ import DeleteModal from '../../../../modals/DeleteModal';
 
 function ArztTabelle(props) {
   const { apoId } = useParams();
-  const [aerzte, setAerzte] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [selectedArzt, setSelectedArzt] = useState(null);
   const [showArztAddModal, setShowArztAddModal] = useState(false);
   const [showArztEditModal, setShowArztEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const getArztData = () => {
-    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/arzt`, {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
-      }
-    }).then((res) => {
-      if (res.status === 200) {
-        return res.json()
-      } else if (res.status === 403) {
-        props.history.push('forbidden');
-      } else if (res.status === 400) {
-        props.history.push('badrequest');
-      }
-    }).then((data) => setAerzte(data)).catch((err) => {
-      //SHOW ERROR
-      return;
-    });
-  }
 
   const deleteArzt = () => {
     fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/arzt/${selectedArzt.id}`, {
@@ -45,7 +24,7 @@ function ArztTabelle(props) {
       },
     }).then((res) => {
       if (res.status === 200) {
-        getArztData()
+        props.updateAerzteList();
         enqueueSnackbar('Arzt erfolgreich gelöscht', { variant: 'success', autoHideDuration: 3000 });
       } else {
         //SHOW ERROR
@@ -67,12 +46,10 @@ function ArztTabelle(props) {
     setShowDeleteModal(true);
   }
 
-  useEffect(getArztData, [apoId, props.history])
-
   return (
     <Fragment>
-      <ArztAddModal {...props} show={showArztAddModal} onHide={() => setShowArztAddModal(false)} updateArztData={getArztData} />
-      {selectedArzt ? <ArztEditModal {...props} arzt={selectedArzt} show={showArztEditModal} onHide={() => setShowArztEditModal(false)} updateArztData={getArztData} /> : null}
+      <ArztAddModal {...props} show={showArztAddModal} onHide={() => setShowArztAddModal(false)} updateArztData={props.updateAerzteList} />
+      {selectedArzt ? <ArztEditModal {...props} arzt={selectedArzt} show={showArztEditModal} onHide={() => setShowArztEditModal(false)} updateArztData={props.updateAerzteList} /> : null}
       <DeleteModal {...props} headertext={'Arzt löschen'}
         maintext={'Möchtest du diesen Arzt wirklich löschen?'} onSubmit={deleteArzt} subtext={'Dieser Vorgang kann nicht rückgängig gemacht werden'}
         show={showDeleteModal} onHide={() => setShowDeleteModal(false)} />
@@ -88,7 +65,7 @@ function ArztTabelle(props) {
           </tr>
         </thead>
         <tbody>
-          {aerzte.map(arzt =>
+          {props.aerzte.map(arzt =>
             <tr key={arzt.id}>
               <td>{arzt.name}</td>
               <td>{arzt.anschrift.strasse} {arzt.anschrift.nummer}</td>
