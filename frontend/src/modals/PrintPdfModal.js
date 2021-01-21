@@ -44,7 +44,7 @@ function PrintPdfModal(props) {
 
   useEffect(() => {
     handleFilter();
-  }, [props.checked]);
+  }, [props.checked, disabled, startDate, endDate]);
   useEffect(() => {
     setDisabled(disabled);
   }, [disabled]);
