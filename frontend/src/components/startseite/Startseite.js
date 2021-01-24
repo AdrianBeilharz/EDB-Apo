@@ -31,7 +31,7 @@ function Startseite(props) {
                             </Row>
                         </Col>
                         <Col>
-                            <img className="img unselectable float-right" style={{marginTop:'5%'}} src="/images/pharma1.png" />
+                            <img className="img unselectable float-right" style={{marginTop:'5%'}} src="/images/pharma1.png" alt="" />
                         </Col>
                     </Row>
                     <Row style={{marginTop:'13em'}}>
@@ -56,7 +56,7 @@ function Startseite(props) {
                             </ul>
                         </Col>
                         <Col>
-                        <img className="img unselectable" style={{marginTop:'-5em'}} src="/images/pharma2.png" />
+                        <img className="img unselectable" style={{marginTop:'-5em'}} src="/images/pharma2.png" alt="" />
                         </Col>
                     </Row>
                 </div>
@@ -64,7 +64,7 @@ function Startseite(props) {
                 <div style={{backgroundColor:'#0e864e', paddingBottom:'4em'}}>
                     <Row>
                         <Col>
-                            <img className="img unselectable float-left" style={{margin:'-11em 0 0 5em'}} src="/images/akteure.png" />
+                            <img className="img unselectable float-left" style={{margin:'-11em 0 0 5em'}} src="/images/akteure.png" alt="" />
                         </Col>
                         <Col style={{color:'white'}}>
                             <h3>

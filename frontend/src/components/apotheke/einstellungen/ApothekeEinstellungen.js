@@ -1,5 +1,5 @@
 import React, { useState, Fragment, useEffect } from 'react';
-import { ListGroup, Button, Row, Col, FormControl} from 'react-bootstrap';
+import { ListGroup, Button, Row, Col, FormControl } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
 import Header from '../../headers/Header';
@@ -55,209 +55,209 @@ function ApothekeEinstellungen(props) {
   }
 
   // FETCHING DATA
-  const getUserData = async () => {
-    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
+  const getUserData = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/benutzer/me`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
       }
-    }).catch(err => console.log(err));
-
-    if (res.status === 200) {
-      let data = await res.json()
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json()
+      } else if (res.status === 403) {
+        props.history.push('forbidden');
+      } else if (res.status === 400) {
+        props.history.push('badrequest');
+      }
+    }).then(data => {
       setUser(data);
       setLoggedIn(true)
-    } else if (res.status === 403) {
-      props.history.push('forbidden');
-    } else if (res.status === 400) {
-      props.history.push('badrequest');
-    }
+    }).catch(err => console.log(err));
   }
 
-  const getPersonalData = async () => {
-    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer`, {
+  const getPersonalData = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/benutzer`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
       }
-    }).catch(err => console.log(err));
-    
-    if (res.status === 200) {
-      let data = await res.json()
-      setPersonal(data);
-    } else if (res.status === 403) {
-      props.history.push('forbidden');
-    } else if (res.status === 400) {
-      props.history.push('badrequest');
-    }
-
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json()
+      } else if (res.status === 403) {
+        props.history.push('forbidden');
+      } else if (res.status === 400) {
+        props.history.push('badrequest');
+      }
+    }).then(data => setPersonal(data)).catch(err => console.log(err));
   }
 
-  const getBtmsData = async () => {
-    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btm`, {
+  const getBtmsData = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btm`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
       }
-    }).catch(err => console.log(err));
-
-    if (res.status === 200) {
-      let data = await res.json()
-      setBtms(data);
-    } else if (res.status === 403) {
-      props.history.push('forbidden');
-    } else if (res.status === 400) {
-      props.history.push('badrequest');
-    }
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json();
+      } else if (res.status === 403) {
+        props.history.push('forbidden');
+      } else if (res.status === 400) {
+        props.history.push('badrequest');
+      }
+    }).then(data => setBtms(data)).catch(err => console.log(err));
   }
 
-  const getAerzteData = async () => {
-    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/arzt`, {
+  const getAerzteData = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/arzt`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
       }
-    }).catch(err => console.log(err));
-
-    if (res.status === 200) {
-      let data = await res.json()
-      setAerzte(data);
-    } else if (res.status === 403) {
-      props.history.push('forbidden');
-    } else if (res.status === 400) {
-      props.history.push('badrequest');
-    }
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json()
+      } else if (res.status === 403) {
+        props.history.push('forbidden');
+      } else if (res.status === 400) {
+        props.history.push('badrequest');
+      }
+    }).then(data => setAerzte(data)).catch(err => console.log(err));
   }
 
-  const getLieferantenData = async () => {
-    const res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/lieferant`, {
+  const getLieferantenData = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/lieferant`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
       }
-    }).catch(err => console.log(err));
-
-    if (res.status === 200) {
-      let data = await res.json()
-      setLieferanten(data);
-    } else if (res.status === 403) {
-      props.history.push('forbidden');
-    } else if (res.status === 400) {
-      props.history.push('badrequest');
-    }
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json()
+      } else if (res.status === 403) {
+        props.history.push('forbidden');
+      } else if (res.status === 400) {
+        props.history.push('badrequest');
+      }
+    }).then(data => setLieferanten(data)).catch(err => console.log(err));
   }
-  
-  const getEmpfaengerData = async () => {
-    let res = await fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/empfaenger`, {
+
+  const getEmpfaengerData = () => {
+    fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/empfaenger`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + window.sessionStorage.getItem("edbapo-jwt"),
       }
-    }).catch(err => console.log(err));
-
-    if (res.status === 200) {
-      let data = await res.json()
-      setEmpfaenger(data);
-    } else if (res.status === 403) {
-      props.history.push('forbidden');
-    } else if (res.status === 400) {
-      props.history.push('badrequest');
-    }
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json()
+      } else if (res.status === 403) {
+        props.history.push('forbidden');
+      } else if (res.status === 400) {
+        props.history.push('badrequest');
+      }
+    }).then(data => setEmpfaenger(data)).catch(err => console.log(err));
   }
 
   //FILTERING THE DATA
   const filterPeronal = () => {
     let st = searchTerm.toLowerCase().replace(" ", "");
     return personal.filter(val => {
-        let uname = val.nutzername.toLowerCase().replace(" ", "");
-        let name = val.name.toLowerCase();
-        let vorname = val.name.toLowerCase();
-        let rolle = val.rolle.toLowerCase();
-        if(searchTerm === ''){
-            return val;
-        } else if (uname.includes(st) || name.includes(st) || vorname.includes(st) || rolle.includes(st)){
-            return val;
-        }
+      let uname = val.nutzername.toLowerCase().replace(" ", "");
+      let name = val.name.toLowerCase();
+      let vorname = val.name.toLowerCase();
+      let rolle = val.rolle.toLowerCase();
+      if (searchTerm === '') {
+        return val;
+      } else if (uname.includes(st) || name.includes(st) || vorname.includes(st) || rolle.includes(st)) {
+        return val;
+      }
+      return null;
     });
-}
+  }
 
-const filterBtms = () => {
+  const filterBtms = () => {
     let st = searchTerm.toLowerCase().replace(" ", "");
     return btms.filter(val => {
-        let name = val.name.toLowerCase();
-        if(searchTerm === ''){
-            return val;
-        } else if (name.includes(st)){
-            return val;
-        }
+      let name = val.name.toLowerCase();
+      if (searchTerm === '') {
+        return val;
+      } else if (name.includes(st)) {
+        return val;
+      }
+      return null;
     });
-}
+  }
 
-const filterAerzte = () => {
+  const filterAerzte = () => {
     let st = searchTerm.toLowerCase().replace(" ", "");
     return aerzte.filter(val => {
-        let name = val.name.toLowerCase();
-        let plz = val.anschrift.plz.toString();
-        let ort = val.anschrift.ort.toLowerCase();
-        let strasse = val.anschrift.strasse.toLowerCase();
-        let nummer = val.anschrift.nummer.toString();
-        if(searchTerm === ''){
-            return val;
-        } else if (name.includes(st) || plz.includes(st)  || ort.includes(st)  || strasse.includes(st)  || nummer.includes(st) ){
-            return val;
-        }
+      let name = val.name.toLowerCase();
+      let plz = val.anschrift.plz.toString();
+      let ort = val.anschrift.ort.toLowerCase();
+      let strasse = val.anschrift.strasse.toLowerCase();
+      let nummer = val.anschrift.nummer.toString();
+      if (searchTerm === '') {
+        return val;
+      } else if (name.includes(st) || plz.includes(st) || ort.includes(st) || strasse.includes(st) || nummer.includes(st)) {
+        return val;
+      }
+      return null;
     });
-}
+  }
 
-const filterLieferanten = () => {
+  const filterLieferanten = () => {
     let st = searchTerm.toLowerCase().replace(" ", "");
     return lieferanten.filter(val => {
-        let name = val.name.toLowerCase();
-        let plz = val.anschrift.plz.toString();
-        let ort = val.anschrift.ort.toLowerCase();
-        let strasse = val.anschrift.strasse.toLowerCase();
-        let nummer = val.anschrift.nummer.toString();
-        if(searchTerm === ''){
-            return val;
-        } else if (name.includes(st) || plz.includes(st)  || ort.includes(st)  || strasse.includes(st)  || nummer.includes(st) ){
-            return val;
-        }
+      let name = val.name.toLowerCase();
+      let plz = val.anschrift.plz.toString();
+      let ort = val.anschrift.ort.toLowerCase();
+      let strasse = val.anschrift.strasse.toLowerCase();
+      let nummer = val.anschrift.nummer.toString();
+      if (searchTerm === '') {
+        return val;
+      } else if (name.includes(st) || plz.includes(st) || ort.includes(st) || strasse.includes(st) || nummer.includes(st)) {
+        return val;
+      }
+      return null;
     });
-}
+  }
 
-const filterEmpfaenger = () => {
-  let st = searchTerm.toLowerCase().replace(" ", "");
-  return empfaenger.filter(val => {
+  const filterEmpfaenger = () => {
+    let st = searchTerm.toLowerCase().replace(" ", "");
+    return empfaenger.filter(val => {
       let vorname = val.vorname.toLowerCase();
       let name = val.name.toLowerCase();
       let plz = val.anschrift.plz.toString();
       let ort = val.anschrift.ort.toLowerCase();
       let strasse = val.anschrift.strasse.toLowerCase();
       let nummer = val.anschrift.nummer.toString();
-      if(searchTerm === ''){
-          return val;
-      } else if (name.includes(st) || vorname.includes(st) || plz.includes(st)  || ort.includes(st)  || strasse.includes(st)  || nummer.includes(st) ){
-          return val;
+      if (searchTerm === '') {
+        return val;
+      } else if (name.includes(st) || vorname.includes(st) || plz.includes(st) || ort.includes(st) || strasse.includes(st) || nummer.includes(st)) {
+        return val;
       }
-  });
-}
+      return null;
+    });
+  }
 
   const renderContent = () => {
     if (activeMenuItem === 'personal') {
       let filtered = filterPeronal();
-      return <PersonalTabelle {...props} updateUserList={getPersonalData} aktiveRolle={aktiveRolle} personal={filtered}/>;
+      return <PersonalTabelle {...props} updateUserList={getPersonalData} aktiveRolle={aktiveRolle} personal={filtered} />;
     } else if (activeMenuItem === 'btm') {
       let filtered = filterBtms();
-      return <BtmTabelle {...props} updateBtmList={getBtmsData} aktiveRolle={aktiveRolle} btms={filtered}/>;
+      return <BtmTabelle {...props} updateBtmList={getBtmsData} aktiveRolle={aktiveRolle} btms={filtered} />;
     } else if (activeMenuItem === 'aerzte') {
       let filtered = filterAerzte();
-      return <ArztTabelle {...props} updateAerzteList={getAerzteData} aktiveRolle={aktiveRolle} aerzte={filtered}/>
+      return <ArztTabelle {...props} updateAerzteList={getAerzteData} aktiveRolle={aktiveRolle} aerzte={filtered} />
     } else if (activeMenuItem === 'lieferanten') {
       let filtered = filterLieferanten();
-      return <LieferantTabelle {...props} updateLieferantenList={getLieferantenData} aktiveRolle={aktiveRolle} lieferanten={filtered}/>
+      return <LieferantTabelle {...props} updateLieferantenList={getLieferantenData} aktiveRolle={aktiveRolle} lieferanten={filtered} />
     } else if (activeMenuItem === 'empfaenger') {
       let filtered = filterEmpfaenger();
-      return <EmpfaengerTabelle {...props} updateEmpfaengerList={getEmpfaengerData} aktiveRolle={aktiveRolle} empfaenger={filtered}/>
+      return <EmpfaengerTabelle {...props} updateEmpfaengerList={getEmpfaengerData} aktiveRolle={aktiveRolle} empfaenger={filtered} />
     }
   }
 
@@ -266,15 +266,13 @@ const filterEmpfaenger = () => {
     window.sessionStorage.setItem("aktive-rolle", data);
   }
 
-  useEffect(() => {
-    getCurrentApotheke();
-    getUserData();
-    getPersonalData();
-    getBtmsData();
-    getAerzteData();
-    getLieferantenData();
-    getEmpfaengerData();
-  }, [apoId, props.history]);
+  useEffect(getCurrentApotheke, [apoId, props.history]);
+  useEffect(getUserData, [apoId, props.history]);
+  useEffect(getPersonalData, [apoId, props.history]);
+  useEffect(getBtmsData, [apoId, props.history]);
+  useEffect(getAerzteData, [apoId, props.history]);
+  useEffect(getLieferantenData, [apoId, props.history]);
+  useEffect(getEmpfaengerData, [apoId, props.history]);
 
   return (
     <Fragment>
@@ -310,7 +308,7 @@ const filterEmpfaenger = () => {
             </ListGroup>
           </Col>
           <Col sm={8}>
-          <FormControl id="searchField" style={{marginBottom:'1em', width:'80%'}} type="text" onChange={event => setSearchTerm(event.target.value) } placeholder="Suchen..."/>
+            <FormControl id="searchField" style={{ marginBottom: '1em', width: '80%' }} type="text" onChange={event => setSearchTerm(event.target.value)} placeholder="Suchen..." />
             {user ? renderContent() : null}
           </Col>
         </Row>

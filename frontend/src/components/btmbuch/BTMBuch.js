@@ -48,10 +48,10 @@ function BTMBuch(props) {
     window.sessionStorage.setItem("aktive-rolle", data);
   }
 
+  useEffect(getUserDetails, [apoId, props.history, aktiveRolle])
   useEffect(() => {
-    getUserDetails();
     setAktiveRolle(window.sessionStorage.getItem("aktive-rolle"));
-  }, [apoId, props.history])
+  }, [])
 
   //this obj is passed to each child, each child can add functions to this object and call functions from this object
   let apothekeRefFunctions = {}

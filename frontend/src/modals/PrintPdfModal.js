@@ -13,8 +13,8 @@ import { Checkbox } from "@material-ui/core";
 function PrintPdfModal(props) {
   const moment = require("moment");
   const [disabled, setDisabled] = useState(true);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(moment().subtract(1, 'y').format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
 
   const isStartEndValid = () => {
     if (startDate === "" || endDate === "") return false;
@@ -42,18 +42,18 @@ function PrintPdfModal(props) {
     }
   };
 
-  useEffect(() => {
-    handleFilter();
-  }, [props.checked, disabled, startDate, endDate]);
-  useEffect(() => {
-    setDisabled(disabled);
-  }, [disabled]);
-  useEffect(() => {
-    setEndDate(endDate);
-  }, [endDate]);
-  useEffect(() => {
-    setStartDate(startDate);
-  }, [startDate]);
+  const reset = () => {
+    setStartDate(moment().subtract(1, 'y').format('YYYY-MM-DD'))
+    setEndDate(moment().format('YYYY-MM-DD'))
+  }
+
+  
+  useEffect(isStartEndValid, [endDate, moment, startDate]);
+  useEffect(isEndValid, [endDate, moment, startDate]);
+  useEffect(isStartValid, [endDate, moment, startDate]);
+  //eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(handleFilter, [props.checked]);
+  
 
   return (
     <Modal
@@ -63,6 +63,7 @@ function PrintPdfModal(props) {
       centered
       show={props.show}
       onHide={props.onHide}
+      backdrop="static"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
@@ -88,7 +89,8 @@ function PrintPdfModal(props) {
                 <Form.Control
                   name="startDate"
                   type="date"
-                  defaultValue={new Date()}
+                  value={startDate}
+                  defaultValue={startDate}
                   onChange={(event) => {
                     props.start(event.target.value);
                     setStartDate(event.target.value);
@@ -115,7 +117,8 @@ function PrintPdfModal(props) {
                 <Form.Control
                   name="endDate"
                   type="date"
-                  defaultValue={new Date()}
+                  value={endDate}
+                  defaultValue={endDate}
                   onChange={(event) => {
                     props.ende(event.target.value);
                     setEndDate(event.target.value);
@@ -144,13 +147,14 @@ function PrintPdfModal(props) {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={props.onHide}>
+          <Button variant="danger" onClick={() => {reset(); props.onHide();}}>
             Abbrechen
           </Button>
           <Button
             variant="primary"
             disabled={disabled}
             onClick={() => {
+              reset()
               props.onHide();
               props.onSubmit();
               handleFilter();

@@ -144,11 +144,13 @@ function UpdateBuchungModal(props) {
 		setBuchung(props.buchung);
 	};
 
+	useEffect(getPersonalData, [apoId, props.history])
 	useEffect(() => {
 		setBuchung(props.buchung);
-		getPersonalData();
 		updateTooltipTexts(props.buchung);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.buchung]);
+
 
 	function Zugang() {
 		if (buchung.typ) {
