@@ -279,8 +279,8 @@ function BuchungTabelle(props) {
       buchung.typ === "ZUGANG" ? "" : buchung.menge,
       buchung.typ === "ZUGANG" ? buchung.anforderungsschein : buchung.rezept,
       buchung.pruefdatum ? moment(buchung.pruefdatum).format("DD.MM.YYYY") : "",
-      buchung.pruefer ? buchung.pruefer.vorname.charAt(0) + " " +
-          buchung.pruefer.name.charAt(0) : "",
+      buchung.pruefer ? buchung.pruefer.vorname + " " +
+          buchung.pruefer.name : "",
     ]);
 
     let content = {
