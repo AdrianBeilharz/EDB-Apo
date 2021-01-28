@@ -19,13 +19,13 @@ import '../../App.scss';
 
 
 function BuchungTabelle(props) {
+
+  const moment = require("moment");
   let { btm } = props;
   const { apoId } = useParams();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [listeUnfiltered, setUnfilteredListe] = useState(false);
 
   const [open, setOpen] = useState(false);
@@ -226,7 +226,8 @@ function BuchungTabelle(props) {
     }
   };
 
-  const exportPdf = () => {
+  const exportPdf = (startDate, endDate) => {
+    console.log("current Date ", startDate, endDate)
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -248,12 +249,12 @@ function BuchungTabelle(props) {
       ],
     ];
 
-    const moment = require("moment");
+    
 
     let filteredData;
 
     if (!listeUnfiltered) {
-      filteredData = btm.buchungen.filter( (d) => d.datum >= moment(startDate).format("YYYY-MM-DD") && d.datum <= moment(endDate).format("YYYY-MM-DD"));
+      filteredData = btm.buchungen.filter( (d) => d.datum >= startDate && d.datum <= endDate);
     }else{
       filteredData = btm.buchungen;
     }  
@@ -331,9 +332,7 @@ function BuchungTabelle(props) {
         {...props}
         show={showPrintPdfModal}
         onHide={() => setShowPrintPdfModal(false)}
-        start={(value) => setStartDate(value)}
-        ende={(value) => setEndDate(value)}
-        onSubmit={exportPdf}
+        onSubmit={(startDate, endDate) => exportPdf(startDate, endDate)}
         unFilter={(value) => setUnfilteredListe(value)}
         checked={listeUnfiltered}
       />

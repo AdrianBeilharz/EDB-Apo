@@ -19,19 +19,19 @@ function PrintPdfModal(props) {
   const isStartEndValid = () => {
     if (startDate === "" || endDate === "") return false;
     return (
-      startDate <= moment(new Date()).format("YYYY-MM-DD") &&
-      endDate <= moment(new Date()).format("YYYY-MM-DD")
+      startDate <= moment().format("YYYY-MM-DD") &&
+      endDate <= moment().format("YYYY-MM-DD")
     );
   };
 
   const isStartValid = () => {
     if (startDate === "") return false;
-    return startDate <= moment(new Date()).format("YYYY-MM-DD");
+    return startDate <= moment().format("YYYY-MM-DD");
   };
 
   const isEndValid = () => {
     if (endDate === "" || startDate > endDate) return false;
-    return endDate <= moment(new Date()).format("YYYY-MM-DD");
+    return endDate <= moment().format("YYYY-MM-DD");
   };
 
   const handleFilter = () => {
@@ -42,12 +42,30 @@ function PrintPdfModal(props) {
     }
   };
 
-  const reset = () => {
+  const updateStartDate = async (event) => {
+    await setStartDate(event.target.value)
+  }
+
+  const updateEndDate = async (event) => {
+    await setEndDate(event.target.value)
+  }
+
+  const submit = async () => {
+    console.log(startDate, endDate)
+    //await props.start(startDate);
+    //await props.ende(endDate);
+    props.onHide();
+    await props.onSubmit(startDate, endDate);
+    handleFilter();
+    resetDates();
+  }
+
+  const resetDates = () => {
     setStartDate(moment().subtract(1, 'y').format('YYYY-MM-DD'))
     setEndDate(moment().format('YYYY-MM-DD'))
   }
 
-  
+  useEffect(resetDates, [moment])
   useEffect(isStartEndValid, [endDate, moment, startDate]);
   useEffect(isEndValid, [endDate, moment, startDate]);
   useEffect(isStartValid, [endDate, moment, startDate]);
@@ -79,7 +97,7 @@ function PrintPdfModal(props) {
             <Col sm="10">
               <OverlayTrigger
                 placement="right"
-                show={startDate > moment(new Date()).format("YYYY-MM-DD")}
+                show={startDate > moment().format("YYYY-MM-DD")}
                 overlay={
                   <Tooltip id="button-tooltip-1">
                     Das Datum darf nicht in der Zukunft liegen
@@ -88,13 +106,11 @@ function PrintPdfModal(props) {
               >
                 <Form.Control
                   name="startDate"
+                  id="startDate"
                   type="date"
                   value={startDate}
                   defaultValue={startDate}
-                  onChange={(event) => {
-                    props.start(event.target.value);
-                    setStartDate(event.target.value);
-                  }}
+                  onChange={updateStartDate}
                   isInvalid={props.checked ? "" : !isStartValid()}
                 />
               </OverlayTrigger>
@@ -107,7 +123,7 @@ function PrintPdfModal(props) {
             <Col sm="10">
               <OverlayTrigger
                 placement="right"
-                show={endDate > moment(new Date()).format("YYYY-MM-DD")}
+                show={endDate > moment().format("YYYY-MM-DD")}
                 overlay={
                   <Tooltip id="button-tooltip-1">
                     Das Datum darf nicht in der Zukunft liegen
@@ -116,13 +132,11 @@ function PrintPdfModal(props) {
               >
                 <Form.Control
                   name="endDate"
+                  id="endDate"
                   type="date"
                   value={endDate}
                   defaultValue={endDate}
-                  onChange={(event) => {
-                    props.ende(event.target.value);
-                    setEndDate(event.target.value);
-                  }}
+                  onChange={updateEndDate}
                   isInvalid={props.checked ? "" : !isEndValid()}
                 />
               </OverlayTrigger>
@@ -147,18 +161,13 @@ function PrintPdfModal(props) {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => {reset(); props.onHide();}}>
+          <Button variant="danger" onClick={() => {resetDates(); props.onHide();}}>
             Abbrechen
           </Button>
           <Button
             variant="primary"
             disabled={disabled}
-            onClick={() => {
-              reset()
-              props.onHide();
-              props.onSubmit();
-              handleFilter();
-            }}
+            onClick={submit}
           >
             Speichern
           </Button>
