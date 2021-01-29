@@ -70,7 +70,7 @@ function BtmAddModal(props) {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      onExiting={props.onHide}
+      onExiting={() => {setShowError(false); props.onHide()}}
       backdrop="static"
     >
       <Modal.Header closeButton>

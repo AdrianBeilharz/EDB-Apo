@@ -8,6 +8,7 @@ import Agb from "./static/Agb";
 import Impressum from "./static/Impressum";
 import Kontakt from "./static/Kontakt";
 import { SnackbarProvider } from 'notistack';
+import Forbidden from './static/Forbidden';
 require('dotenv').config()
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/agb" exact component={Agb} />
           <Route path="/impressum" exact component={Impressum} />
           <Route path="/kontakt" exact component={Kontakt} />
+          <Route path="/forbidden" exact component={Forbidden} />
         </Switch>
       </Router>
     </SnackbarProvider>
