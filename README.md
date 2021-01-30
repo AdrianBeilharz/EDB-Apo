@@ -1,15 +1,20 @@
 # EDB-Apo
 
-## Über Docker Container bauen
-Die Container können mithilfe eines Befehls erstellt werden.
-Der Build benötigt ca. 4 minuten.
-Danach ist das Frontend über http://localhost:3000 erreichbar.
+## Über Docker Compose starten
+Die gesamte Anwendung kann mittels Docker Compose gebaut und gestartet werden.
+Das Bauen benötigt ca. vier Minuten.
+Danach ist die Webanwendung über http://localhost:3000 erreichbar. (Localhost oder IP-Adresse der Docker-Machine)
+
+Im root Ordner:
 ```
 docker-compose up --build
 ```
-Da die Images viel speicherplatz verwenden kann nachdem die Container mit `docker-compose down` entfernt wurden, alle ungenutzten Images mit `docker image prune -a` entfernt werden.
+Da die Images viel Speicherplatz verwenden kann nachdem die Container mit `docker-compose down` entfernt wurden, alle ungenutzten Images mit `docker image prune -a` entfernt werden.
+
 
 ## Anwendung ohne Docker starten
+Um die Anwendung ohne Docker Compose zu starten müssen folgende drei Schritte durchgeführt werden:
+
 1. Datenbank starten
     ```
     cd Datenbank
