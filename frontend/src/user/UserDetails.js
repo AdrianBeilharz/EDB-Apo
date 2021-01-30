@@ -20,13 +20,15 @@ function UserDetails(props) {
    }
 
    const getAktiveRolleVal = () => {
-    let a = props.aktiveRolle.toLowerCase();
-    a = a.charAt(0).toUpperCase() + a.slice(1);
-    return a;
-   }
-
+       let a = props.aktiveRolle.toLowerCase();
+       a = a.charAt(0).toUpperCase() + a.slice(1);
+       return a;
+    }
+    
+    //aktive rolle kommt von Parent component und wird initial gesetzt
    const [aktiveRolleVal, setAktiveRolleVal] = useState(getAktiveRolleVal);
 
+   //aktualisiert die aktuelle ausgewählte Rolle
    const updateAktiveRolleVal = data => {
     data = data.charAt(0).toUpperCase() + data.slice(1);
     setAktiveRolleVal(data);

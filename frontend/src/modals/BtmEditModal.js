@@ -36,7 +36,6 @@ function BtmEditModal(props) {
       einheit: einheit.value,
       menge: menge.value
     }
-    console.log(body)
     fetch(`http://${process.env.REACT_APP_BACKEND_URL}/apotheke/${apoId}/btm/${id}`, {
       method: 'PUT',
       headers: {

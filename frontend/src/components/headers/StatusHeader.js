@@ -3,6 +3,7 @@ import './Headers.scss'
 
 function StatusHeader(props) {
 
+    // setzt die richtige style klasse für den hintergrund des status headers
   const checkRolle = (rolle) => {
       rolle = rolle.toLowerCase();
 

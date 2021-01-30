@@ -66,9 +66,11 @@ function PrintPdfModal(props) {
   }
 
   useEffect(resetDates, [moment])
-  useEffect(isStartEndValid, [endDate, moment, startDate]);
-  useEffect(isEndValid, [endDate, moment, startDate]);
-  useEffect(isStartValid, [endDate, moment, startDate]);
+  useEffect(() => {
+    isStartEndValid();
+    isEndValid();
+    isStartValid();
+  }, [endDate, moment, startDate]);
   //eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(handleFilter, [props.checked]);
   

@@ -35,6 +35,7 @@ function ApothekenDetails(props) {
     
   };
 
+  //apotheken daten werden aktualisiert, sobald sich die history oder die apotheken id ändert
   useEffect(getApothekeData, [apoId, props.history]);
 
   return (

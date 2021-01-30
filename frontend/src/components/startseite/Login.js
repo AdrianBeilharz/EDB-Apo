@@ -9,6 +9,9 @@ function Login(props) {
 
     const { enqueueSnackbar } = useSnackbar();
 
+    //ref wird verwendet um diesen Komponenten zu referenzieren
+    //dieser Komponent fügt einen Mousedown eventlistener hinzu und bei einem Mausklick
+    //außerhalb dieses Komponents, wird dieses unsichtbar gemacht
     const myRef = useRef();
 
     const handleClickOutside = e => {
@@ -42,6 +45,8 @@ function Login(props) {
 
 
         if(response && response.status === 200){
+            //bei erfolgreichem login, wird der JWT im sessionspeicher gespeichert und der Nutzer
+            //automatisch auf die Hauptseite seiner Apotheke weitergeleitet
             const data = await response.json();
             window.sessionStorage.setItem("edbapo-jwt", data.jwt)
             props.history.push(`/apotheke/${data.apothekeId}`);

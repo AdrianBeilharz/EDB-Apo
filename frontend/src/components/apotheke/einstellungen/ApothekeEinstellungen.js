@@ -266,13 +266,15 @@ function ApothekeEinstellungen(props) {
     window.sessionStorage.setItem("aktive-rolle", data);
   }
 
-  useEffect(getCurrentApotheke, [apoId, props.history]);
-  useEffect(getUserData, [apoId, props.history]);
-  useEffect(getPersonalData, [apoId, props.history]);
-  useEffect(getBtmsData, [apoId, props.history]);
-  useEffect(getAerzteData, [apoId, props.history]);
-  useEffect(getLieferantenData, [apoId, props.history]);
-  useEffect(getEmpfaengerData, [apoId, props.history]);
+  useEffect(() => {
+    getCurrentApotheke();
+    getUserData();
+    getPersonalData();
+    getBtmsData();
+    getAerzteData();
+    getLieferantenData();
+    getEmpfaengerData();
+  }, [apoId, props.history]);
 
   return (
     <Fragment>

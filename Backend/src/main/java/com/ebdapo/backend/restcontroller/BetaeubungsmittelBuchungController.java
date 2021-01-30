@@ -307,13 +307,23 @@ public class BetaeubungsmittelBuchungController {
             throw new BadRequestException();
         }
         Abgang a = abgangRepository.findByIds(btmbuchungId,apothekeId);
-        if(a != null){
+        if(a != null) {
+            //die geänderte Menge wird rückgängig gemacht
+            Betaeubungsmittel btm = a.getBtm();
+            int previousMenge = a.getMenge();
+            btm.setMenge(btm.getMenge()+previousMenge);
             abgangRepository.delete(a);
+            btmRepo.save(btm);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         Zugang z = zugangRepository.findByIds(btmbuchungId, apothekeId);
-        if(z != null){
+        if(z != null) {
+            //die geänderte Menge wird rückgängig gemacht
+            Betaeubungsmittel btm = z.getBtm();
+            int previousMenge = z.getMenge();
+            btm.setMenge(btm.getMenge()-previousMenge);
             zugangRepository.delete(z);
+            btmRepo.save(btm);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
