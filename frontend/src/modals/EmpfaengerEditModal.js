@@ -60,7 +60,7 @@ function EmpfaengerUpdateModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Empfaenger bearbeiten
+          Empfänger bearbeiten
             </Modal.Title>
       </Modal.Header>
       <Form onSubmit={updateDetails}>

@@ -54,7 +54,7 @@ function NeuesLieferantenModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Liefernat hinzufügen
+          Lieferant hinzufügen
             </Modal.Title>
       </Modal.Header>
       <Form onSubmit={updateDetails}>

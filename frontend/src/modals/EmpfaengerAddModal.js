@@ -55,7 +55,7 @@ function NeuesEmpfaengerenModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Liefernat hinzufügen
+          Empfänger hinzufügen
             </Modal.Title>
       </Modal.Header>
       <Form onSubmit={updateDetails}>
