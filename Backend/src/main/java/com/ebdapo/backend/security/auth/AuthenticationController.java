@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * Bietet die REST-Schnitteslle für den Login an
+ * des weiteren bietet diese Klasse Methoden an um Nutzerinformationen des
+ * aktuell eingeloggten Benutzers auszulesen
+ */
 @RestController
 public class AuthenticationController {
 

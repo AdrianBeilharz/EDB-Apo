@@ -15,6 +15,13 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     public BenutzerRepository benutzerRepo;
 
+    /**
+     * Sucht den Benutzer aus der Datenbank und erstellt ein UserDetails Objekt mit dem Benutzer aus der Datenbank
+     * @param username
+     * @return das UserDetails Objekt mit dem Benutzer
+     * @throws UsernameNotFoundException wenn der Benutzer nicht in der Db gefunden werden konnte, der Client
+     * kann diese Exception abfangen und den Nutzer benachrichtigen
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Benutzer benutzer = benutzerRepo.getBenutzerByUsername(username);

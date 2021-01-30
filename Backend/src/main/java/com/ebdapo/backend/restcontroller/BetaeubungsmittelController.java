@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * Bietet eine REST-Schnittstelle zur Verwaltung der Betäubungsmittel an, die Dokumentation dazu kann
+ * in der OpenAPI3 Datei gesehen werden
+ */
 @RestController
 public class BetaeubungsmittelController {
 

@@ -25,12 +25,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
+
+    /**
+     * Jede eingehende Anfrage wird mit diesem Filter geprüft.
+     * @param request
+     * @param response
+     * @param chain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
 
+        //Token aus dem Header der Anfrage holen
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             jwt = authorizationHeader.substring(7);
             try{
@@ -41,6 +51,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
 
+        //User wird authentifiziert und Token validiert
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.myUserDetailsService.loadUserByUsername(username);
             if(jwtUtil.validateToken(jwt, userDetails)){

@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Bietet eine REST-Schnittstelle zur Verwaltung der Apotheken an, die Dokumentation dazu kann
+ * in der OpenAPI3 Datei gesehen werden
+ */
 @RestController
 public class ApothekenController {
 
@@ -59,6 +63,7 @@ public class ApothekenController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
+        //update the values and save in db (update)
         Apotheke apo = apothekenRepo.findById(apothekeId).orElseThrow(InvalidInputException::new);
         apo.setName(newApo.getName());
         apo.setEmail(newApo.getEmail());
@@ -90,6 +95,11 @@ public class ApothekenController {
     }
 
 
+    /**
+     * prüft, ob die übergebene Apotheke bereits in der Datenbank gespeichert ist
+     * @param apotheke
+     * @return
+     */
     private boolean checkIfAlreadyExists(Apotheke apotheke) {
         return apothekenRepo.getApothekeByValues(apotheke.getName(),
                 apotheke.getAnschrift().getStrasse(),

@@ -7,6 +7,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * This class is for the hibernate mapping
+ * it represents the tables and relations in the database
+ */
 @Entity
 @Data
 @NoArgsConstructor

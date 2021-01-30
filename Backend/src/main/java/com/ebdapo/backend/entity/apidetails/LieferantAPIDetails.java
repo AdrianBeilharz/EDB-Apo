@@ -5,6 +5,9 @@ import lombok.Data;
 
 import javax.persistence.Id;
 
+/**
+ * This class represents the data that comes from or is passed to the client
+ */
 @Data
 public class LieferantAPIDetails {
 

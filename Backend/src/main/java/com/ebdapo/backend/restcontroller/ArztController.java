@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Bietet eine REST-Schnittstelle zur Verwaltung der Ärzte an, die Dokumentation dazu kann
+ * in der OpenAPI3 Datei gesehen werden
+ */
 @RestController
 public class ArztController {
 
@@ -34,6 +38,8 @@ public class ArztController {
 
     @PostMapping("/apotheke/{apothekeId}/arzt")
     public ResponseEntity<?> addArzt(@PathVariable String apothekeId, @RequestBody ArztAPIDetails arzt) {
+
+        //wenn der Benutzer nicht autorisiert ist wird die Anfrage verweigert
         if(!authController.checkIfAuthorized(authController.getCurrentUsername(), apothekeId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -45,6 +51,7 @@ public class ArztController {
                 arzt.getAnschrift().getPlz(),
                 arzt.getAnschrift().getOrt());
 
+        //wen der Arzt schon existiert wird ein fehler geworfen
         if(newArzt == null) {
             newArzt = new Arzt();
             newArzt.setId(UUID.randomUUID().toString());
@@ -80,6 +87,7 @@ public class ArztController {
 
         Arzt found = arztRepo.findByIds(arztId, apothekeId);
 
+        //wen der Arzt nicht existiert wird ein fehler geworfen
         if(found == null) {
             throw new InvalidInputException("Arzt konnte nicht gefunden werden");
         }

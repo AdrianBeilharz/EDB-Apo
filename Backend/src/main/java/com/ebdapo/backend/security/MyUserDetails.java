@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Diese Klasse repräsentiert die Details eines Benutzers für die Authentifizierung
+ */
 public class MyUserDetails implements UserDetails {
 
     private Benutzer benutzer;

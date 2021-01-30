@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * Bietet eine REST-Schnittstelle zur Verwaltung der Benutzer an, die Dokumentation dazu kann
+ * in der OpenAPI3 Datei gesehen werden
+ */
 @RestController
 public class BenutzerController {
 
@@ -124,7 +128,8 @@ public class BenutzerController {
 
         boolean reqFromAdmin = authorized.equals("admin");
 
-        //checks if the user is authorized to change it (entering valid password)
+        //es wird geprüft, ob der Benutzer autorisiert ist, die Änderungen vorzunehmen,
+        //dazu wird das Passwort abgeglichen
         String pw = newBenutzer.getOldPassword() ;
 
         if(!reqFromAdmin){
@@ -162,6 +167,12 @@ public class BenutzerController {
         return new ResponseEntity<>(benutzer, HttpStatus.OK);
     }
 
+    /**
+     * Prüft, ob der neue Benutzername schon vergeben ist
+     * @param current aktueller Name
+     * @param newName neuer Name
+     * @return true wenn es vergeben ist ansonsten false
+     */
     private boolean usernameIsTaken(String current, String newName) {
         return !current.equals(newName) && benutzerRepo.getBenutzerByUsername(newName) != null;
     }
@@ -189,6 +200,11 @@ public class BenutzerController {
     }
 
 
+    /**
+     * Prüft, ob der angegebene Benutzer bereits in der Datenbank gespeichert ist
+     * @param benutzer
+     * @return
+     */
     private boolean checkIfUserExists(BenutzerAPIDetails benutzer) {
         return benutzerRepo.getBenutzerByUsername(benutzer.getNutzername()) != null;
     }

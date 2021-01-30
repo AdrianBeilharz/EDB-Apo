@@ -5,6 +5,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * This class is for the hibernate mapping
+ * it represents the tables and relations in the database
+ */
 @Entity
 @Data
 @NoArgsConstructor

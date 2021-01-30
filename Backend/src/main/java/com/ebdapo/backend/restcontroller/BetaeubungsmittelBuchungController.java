@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Bietet eine REST-Schnittstelle zur Verwaltung der Betäubungsmittel Buchungen an, die Dokumentation dazu kann
+ * in der OpenAPI3 Datei gesehen werden
+ */
 @RestController
 public class BetaeubungsmittelBuchungController {
 
@@ -32,6 +36,10 @@ public class BetaeubungsmittelBuchungController {
     @Autowired private BetaeubungsmittelRepository btmRepo;
     @Autowired private AuthenticationController authController;
 
+    /**
+     * Definiert eine extra Klasse, welche als Antwort an den Client gesendet wird,
+     * die Antwort beinhaltet das Betäubungsmittel und eine Liste aller Buchungen mit diesem Betäubungsmittel
+     */
     @Data
     private class BtmBuchungsResponse {
         Betaeubungsmittel btm;
@@ -96,6 +104,8 @@ public class BetaeubungsmittelBuchungController {
             throw new BadRequestException("Apotheke existiert nicht");
         }
 
+        //Generiert eine List aller Betäubungsmittel und holt zu jedem Betäubungsmittel alle Buchungen aus der Datenbank
+        //Diese Buchungen werden über Streams nach Datum sortiert und anschließend als eine Liste an den Client gesendet
         List<Betaeubungsmittel> btms = btmRepo.getByApotheke(apothekeId);
 
         List<BtmBuchungsResponse> response = new ArrayList<>();
@@ -209,7 +219,7 @@ public class BetaeubungsmittelBuchungController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        //Wird verwendet da ein Pruefer nur das Pruefdatum eines BTM aendern kann und nicht andere properties
+        //Wird verwendet da ein Pruefer nur das Pruefdatum eines BTM aendern kann und nicht andere Eigenschaften
         boolean pruefer = false;
         if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().contains("ROLE_"+Rolle.PRUEFER.toString())) {
             pruefer = true;
@@ -217,12 +227,13 @@ public class BetaeubungsmittelBuchungController {
 
         if((pruefer || authController.isAdmin(authController.getCurrentUsername(), apothekeId)) && setGeprueft != null){
 
+            //Falls der Nutzer ein Prüfer/Admin ist, wird hier die Buchung geprüft oder die Prüfung entfernt
             BetaeubungsmittelBuchung btmb = btmBuchungRepo.findByIds(btmbuchungId, apothekeId);
             if(setGeprueft.equals("false")){
                 btmb.setPruefdatum(null);
                 btmb.setPruefer(null);
             }else {
-                btmb.setPruefdatum(new Date());
+                btmb.setPruefdatum(new Date()); //das Datum der Prüfung ist das aktuelle Datum
                 btmb.setPruefer(benutzerRepository.getBenutzerWithApotheke(authController.getCurrentUsername(), apothekeId));
             }
             btmBuchungRepo.save(btmb);

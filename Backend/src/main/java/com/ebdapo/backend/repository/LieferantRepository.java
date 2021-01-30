@@ -8,8 +8,22 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * With this class, data can be read and written into the database
+ * Custom queries can be defined to fetch or update data from the database
+ */
 public interface LieferantRepository extends JpaRepository<Lieferant, String> {
 
+    /**
+     *  Sucht einen Liferanten mit den angegebenen Daten
+     * @param apothekeId
+     * @param name
+     * @param strasse
+     * @param nummer
+     * @param plz
+     * @param ort
+     * @return den Lieferanten oder null, falls dieser nicht gefunden wurde
+     */
     @Query(value =
             "SELECT * " +
             "FROM lieferant " +
@@ -26,6 +40,12 @@ public interface LieferantRepository extends JpaRepository<Lieferant, String> {
                                     @Param("ort") String ort);
 
 
+    /**
+     * Sucht einen Lieferanten mit der angegebenen Id in der angegebenen Apotheke
+     * @param lieferantId
+     * @param apothekeId
+     * @return  den Liferanten oder null, falls dieser nicht gefunden wurde
+     */
     @Query(value = "SELECT * FROM lieferant l JOIN apotheke a on l.apotheke = a.id WHERE " +
             "l.id = :lieferantId AND a.id = :apothekeId", nativeQuery = true)
     Lieferant findByIds(@Param("lieferantId") String lieferantId,

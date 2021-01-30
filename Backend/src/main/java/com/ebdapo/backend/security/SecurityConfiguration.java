@@ -31,6 +31,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     }
 
 
+    /**
+     * Definiert die Zugriffsberechtigungen der Endpunkte des REST-Schnittstelle
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -60,13 +65,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     }
 
 
+    /**
+     * Gibt an, welcher Passwort-Verschlüsselungsalgorithmus verwendet werden soll
+     * @return
+     */
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
-        //return NoOpPasswordEncoder.getInstance();
     }
 
 
+    /**
+     * Um CORS zu aktivieren
+     * @param registry
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*");

@@ -11,9 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Klasse für das Erstellen und Validieren von JSON WEB TOKENS
+ */
 @Service
 public class JwtUtil {
 
+    //Geheimer Schlüssel, welcher bei der Signatur des Tokens verwendet wird
     private String SECRET_KEY = "N12E3DzH7cz4t6Qv3Vay";
 
     public String extractUsername(String token){
@@ -48,6 +52,12 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
+    /**
+     * Prüft, ob der Token gültig ist
+     * @param token
+     * @param userDetails
+     * @return
+     */
     public Boolean validateToken(String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
