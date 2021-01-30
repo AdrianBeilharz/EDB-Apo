@@ -165,6 +165,7 @@ function ApothekeRegisterModal(props) {
     }
   }
 
+  //bei jedem re-render werden die Daten neu validiert
   useEffect(() => {
     validation();
   })

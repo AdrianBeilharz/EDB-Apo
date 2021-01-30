@@ -14,6 +14,7 @@ function UserDetails(props) {
        BENUTZER : { 0: "Benutzer"}
    }
 
+   //entfernt den JWT aus dem speicher und leitet den Benutzer auf die Startseite weiter
    const logout = () => {
        window.sessionStorage.removeItem("edbapo-jwt")
        props.history.push('/');
