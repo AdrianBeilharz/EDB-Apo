@@ -39,4 +39,4 @@ Diese YAML Datei kann beispielsweise über Swagger dargestellt werden.
 
 
 ## API-Tests
-Die Postman API-Testsuite befindet sich [hier](Backend\src\test\api\EDB-APO-API-TESTS.postman_collection.json). Die Umgebungsvariablen sind [hier](Backend\src\test\api\EDB-APO.postman_environment.json) zu finden und können direkt in Postman importiert werden.
+Die Postman API-Testsuite befindet sich [hier](Backend/src/test/api/EDB-APO-API-TESTS.postman_collection.json). Die Umgebungsvariablen sind [hier](Backend/src/test/api/EDB-APO.postman_environment.json) zu finden und können direkt in Postman importiert werden.
